@@ -4,6 +4,7 @@ using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Aplication.Services;
 using DeliveryApp.Commons.Models;
 using DeliveryApp.Domain.DTO;
+using DeliveryApp.Domain.MailSender;
 using DeliveryApp.Repository.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -40,7 +41,12 @@ public class AccountController : ControllerBase
 
         if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
             return Unauthorized();
-
+        var request = new WelcomeRequest
+        {
+            ToEmail = loginDto.Email,
+            UserName = loginDto.Username
+        };
+        await _mailService.SendWelcomeEmailAsync(request);
         return new UserDto
 
         {

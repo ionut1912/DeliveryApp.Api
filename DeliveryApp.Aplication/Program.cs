@@ -1,22 +1,21 @@
-using DeliveryApp.Aplication.Middlewares;
-using DeliveryApp.Aplication.Services;
-using DeliveryApp.Repository.Entities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System.Text;
 using DeliveryApp.Aplication.MailSending;
-using DeliveryApp.Repository.Context;
-using DeliveryApp.Repository.Profiles;
-using Microsoft.EntityFrameworkCore;
 using DeliveryApp.Aplication.Mediatr;
+using DeliveryApp.Aplication.Middlewares;
 using DeliveryApp.Aplication.Repositories;
+using DeliveryApp.Aplication.Services;
 using DeliveryApp.Domain.Cloudinary.Settings;
 using DeliveryApp.Domain.MailSender.Settings;
 using DeliveryApp.Domain.Pipelines;
+using DeliveryApp.Repository.Context;
+using DeliveryApp.Repository.Entities;
+using DeliveryApp.Repository.Profiles;
 using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,22 +34,22 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer"
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
                 {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Scheme = "oauth2",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header
-                        },
-                        new List<string>()
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
         }
-                });
+    });
 });
 builder.Services.AddAutoMapper(typeof(BaseProfile).Assembly);
 builder.Services.AddDbContext<DeliveryContext>(options =>
@@ -74,10 +73,7 @@ var mediatrAssembly = typeof(MediatrAssemblyReference).Assembly;
 builder.Services.AddMediatR(mediatrAssembly);
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddValidatorsFromAssembly(mediatrAssembly);
-builder.Services.AddIdentityCore<Users>(opt =>
-{
-    opt.User.RequireUniqueEmail = true;
-})
+builder.Services.AddIdentityCore<Users>(opt => { opt.User.RequireUniqueEmail = true; })
     .AddRoles<Roles>()
     .AddEntityFrameworkStores<DeliveryContext>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -97,7 +93,6 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();
 
 
-
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 
@@ -110,23 +105,15 @@ if (app.Environment.IsDevelopment())
 }
 
 
-
 app.UseRouting();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseCors(opt =>
-{
-    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
-});
+app.UseCors(opt => { opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000"); });
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-
-});
+app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 app.Run();

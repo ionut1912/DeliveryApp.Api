@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DeliveryApp.Aplication.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 public class PhotoControllerForMenuItems : BaseApiController
 {
     private IMediator _mediator;
@@ -15,7 +15,7 @@ public class PhotoControllerForMenuItems : BaseApiController
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices
         .GetService<IMediator>();
 
-    [Authorize]
+
     [HttpPost("{id}")]
     public async Task<ActionResult<PhotoForMenuItem>> AddPhoto(IFormFile file, Guid id)
     {
@@ -23,7 +23,7 @@ public class PhotoControllerForMenuItems : BaseApiController
             await Mediator.Send(new PhotoForMenuItemCreateCommand { file = file, id = id }));
     }
 
-    [Authorize]
+
     [HttpDelete("{photoId}/{itemId}")]
     public async Task<ActionResult<PhotoForMenuItem>> Delete(string photoId, Guid itemId)
     {
@@ -31,7 +31,6 @@ public class PhotoControllerForMenuItems : BaseApiController
             await Mediator.Send(new PhotoForMenuItemDeleteCommand { photoId = photoId, itemId = itemId }));
     }
 
-    [Authorize]
     [HttpPost("{photoId}/{itemId}/setMain")]
     public async Task<ActionResult<PhotoForMenuItem>> SetMain(string photoId, Guid itemId)
     {

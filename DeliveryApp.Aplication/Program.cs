@@ -51,6 +51,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(BaseProfile).Assembly);
 builder.Services.AddDbContext<DeliveryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DeliveryConnectionString")));
@@ -59,6 +60,7 @@ builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailS
 builder.Services.AddTransient<IMailService, MailService>(); builder.Services.AddScoped<IPhotoAccessor, PhotoAccessor>();
 builder.Services.AddScoped<IMenuItemRepository, MenuItemService>();
 builder.Services.AddScoped<IOfferRepository, OfferService>();
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddScoped<IOrderRepository, OrderService>();
 builder.Services.AddScoped<IPhotoForMenuItemRepository, PhotoForMenuItemService>();
 builder.Services.AddScoped<IPhotoRepository, PhotoService>();

@@ -15,23 +15,23 @@ public class PhotoControoller : BaseApiController
         .GetService<IMediator>();
 
 
-    [HttpPost("{email}")]
-    public async Task<IActionResult> Add(IFormFile file, string email)
+    [HttpPost]
+    public async Task<IActionResult> Add(IFormFile file)
     {
-        return HandleResult(await Mediator.Send(new PhotoAddCommand { File = file, email = email }));
+        return HandleResult(await Mediator.Send(new PhotoAddCommand { File = file }));
     }
 
 
-    [HttpDelete("{id}/{email}")]
-    public async Task<IActionResult> Delete(string id, string email)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
     {
-        return HandleResult(await Mediator.Send(new PhotoDeleteCommand { Id = id, email = email }));
+        return HandleResult(await Mediator.Send(new PhotoDeleteCommand { Id = id}));
     }
 
 
-    [HttpPost("{id}/{email}/setMain")]
-    public async Task<IActionResult> SetMain(string id, string email)
+    [HttpPost("{id}/setMain")]
+    public async Task<IActionResult> SetMain(string id)
     {
-        return HandleResult(await Mediator.Send(new PhotoSetMainCommand { Id = id, email = email }));
+        return HandleResult(await Mediator.Send(new PhotoSetMainCommand { Id = id }));
     }
 }

@@ -4,7 +4,6 @@ using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Aplication.Services;
 using DeliveryApp.Commons.Models;
 using DeliveryApp.Domain.DTO;
-using DeliveryApp.Domain.MailSender;
 using DeliveryApp.Repository.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryApp.Aplication.Controllers;
-
 
 [Route("[controller]")]
 [ApiController]
@@ -37,7 +35,8 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-        var user = await _userManager.Users.Include(x=>x.userAddress).Include(x=>x.photos).FirstOrDefaultAsync(x=>x.UserName==loginDto.Username);
+        var user = await _userManager.Users.Include(x => x.userAddress).Include(x => x.photos)
+            .FirstOrDefaultAsync(x => x.UserName == loginDto.Username);
 
         if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
             return Unauthorized();
@@ -67,10 +66,7 @@ public class AccountController : ControllerBase
         var result = await _userManager.CreateAsync(user, registerDto.Password);
         if (!result.Succeeded)
         {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(error.Code, error.Description);
-            }
+            foreach (var error in result.Errors) ModelState.AddModelError(error.Code, error.Description);
 
             return ValidationProblem();
         }
@@ -78,15 +74,15 @@ public class AccountController : ControllerBase
         await _userManager.AddToRoleAsync(user, "Member");
 
         return StatusCode(201);
-
     }
 
-    
+
     [Authorize]
-    [HttpGet]
+    [HttpGet("current")]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
-        var user = await _userManager.Users.Include(x=>x.photos).Include(x=>x.userAddress).FirstOrDefaultAsync(x=>x.UserName==User.Identity.Name);
+        var user = await _userManager.Users.Include(x => x.photos).Include(x => x.userAddress)
+            .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
         return new UserDto
 
         {

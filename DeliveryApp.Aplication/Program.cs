@@ -56,9 +56,7 @@ builder.Services.AddDbContext<DeliveryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DeliveryConnectionString")));
 builder.Services.AddCors();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-builder.Services.AddTransient<IMailService, MailService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+builder.Services.AddTransient<IMailService, MailService>(); builder.Services.AddScoped<IPhotoAccessor, PhotoAccessor>();
 builder.Services.AddScoped<IMenuItemRepository, MenuItemService>();
 builder.Services.AddScoped<IOfferRepository, OfferService>();
 builder.Services.AddScoped<IOrderRepository, OrderService>();

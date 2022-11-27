@@ -21,15 +21,13 @@ public class AccountController : ControllerBase
     private readonly IMapper _mapper;
     private readonly TokenService _tokenService;
     private readonly UserManager<Users> _userManager;
-    private readonly IUserService _userService;
 
     public AccountController(IMapper mapper, TokenService tokenService,
-        UserManager<Users> userManager, IUserService userService, IMailService mailService)
+        UserManager<Users> userManager, IMailService mailService)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         _mailService = mailService ?? throw new ArgumentNullException(nameof(mailService));
     }
 

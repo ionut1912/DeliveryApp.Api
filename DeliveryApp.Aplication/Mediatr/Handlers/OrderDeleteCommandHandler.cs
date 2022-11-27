@@ -4,20 +4,19 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using MediatR;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers
+namespace DeliveryApp.Aplication.Mediatr.Handlers;
+
+public class OrderDeleteCommandHandler : ICommandHandler<DeleteCommand, Result<Unit>>
 {
-    public class OrderDeleteCommandHandler : ICommandHandler<DeleteCommand, Result<Unit>>
+    private readonly IOrderRepository _orderRepository;
+
+    public OrderDeleteCommandHandler(IOrderRepository orderRepository)
     {
-        private readonly IOrderRepository _orderRepository;
+        _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+    }
 
-        public OrderDeleteCommandHandler(IOrderRepository orderRepository)
-        {
-            _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
-        }
-
-        public async Task<Result<Unit>> Handle(DeleteCommand request, CancellationToken cancellationToken)
-        {
-            return await _orderRepository.DeleteOrder(request, cancellationToken);
-        }
+    public async Task<Result<Unit>> Handle(DeleteCommand request, CancellationToken cancellationToken)
+    {
+        return await _orderRepository.DeleteOrder(request, cancellationToken);
     }
 }

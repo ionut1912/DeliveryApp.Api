@@ -2,11 +2,10 @@
 using DeliveryApp.Commons.Interfaces;
 using MediatR;
 
-namespace DeliveryApp.Aplication.Mediatr.Commands
+namespace DeliveryApp.Aplication.Mediatr.Commands;
+
+public class PhotoSetMainCommand : ICommand<Result<Unit>>
 {
-    public class PhotoSetMainCommand : ICommand<Result<Unit>>
-    {
-        public string Id { get; set; }
-        public string email { get; set; }
-    }
+    public string Id { get; set; }
+    public string email { get; set; }
 }

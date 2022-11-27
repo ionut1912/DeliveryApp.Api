@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace DeliveryApp.Commons.Interfaces
+namespace DeliveryApp.Commons.Interfaces;
+
+public interface IQuery<out TResponse> : IRequest<TResponse>
 {
-    public interface IQuery<out TResponse> : IRequest<TResponse>
-    {
-    }
 }

@@ -1,6 +1,5 @@
-﻿namespace DeliveryApp.Aplication.Mediatr
+﻿namespace DeliveryApp.Aplication.Mediatr;
+
+public class MediatrAssemblyReference
 {
-    public class MediatrAssemblyReference
-    {
-    }
 }

@@ -1,14 +1,13 @@
 ﻿using DeliveryApp.Domain.Models;
 using DeliveryApp.Repository.Entities;
 
-namespace DeliveryApp.Repository.Profiles
+namespace DeliveryApp.Repository.Profiles;
+
+public class RestaurantProfile : BaseProfile
 {
-    public class RestaurantProfile:BaseProfile
+    public RestaurantProfile()
     {
-        public RestaurantProfile()
-        {
-            CreateMap<Restaurants, RestaurantForCreation>().ReverseMap();
-            CreateMap<Restaurants, RestaurantForUpdate>().ReverseMap();
-        }
+        CreateMap<Restaurants, RestaurantForCreation>().ReverseMap();
+        CreateMap<Restaurants, RestaurantForUpdate>().ReverseMap();
     }
 }

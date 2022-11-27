@@ -1,8 +1,7 @@
-﻿namespace DeliveryApp.Domain.MailSender
+﻿namespace DeliveryApp.Domain.MailSender;
+
+public class WelcomeRequest
 {
-    public class WelcomeRequest
-    {
-        public string ToEmail { get; set; }
-        public string UserName { get; set; }
-    }
+    public string ToEmail { get; set; }
+    public string UserName { get; set; }
 }

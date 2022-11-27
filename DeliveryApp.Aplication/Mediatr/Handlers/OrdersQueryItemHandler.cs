@@ -4,25 +4,23 @@ using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Repository.Entities;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers
+namespace DeliveryApp.Aplication.Mediatr.Handlers;
+
+public class OrdersQueryItemHandler : IQueryHandler<
+    QueryItem<Orders>,
+    Result<Orders>>
 {
+    private readonly IOrderRepository _orderRepository;
 
-    public class OrdersQueryItemHandler : IQueryHandler<
-        QueryItem<Orders>,
-        Result<Orders>>
+    public OrdersQueryItemHandler(IOrderRepository orderRepository)
     {
-        private readonly IOrderRepository _orderRepository;
+        _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+    }
 
-        public OrdersQueryItemHandler(IOrderRepository orderRepository)
-        {
-            _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
-        }
-
-        public async Task<Result<Orders>> Handle(
-            QueryItem<Orders> request,
-            CancellationToken cancellationToken)
-        {
-            return await _orderRepository.GetOrder(request, cancellationToken);
-        }
+    public async Task<Result<Orders>> Handle(
+        QueryItem<Orders> request,
+        CancellationToken cancellationToken)
+    {
+        return await _orderRepository.GetOrder(request, cancellationToken);
     }
 }

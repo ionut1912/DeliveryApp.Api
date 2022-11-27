@@ -1,10 +1,9 @@
 ﻿using DeliveryApp.Domain.MailSender;
 
-namespace DeliveryApp.Aplication.MailSending
+namespace DeliveryApp.Aplication.MailSending;
+
+public interface IMailService
 {
-    public interface IMailService
-    {
-        Task SendEmailAsync(MailRequest mailRequest);
-        Task SendWelcomeEmailAsync(WelcomeRequest request);
-    }
+    Task SendEmailAsync(MailRequest mailRequest);
+    Task SendWelcomeEmailAsync(WelcomeRequest request);
 }

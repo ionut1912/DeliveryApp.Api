@@ -9,65 +9,64 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DeliveryApp.Aplication.Controllers
+namespace DeliveryApp.Aplication.Controllers;
+
+[AllowAnonymous]
+public class UserConfigController : BaseApiController
 {
-    [AllowAnonymous]
-    public class UserConfigController : BaseApiController
+    private IMediator _mediator;
+
+    protected IMediator Mediator => _mediator ??= HttpContext.RequestServices
+        .GetService<IMediator>();
+
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<UserConfigs>>>
+        GetUserConfigs()
     {
-        private IMediator _mediator;
+        return HandleResult(
+            await Mediator.Send(new ListQuery<UserConfigs>()));
+    }
 
-        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices
-            .GetService<IMediator>();
+    [Authorize]
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserConfigs>>
+        GetUserConfig(Guid id)
+    {
+        return HandleResult(
+            await Mediator.Send(new QueryItem<UserConfigs>
+                { id = id }));
+    }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserConfigs>>>
-            GetUserConfigs()
-        {
-            return HandleResult(
-                await Mediator.Send(new ListQuery<UserConfigs>()));
-        }
+    [Authorize]
+    [HttpGet("config/{username}")]
+    public async Task<ActionResult<UserConfigs>> GetUserConfigByUsername(string username)
+    {
+        return HandleResult(await Mediator.Send(new UserConfigQueryItemByUsername { username = username }));
+    }
 
-        [Authorize]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserConfigs>>
-            GetUserConfig(Guid id)
-        {
-            return HandleResult(
-                await Mediator.Send(new QueryItem<UserConfigs>
-                    { id = id }));
-        }
+    [Authorize]
+    [HttpPut("{id}")]
+    public async Task<ActionResult<UserConfigs>> UpdateUserConfig(
+        int id, UserConfigForUpdate configs)
+    {
+        return HandleResult(await Mediator.Send(new UserConfigsUpdateCommand
+            { id = id, configs = configs }));
+    }
 
-        [Authorize]
-        [HttpGet("config/{username}")]
-        public async Task<ActionResult<UserConfigs>> GetUserConfigByUsername(string username)
-        {
-            return HandleResult(await Mediator.Send(new UserConfigQueryItemByUsername { username = username }));
-        }
+    [Authorize]
+    [HttpPost]
+    public async Task<ActionResult<UserConfigs>> AddUserConfigs(UserConfigForCreation userConfig)
+    {
+        return HandleResult(await Mediator.Send(new UserConfigCreateCommand
+            { userConfigs = userConfig }));
+    }
 
-        [Authorize]
-        [HttpPut("{id}")]
-        public async Task<ActionResult<UserConfigs>> UpdateUserConfig(
-            int id, UserConfigForUpdate configs)
-        {
-            return HandleResult(await Mediator.Send(new UserConfigsUpdateCommand
-                { id = id, configs = configs }));
-        }
-
-        [Authorize]
-        [HttpPost]
-        public async Task<ActionResult<UserConfigs>> AddUserConfigs(UserConfigForCreation userConfig)
-        {
-            return HandleResult(await Mediator.Send(new UserConfigCreateCommand
-                { userConfigs = userConfig }));
-        }
-
-        [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<UserConfigs>>
-            DeleteRestaurant(Guid id)
-        {
-            return HandleResult(await Mediator.Send(new DeleteCommand { id = id }));
-        }
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<UserConfigs>>
+        DeleteRestaurant(Guid id)
+    {
+        return HandleResult(await Mediator.Send(new DeleteCommand { id = id }));
     }
 }

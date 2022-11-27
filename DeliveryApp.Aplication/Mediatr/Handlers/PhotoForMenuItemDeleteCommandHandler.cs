@@ -4,22 +4,20 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using MediatR;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers
+namespace DeliveryApp.Aplication.Mediatr.Handlers;
+
+public class PhotoForMenuItemDeleteCommandHandler : ICommandHandler<PhotoForMenuItemDeleteCommand, Result<Unit>>
 {
+    private readonly IPhotoForMenuItemRepository _photoForMenuItemRepository;
 
-    public class PhotoForMenuItemDeleteCommandHandler : ICommandHandler<PhotoForMenuItemDeleteCommand, Result<Unit>>
+    public PhotoForMenuItemDeleteCommandHandler(IPhotoForMenuItemRepository photoForMenuItemRepository)
     {
-        private readonly IPhotoForMenuItemRepository _photoForMenuItemRepository;
+        _photoForMenuItemRepository = photoForMenuItemRepository ??
+                                      throw new ArgumentNullException(nameof(photoForMenuItemRepository));
+    }
 
-        public PhotoForMenuItemDeleteCommandHandler(IPhotoForMenuItemRepository photoForMenuItemRepository)
-        {
-            _photoForMenuItemRepository = photoForMenuItemRepository ??
-                                          throw new ArgumentNullException(nameof(photoForMenuItemRepository));
-        }
-
-        public async Task<Result<Unit>> Handle(PhotoForMenuItemDeleteCommand request, CancellationToken cancellationToken)
-        {
-            return await _photoForMenuItemRepository.DeletePhotoForMenuItem(request, cancellationToken);
-        }
+    public async Task<Result<Unit>> Handle(PhotoForMenuItemDeleteCommand request, CancellationToken cancellationToken)
+    {
+        return await _photoForMenuItemRepository.DeletePhotoForMenuItem(request, cancellationToken);
     }
 }

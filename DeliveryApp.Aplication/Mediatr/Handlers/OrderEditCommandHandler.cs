@@ -4,20 +4,19 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using MediatR;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers
+namespace DeliveryApp.Aplication.Mediatr.Handlers;
+
+public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, Result<Unit>>
 {
-    public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, Result<Unit>>
+    private readonly IOrderRepository _orderRepository;
+
+    public OrderEditCommandHandler(IOrderRepository orderRepository)
     {
-        private readonly IOrderRepository _orderRepository;
+        _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+    }
 
-        public OrderEditCommandHandler(IOrderRepository orderRepository)
-        {
-            _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
-        }
-
-        public async Task<Result<Unit>> Handle(OrderEditCommand request, CancellationToken cancellationToken)
-        {
-            return await _orderRepository.EditOrder(request, cancellationToken);
-        }
+    public async Task<Result<Unit>> Handle(OrderEditCommand request, CancellationToken cancellationToken)
+    {
+        return await _orderRepository.EditOrder(request, cancellationToken);
     }
 }

@@ -1,10 +1,8 @@
 ﻿using DeliveryApp.Repository.Entities;
 
-namespace DeliveryApp.Aplication.Repositories
-{
+namespace DeliveryApp.Aplication.Repositories;
 
-    public interface IUserService
-    {
-        Task<Users> getByEmail(string email);
-    }
+public interface IUserService
+{
+    Task<Users> getByEmail(string email);
 }

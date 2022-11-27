@@ -4,22 +4,20 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Repository.Entities;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers
+namespace DeliveryApp.Aplication.Mediatr.Handlers;
+
+public class UserConfigQueryItemByUsernameHandler : IQueryHandler<UserConfigQueryItemByUsername, Result<UserConfigs>>
 {
+    private readonly IUserConfigRepository _userConfigRepository;
 
-    public class UserConfigQueryItemByUsernameHandler : IQueryHandler<UserConfigQueryItemByUsername, Result<UserConfigs>>
+    public UserConfigQueryItemByUsernameHandler(IUserConfigRepository userConfigRepository)
     {
-        private readonly IUserConfigRepository _userConfigRepository;
+        _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
+    }
 
-        public UserConfigQueryItemByUsernameHandler(IUserConfigRepository userConfigRepository)
-        {
-            _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
-        }
-
-        public async Task<Result<UserConfigs>> Handle(UserConfigQueryItemByUsername request,
-            CancellationToken cancellationToken)
-        {
-            return await _userConfigRepository.GetConfigByUsername(request, cancellationToken);
-        }
+    public async Task<Result<UserConfigs>> Handle(UserConfigQueryItemByUsername request,
+        CancellationToken cancellationToken)
+    {
+        return await _userConfigRepository.GetConfigByUsername(request, cancellationToken);
     }
 }

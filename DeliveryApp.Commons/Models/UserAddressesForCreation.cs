@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace DeliveryApp.Commons.Models;
 
-namespace DeliveryApp.Commons.Models
+public class UserAddressesForCreation
 {
-    public class UserAddressesForCreation
-    {
-        public string street { get; set; }
-        public string number { get; set; }
-        public string city { get; set; }
-        public string postalCode { get; set; }
-    }
+    public string street { get; set; }
+    public string number { get; set; }
+    public string city { get; set; }
+    public string postalCode { get; set; }
 }

@@ -1,13 +1,12 @@
 ﻿using DeliveryApp.Aplication.Mediatr.Commands;
 using FluentValidation;
 
-namespace DeliveryApp.Aplication.Mediatr.CommandValidators
+namespace DeliveryApp.Aplication.Mediatr.CommandValidators;
+
+public class OrderEditCommandValidator : AbstractValidator<OrderEditCommand>
 {
-    public class OrderEditCommandValidator : AbstractValidator<OrderEditCommand>
+    public OrderEditCommandValidator()
     {
-        public OrderEditCommandValidator()
-        {
-            RuleFor(x => x.orderForUpdate.status).NotEmpty().WithMessage("Status should not be empty");
-        }
+        RuleFor(x => x.orderForUpdate.status).NotEmpty().WithMessage("Status should not be empty");
     }
 }

@@ -1,10 +1,9 @@
 ﻿using DeliveryApp.Commons.Models;
 
-namespace DeliveryApp.Domain.Models
+namespace DeliveryApp.Domain.Models;
+
+public class RestaurantForUpdate
 {
-    public class RestaurantForUpdate
-    {
-        public string name { get; set; }
-        public RestaurantAddressesForUpdate address { get; set; }
-    }
+    public string name { get; set; }
+    public RestaurantAddressesForUpdate address { get; set; }
 }

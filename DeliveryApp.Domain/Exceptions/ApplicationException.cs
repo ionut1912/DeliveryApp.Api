@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace DeliveryApp.Domain.Exceptions;
 
-namespace DeliveryApp.Domain.Exceptions
+public abstract class ApplicationException : Exception
 {
-    public abstract class ApplicationException : Exception
+    protected ApplicationException(string title, string message)
+        : base(message)
     {
-        protected ApplicationException(string title, string message)
-            : base(message)
-        {
-            Title = title;
-        }
-
-        public string Title { get; }
+        Title = title;
     }
+
+    public string Title { get; }
 }

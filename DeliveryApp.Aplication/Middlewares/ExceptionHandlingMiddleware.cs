@@ -2,77 +2,76 @@
 using DeliveryApp.Domain.Exceptions;
 using ApplicationException = DeliveryApp.Domain.Exceptions.ApplicationException;
 
-namespace DeliveryApp.Aplication.Middlewares
+namespace DeliveryApp.Aplication.Middlewares;
+
+internal sealed class ExceptionHandlingMiddleware : IMiddleware
 {
-    internal sealed class ExceptionHandlingMiddleware : IMiddleware
+    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+
+    public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger)
     {
-        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+        _logger = logger;
+    }
 
-        public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    {
+        try
         {
-            _logger = logger;
+            await next(context);
         }
-
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        catch (Exception e)
         {
-            try
-            {
-                await next(context);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
+            _logger.LogError(e, e.Message);
 
-                await HandleExceptionAsync(context, e);
-            }
+            await HandleExceptionAsync(context, e);
         }
+    }
 
-        private static async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
+    private static async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
+    {
+        var statusCode = GetStatusCode(exception);
+
+        var response = new
         {
-            var statusCode = GetStatusCode(exception);
+            title = GetTitle(exception),
+            status = statusCode,
+            detail = exception.Message,
+            errors = GetErrors(exception)
+        };
 
-            var response = new
-            {
-                title = GetTitle(exception),
-                status = statusCode,
-                detail = exception.Message,
-                errors = GetErrors(exception)
-            };
+        httpContext.Response.ContentType = "application/json";
 
-            httpContext.Response.ContentType = "application/json";
+        httpContext.Response.StatusCode = statusCode;
 
-            httpContext.Response.StatusCode = statusCode;
+        await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
+    }
 
-            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
-        }
-
-        private static int GetStatusCode(Exception exception)
+    private static int GetStatusCode(Exception exception)
+    {
+        return exception switch
         {
-            return exception switch
-            {
-                BadRequestException => StatusCodes.Status400BadRequest,
-                NotFoundException => StatusCodes.Status404NotFound,
-                ValidationException => StatusCodes.Status422UnprocessableEntity,
-                _ => StatusCodes.Status500InternalServerError
-            };
-        }
+            BadRequestException => StatusCodes.Status400BadRequest,
+            NotFoundException => StatusCodes.Status404NotFound,
+            ValidationException => StatusCodes.Status422UnprocessableEntity,
+            _ => StatusCodes.Status500InternalServerError
+        };
+    }
 
-        private static string GetTitle(Exception exception)
+    private static string GetTitle(Exception exception)
+    {
+        return exception switch
         {
-            return exception switch
-            {
-                ApplicationException applicationException => applicationException.Title,
-                _ => "Server Error"
-            };
-        }
+            ApplicationException applicationException => applicationException.Title,
+            _ => "Server Error"
+        };
+    }
 
-        private static IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
-        {
-            IReadOnlyDictionary<string, string[]> errors = null;
+    private static IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
+    {
+        IReadOnlyDictionary<string, string[]> errors = null;
 
-            if (exception is ValidationException validationException) errors = validationException.ErrorsDictionary;
+        if (exception is ValidationException validationException) errors = validationException.ErrorsDictionary;
 
-            return errors;
-        }
+        return errors;
     }
 }

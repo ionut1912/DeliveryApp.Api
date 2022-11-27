@@ -4,20 +4,19 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using MediatR;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers
+namespace DeliveryApp.Aplication.Mediatr.Handlers;
+
+public class OfferEditCommandHandler : ICommandHandler<OfferEditCommand, Result<Unit>>
 {
-    public class OfferEditCommandHandler : ICommandHandler<OfferEditCommand, Result<Unit>>
+    private readonly IOfferRepository _offerRepository;
+
+    public OfferEditCommandHandler(IOfferRepository offerRepository)
     {
-        private readonly IOfferRepository _offerRepository;
+        _offerRepository = offerRepository ?? throw new ArgumentNullException(nameof(offerRepository));
+    }
 
-        public OfferEditCommandHandler(IOfferRepository offerRepository)
-        {
-            _offerRepository = offerRepository ?? throw new ArgumentNullException(nameof(offerRepository));
-        }
-
-        public async Task<Result<Unit>> Handle(OfferEditCommand request, CancellationToken cancellationToken)
-        {
-            return await _offerRepository.EditOffer(request, cancellationToken);
-        }
+    public async Task<Result<Unit>> Handle(OfferEditCommand request, CancellationToken cancellationToken)
+    {
+        return await _offerRepository.EditOffer(request, cancellationToken);
     }
 }

@@ -7,39 +7,38 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DeliveryApp.Aplication.Controllers
+namespace DeliveryApp.Aplication.Controllers;
+
+[AllowAnonymous]
+public class OfferController : BaseApiController
 {
-    [AllowAnonymous]
-    public class OfferController : BaseApiController
+    private IMediator _mediator;
+
+    protected IMediator Mediator => _mediator ??= HttpContext.RequestServices
+        .GetService<IMediator>();
+
+    [HttpPost]
+    public async Task<ActionResult<Offers>> AddOffer(OfferForCreation offerForCreation)
     {
-        private IMediator _mediator;
+        return HandleResult(await Mediator.Send(new OfferCreateCommand { offerForCreation = offerForCreation }));
+    }
 
-        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices
-            .GetService<IMediator>();
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Offers>>> GetOffers()
+    {
+        return HandleResult(await Mediator.Send(new ListQuery<Offers>()));
+    }
 
-        [HttpPost]
-        public async Task<ActionResult<Offers>> AddOffer(OfferForCreation offerForCreation)
-        {
-            return HandleResult(await Mediator.Send(new OfferCreateCommand { offerForCreation = offerForCreation }));
-        }
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Offers>> GetOffer(Guid id)
+    {
+        return HandleResult(await Mediator.Send(new QueryItem<Offers> { id = id }));
+    }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Offers>>> GetOffers()
-        {
-            return HandleResult(await Mediator.Send(new ListQuery<Offers>()));
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Offers>> GetOffer(Guid id)
-        {
-            return HandleResult(await Mediator.Send(new QueryItem<Offers> { id = id }));
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Offers>> UpdateOffer(Guid id, OfferForUpdate offerForUpdate)
-        {
-            return HandleResult(await Mediator.Send(new OfferEditCommand
-                { id = id, offerForUpdate = offerForUpdate }));
-        }
+    [HttpPut("{id}")]
+    public async Task<ActionResult<Offers>> UpdateOffer(Guid id, OfferForUpdate offerForUpdate)
+    {
+        return HandleResult(await Mediator.Send(new OfferEditCommand
+            { id = id, offerForUpdate = offerForUpdate }));
     }
 }

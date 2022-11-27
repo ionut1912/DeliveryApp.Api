@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace DeliveryApp.Domain.Exceptions;
 
-namespace DeliveryApp.Domain.Exceptions
+public abstract class BadRequestException : ApplicationException
 {
-    public abstract class BadRequestException : ApplicationException
+    protected BadRequestException(string message)
+        : base("Bad Request", message)
     {
-        protected BadRequestException(string message)
-            : base("Bad Request", message)
-        {
-        }
     }
 }

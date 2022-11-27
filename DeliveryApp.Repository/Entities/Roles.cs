@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace DeliveryApp.Repository.Entities
+namespace DeliveryApp.Repository.Entities;
+
+public class Roles : IdentityRole<int>
 {
-    public class Roles : IdentityRole<int>
-    {
-    }
 }

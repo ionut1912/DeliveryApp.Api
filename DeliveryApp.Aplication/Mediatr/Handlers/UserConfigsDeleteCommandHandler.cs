@@ -4,20 +4,19 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using MediatR;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers
+namespace DeliveryApp.Aplication.Mediatr.Handlers;
+
+public class UserConfigsDeleteCommandHandler : ICommandHandler<DeleteCommand, Result<Unit>>
 {
-    public class UserConfigsDeleteCommandHandler : ICommandHandler<DeleteCommand, Result<Unit>>
+    private readonly IUserConfigRepository _userConfigRepository;
+
+    public UserConfigsDeleteCommandHandler(IUserConfigRepository userConfigRepository)
     {
-        private readonly IUserConfigRepository _userConfigRepository;
+        _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
+    }
 
-        public UserConfigsDeleteCommandHandler(IUserConfigRepository userConfigRepository)
-        {
-            _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
-        }
-
-        public async Task<Result<Unit>> Handle(DeleteCommand request, CancellationToken cancellationToken)
-        {
-            return await _userConfigRepository.DeleteConfig(request, cancellationToken);
-        }
+    public async Task<Result<Unit>> Handle(DeleteCommand request, CancellationToken cancellationToken)
+    {
+        return await _userConfigRepository.DeleteConfig(request, cancellationToken);
     }
 }

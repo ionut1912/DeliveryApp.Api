@@ -1,14 +1,13 @@
 ﻿using DeliveryApp.Commons.Models;
 
-namespace DeliveryApp.Repository.Profiles
+namespace DeliveryApp.Repository.Profiles;
+
+public class AddressProfile : BaseProfile
 {
-    public class AddressProfile : BaseProfile
+    public AddressProfile()
     {
-        public AddressProfile()
-        {
-            CreateMap<RestaurantAddresses, RestaurantAddressesForCreation>().ReverseMap();
-            CreateMap<RestaurantAddresses, RestaurantAddressesForUpdate>().ReverseMap();
-            CreateMap<UserAddresses, UserAddressesForCreation>().ReverseMap();
-        }
+        CreateMap<RestaurantAddresses, RestaurantAddressesForCreation>().ReverseMap();
+        CreateMap<RestaurantAddresses, RestaurantAddressesForUpdate>().ReverseMap();
+        CreateMap<UserAddresses, UserAddressesForCreation>().ReverseMap();
     }
 }

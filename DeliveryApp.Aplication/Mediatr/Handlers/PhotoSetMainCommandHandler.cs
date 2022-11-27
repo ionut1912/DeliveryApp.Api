@@ -4,20 +4,19 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using MediatR;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers
+namespace DeliveryApp.Aplication.Mediatr.Handlers;
+
+public class PhotoSetMainCommandHandler : ICommandHandler<PhotoSetMainCommand, Result<Unit>>
 {
-    public class PhotoSetMainCommandHandler : ICommandHandler<PhotoSetMainCommand, Result<Unit>>
+    private readonly IPhotoRepository _photoRepository;
+
+    public PhotoSetMainCommandHandler(IPhotoRepository photoRepository)
     {
-        private readonly IPhotoRepository _photoRepository;
+        _photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
+    }
 
-        public PhotoSetMainCommandHandler(IPhotoRepository photoRepository)
-        {
-            _photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
-        }
-
-        public async Task<Result<Unit>> Handle(PhotoSetMainCommand request, CancellationToken cancellationToken)
-        {
-            return await _photoRepository.SetMainPhoto(request, cancellationToken);
-        }
+    public async Task<Result<Unit>> Handle(PhotoSetMainCommand request, CancellationToken cancellationToken)
+    {
+        return await _photoRepository.SetMainPhoto(request, cancellationToken);
     }
 }

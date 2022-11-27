@@ -1,14 +1,13 @@
 ﻿using DeliveryApp.Domain.Models;
 using DeliveryApp.Repository.Entities;
 
-namespace DeliveryApp.Repository.Profiles
+namespace DeliveryApp.Repository.Profiles;
+
+public class UserConfigProfile : BaseProfile
 {
-    public class UserConfigProfile : BaseProfile
+    public UserConfigProfile()
     {
-        public UserConfigProfile()
-        {
-            CreateMap<UserConfigs, UserConfigForCreation>().ReverseMap();
-            CreateMap<UserConfigs, UserConfigForUpdate>().ReverseMap();
-        }
+        CreateMap<UserConfigs, UserConfigForCreation>().ReverseMap();
+        CreateMap<UserConfigs, UserConfigForUpdate>().ReverseMap();
     }
 }

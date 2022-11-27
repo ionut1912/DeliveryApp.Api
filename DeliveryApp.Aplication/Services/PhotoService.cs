@@ -6,69 +6,68 @@ using DeliveryApp.Repository.Context;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeliveryApp.Aplication.Services
+namespace DeliveryApp.Aplication.Services;
+
+public class PhotoService : IPhotoRepository
 {
-    public class PhotoService : IPhotoRepository
+    private readonly DeliveryContext _context;
+    private readonly IPhotoAccessor _photoAccessor;
+
+    public PhotoService(DeliveryContext context, IPhotoAccessor photoAccessor)
     {
-        private readonly DeliveryContext _context;
-        private readonly IPhotoAccessor _photoAccessor;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _photoAccessor = photoAccessor ?? throw new ArgumentNullException(nameof(photoAccessor));
+    }
 
-        public PhotoService(DeliveryContext context, IPhotoAccessor photoAccessor)
+    public async Task<Result<Photo>> AddPhoto(PhotoAddCommand command, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users.Include(p => p.photos)
+            .FirstOrDefaultAsync(x => x.Email == command.email, cancellationToken);
+        if (user == null) return null;
+        var photoUploadResult = await _photoAccessor.AddPhoto(command.File);
+        var photo = new Photo
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _photoAccessor = photoAccessor ?? throw new ArgumentNullException(nameof(photoAccessor));
-        }
+            Url = photoUploadResult.Url,
+            Id = photoUploadResult.PublicId
+        };
+        if (!user.photos.Any(x => x.IsMain)) photo.IsMain = true;
+        user.photos.Add(photo);
+        _context.PhotosForUser.Add(photo);
+        _context.Users.Update(user);
+        var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+        return result
+            ? Result<Photo>.Success(photo)
+            : Result<Photo>.Failure("Problems adding the photo");
+    }
 
-        public async Task<Result<Photo>> AddPhoto(PhotoAddCommand command, CancellationToken cancellationToken)
-        {
-            var user = await _context.Users.Include(p => p.photos)
-                .FirstOrDefaultAsync(x => x.Email == command.email, cancellationToken);
-            if (user == null) return null;
-            var photoUploadResult = await _photoAccessor.AddPhoto(command.File);
-            var photo = new Photo
-            {
-                Url = photoUploadResult.Url,
-                Id = photoUploadResult.PublicId
-            };
-            if (!user.photos.Any(x => x.IsMain)) photo.IsMain = true;
-            user.photos.Add(photo);
-            _context.PhotosForUser.Add(photo);
-            _context.Users.Update(user);
-            var result = await _context.SaveChangesAsync(cancellationToken) > 0;
-            return result
-                ? Result<Photo>.Success(photo)
-                : Result<Photo>.Failure("Problems adding the photo");
-        }
+    public async Task<Result<Unit>> DeletePhoto(PhotoDeleteCommand command, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users.Include(p => p.photos)
+            .FirstOrDefaultAsync(x => x.Email == command.email);
+        if (user == null) return null;
+        var photo = user.photos.FirstOrDefault(x => x.Id == command.Id);
+        if (photo == null) return null;
+        if (photo.IsMain) return Result<Unit>.Failure("You can't delete your main photo");
+        var result = await _photoAccessor.DeletePhoto(photo.Id);
+        if (result == null) return Result<Unit>.Failure("Problem deleting photo from Cloudinary");
+        user.photos.Remove(photo);
+        _context.PhotosForUser.Remove(photo);
+        var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+        return success ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem deleting photo from API");
+    }
 
-        public async Task<Result<Unit>> DeletePhoto(PhotoDeleteCommand command, CancellationToken cancellationToken)
-        {
-            var user = await _context.Users.Include(p => p.photos)
-                .FirstOrDefaultAsync(x => x.Email == command.email);
-            if (user == null) return null;
-            var photo = user.photos.FirstOrDefault(x => x.Id == command.Id);
-            if (photo == null) return null;
-            if (photo.IsMain) return Result<Unit>.Failure("You can't delete your main photo");
-            var result = await _photoAccessor.DeletePhoto(photo.Id);
-            if (result == null) return Result<Unit>.Failure("Problem deleting photo from Cloudinary");
-            user.photos.Remove(photo);
-            _context.PhotosForUser.Remove(photo);
-            var success = await _context.SaveChangesAsync(cancellationToken) > 0;
-            return success ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem deleting photo from API");
-        }
-
-        public async Task<Result<Unit>> SetMainPhoto(PhotoSetMainCommand command, CancellationToken cancellationToken)
-        {
-            var user = await _context.Users.Include(p => p.photos)
-                .FirstOrDefaultAsync(x => x.Email == command.email, cancellationToken);
-            if (user == null) return null;
-            var photo = user.photos.FirstOrDefault(x => x.Id == command.Id);
-            if (photo == null) return null;
-            var currentMain = user.photos.FirstOrDefault(x => x.IsMain);
-            if (currentMain != null) currentMain.IsMain = false;
-            photo.IsMain = true;
-            _context.PhotosForUser.Update(photo);
-            var success = await _context.SaveChangesAsync(cancellationToken) > 0;
-            return success ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem setting main photo");
-        }
+    public async Task<Result<Unit>> SetMainPhoto(PhotoSetMainCommand command, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users.Include(p => p.photos)
+            .FirstOrDefaultAsync(x => x.Email == command.email, cancellationToken);
+        if (user == null) return null;
+        var photo = user.photos.FirstOrDefault(x => x.Id == command.Id);
+        if (photo == null) return null;
+        var currentMain = user.photos.FirstOrDefault(x => x.IsMain);
+        if (currentMain != null) currentMain.IsMain = false;
+        photo.IsMain = true;
+        _context.PhotosForUser.Update(photo);
+        var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+        return success ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem setting main photo");
     }
 }

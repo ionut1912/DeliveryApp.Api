@@ -51,7 +51,14 @@ public class AccountController : ControllerBase
         };
         await _mailService.SendWelcomeEmailAsync(request);
 
-        return await CreateUserObject(user);
+        return new UserDto
+
+        {
+            token = await _tokenService.GenerateToken(user),
+            image = user.photos.FirstOrDefault(x => x.IsMain)?.Url,
+            username = user.UserName,
+            address = _mapper.Map<UserAddressesForCreation>(user.userAddress)
+        };
     }
 
     [HttpPost("register")]
@@ -80,7 +87,15 @@ public class AccountController : ControllerBase
         var result = await _userManager.CreateAsync(user, registerDto.Password);
         await _userManager.AddToRoleAsync(user, "Member");
 
-        if (result.Succeeded) return await CreateUserObject(user);
+        if (result.Succeeded)
+            return new UserDto
+
+            {
+                token = await _tokenService.GenerateToken(user),
+                image = user.photos.FirstOrDefault(x => x.IsMain)?.Url,
+                username = user.UserName,
+                address = _mapper.Map<UserAddressesForCreation>(user.userAddress)
+            };
         return BadRequest("Problems registering user");
     }
 
@@ -89,11 +104,6 @@ public class AccountController : ControllerBase
     public async Task<ActionResult<UserDto>> GetCurrentUser(string email)
     {
         var user = await _userService.getByEmail(email);
-        return await CreateUserObject(user);
-    }
-
-    private async Task<UserDto> CreateUserObject(Users user)
-    {
         return new UserDto
 
         {

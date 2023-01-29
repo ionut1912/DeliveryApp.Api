@@ -64,7 +64,7 @@ public class UserConfigService : IUserConfigRepository
     public async Task<Result<UserConfigs>> GetConfigByUsername(UserConfigQueryItemByUsername query,
         CancellationToken cancellationToken)
     {
-        var user =await _context.Users.FirstOrDefaultAsync(x => x.UserName == query.Username, cancellationToken);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == query.Username, cancellationToken);
         if (user == null) return Result<UserConfigs>.Failure($"User with username {query.Username} does not exists");
         var config =
             await _context.UserConfigs.FirstOrDefaultAsync(x => x.Username == query.Username, cancellationToken);

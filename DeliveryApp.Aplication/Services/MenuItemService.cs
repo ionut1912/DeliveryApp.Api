@@ -25,7 +25,7 @@ public class MenuItemService : IMenuItemRepository
         CancellationToken cancellationToken)
     {
         var menuItem = _mapper.Map<MenuItems>(request.MenuItemForCreation);
-        menuItem.Id= Guid.NewGuid();
+        menuItem.Id = Guid.NewGuid();
 
 
         menuItem.Active = request.MenuItemForCreation.Quantity > 0;

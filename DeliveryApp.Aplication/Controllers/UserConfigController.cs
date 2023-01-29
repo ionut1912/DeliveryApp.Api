@@ -59,7 +59,7 @@ public class UserConfigController : BaseApiController
     public async Task<ActionResult<UserConfigs>> AddUserConfigs(UserConfigForCreation userConfig)
     {
         return HandleResult(await Mediator.Send(new UserConfigCreateCommand
-            { UserConfigs  = userConfig }));
+            { UserConfigs = userConfig }));
     }
 
     [Authorize]

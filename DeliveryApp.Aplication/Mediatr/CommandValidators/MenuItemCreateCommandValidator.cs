@@ -12,7 +12,7 @@ public class MenuItemCreateCommandValidator : AbstractValidator<MenuItemCreateCo
         RuleFor(x => x.MenuItemForCreation.Ingredients).NotEmpty().WithMessage("ingredients should not be empty");
         RuleFor(x => x.MenuItemForCreation.Price).NotEmpty().WithMessage("price should not be empty").GreaterThan(0)
             .WithMessage("price should be greater than 0");
-        RuleFor(x =>x.MenuItemForCreation.Quantity).NotEmpty().WithMessage("quantity should not be empty")
+        RuleFor(x => x.MenuItemForCreation.Quantity).NotEmpty().WithMessage("quantity should not be empty")
             .GreaterThan(0)
             .WithMessage("quantity should be grater than 0");
     }

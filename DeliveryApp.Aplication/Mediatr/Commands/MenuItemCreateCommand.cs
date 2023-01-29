@@ -7,5 +7,5 @@ namespace DeliveryApp.Aplication.Mediatr.Commands;
 
 public class MenuItemCreateCommand : ICommand<Result<MenuItems>>
 {
-    public MenuItemForCreation menuItemForCreation { get; set; }
+    public MenuItemForCreation MenuItemForCreation { get; set; }
 }

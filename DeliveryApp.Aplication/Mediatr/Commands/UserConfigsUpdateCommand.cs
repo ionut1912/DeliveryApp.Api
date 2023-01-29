@@ -7,6 +7,6 @@ namespace DeliveryApp.Aplication.Mediatr.Commands;
 
 public class UserConfigsUpdateCommand : ICommand<Result<Unit>>
 {
-    public int id { get; set; }
-    public UserConfigForUpdate configs { get; set; }
+    public int Id { get; set; }
+    public UserConfigForUpdate Configs { get; set; }
 }

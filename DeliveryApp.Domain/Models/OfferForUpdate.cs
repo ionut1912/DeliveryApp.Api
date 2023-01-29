@@ -2,8 +2,8 @@
 
 public class OfferForUpdate
 {
-    public string dateActiveFrom { get; set; }
-    public string dateActiveTo { get; set; }
-    public int discount { get; set; }
-    public Guid menuItemId { get; set; }
+    public string DateActiveFrom { get; set; }
+    public string DateActiveTo { get; set; }
+    public int Discount { get; set; }
+    public Guid MenuItemId { get; set; }
 }

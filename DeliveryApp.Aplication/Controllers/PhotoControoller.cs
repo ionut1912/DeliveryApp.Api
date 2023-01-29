@@ -25,7 +25,7 @@ public class PhotoControoller : BaseApiController
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
-        return HandleResult(await Mediator.Send(new PhotoDeleteCommand { Id = id}));
+        return HandleResult(await Mediator.Send(new PhotoDeleteCommand { Id = id }));
     }
 
 

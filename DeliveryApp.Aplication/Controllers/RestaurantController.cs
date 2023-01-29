@@ -32,7 +32,7 @@ public class RestaurantController : BaseApiController
     {
         return HandleResult(
             await Mediator.Send(new QueryItem<Restaurants>
-                { id = id }));
+                { Id = id }));
     }
 
     [Authorize]
@@ -41,7 +41,7 @@ public class RestaurantController : BaseApiController
         Guid id, RestaurantForUpdate restaurantForUpdate)
     {
         return HandleResult(await Mediator.Send(new RestaurantEditCommand
-            { id = id, restaurantForUpdate = restaurantForUpdate }));
+            { Id = id, RestaurantForUpdate = restaurantForUpdate }));
     }
 
     [Authorize]
@@ -50,7 +50,7 @@ public class RestaurantController : BaseApiController
         RestaurantForCreation restaurantForCreation)
     {
         return HandleResult(await Mediator.Send(new RestaurantCreateCommand
-            { restaurantForCreation = restaurantForCreation }));
+            { RestaurantForCreation = restaurantForCreation }));
     }
 
     [Authorize]
@@ -58,6 +58,6 @@ public class RestaurantController : BaseApiController
     public async Task<ActionResult<Restaurants>>
         DeleteRestaurant(Guid id)
     {
-        return HandleResult(await Mediator.Send(new DeleteCommand { id = id }));
+        return HandleResult(await Mediator.Send(new DeleteCommand { Id = id }));
     }
 }

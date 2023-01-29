@@ -2,10 +2,10 @@
 
 public class UserAddresses
 {
-    public Guid addressId { get; set; }
-    public int userId { get; set; }
-    public string street { get; set; }
-    public string number { get; set; }
-    public string city { get; set; }
-    public string postalCode { get; set; }
+    public Guid AddressId { get; set; }
+    public int UserId { get; set; }
+    public string Street { get; set; }
+    public string Number { get; set; }
+    public string City { get; set; }
+    public string PostalCode { get; set; }
 }

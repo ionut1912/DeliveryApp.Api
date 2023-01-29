@@ -2,8 +2,8 @@
 
 public class OfferMenuItems
 {
-    public Guid offerId { get; set; }
-    public Offers offer { get; set; }
-    public Guid menuItemId { get; set; }
-    public MenuItems menuItem { get; set; }
+    public Guid OfferId { get; set; }
+    public Offers Offer { get; set; }
+    public Guid MenuItemId { get; set; }
+    public MenuItems MenuItem { get; set; }
 }

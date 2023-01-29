@@ -27,25 +27,25 @@ public class DeliveryContext : IdentityDbContext<Users, Roles, int>
     {
         base.OnModelCreating(builder);
         builder.Entity<OfferMenuItems>()
-            .HasKey(x => new { x.offerId, x.menuItemId });
-        builder.Entity<OfferMenuItems>().HasOne(offer => offer.offer)
-            .WithMany(om => om.offerMenuItems)
-            .HasForeignKey(id => id.offerId);
-        builder.Entity<OfferMenuItems>().HasOne(menuItem => menuItem.menuItem)
-            .WithMany(om => om.offerMenuItems)
-            .HasForeignKey(id => id.menuItemId);
-        builder.Entity<RestaurantAddresses>().HasKey(x => x.addressId);
-        builder.Entity<Restaurants>().HasOne(r => r.address).WithOne()
-            .HasForeignKey<RestaurantAddresses>(x => x.restaurantId)
+            .HasKey(x => new { x.OfferId, x.MenuItemId });
+        builder.Entity<OfferMenuItems>().HasOne(offer => offer.Offer)
+            .WithMany(om => om.OfferMenuItems)
+            .HasForeignKey(id => id.OfferId);
+        builder.Entity<OfferMenuItems>().HasOne(menuItem => menuItem.MenuItem)
+            .WithMany(om => om.OfferMenuItems)
+            .HasForeignKey(id => id.MenuItemId);
+        builder.Entity<RestaurantAddresses>().HasKey(x => x.AddressId);
+        builder.Entity<Restaurants>().HasOne(r => r.Address).WithOne()
+            .HasForeignKey<RestaurantAddresses>(x => x.RestaurantId)
             .OnDelete(DeleteBehavior.Cascade);
-        builder.Entity<UserAddresses>().HasKey(x => x.addressId);
+        builder.Entity<UserAddresses>().HasKey(x => x.AddressId);
         builder.Entity<Users>()
-            .HasOne(a => a.userAddress)
+            .HasOne(a => a.UserAddress)
             .WithOne()
-            .HasForeignKey<UserAddresses>(a => a.userId)
+            .HasForeignKey<UserAddresses>(a => a.UserId)
             .OnDelete(DeleteBehavior.Cascade);
-        builder.Entity<UserConfigs>().HasKey(x => x.id);
-        builder.Entity<Users>().HasOne(c => c.userConfigs).WithOne().HasForeignKey<UserConfigs>(c => c.userId)
+        builder.Entity<UserConfigs>().HasKey(x => x.Id);
+        builder.Entity<Users>().HasOne(c => c.UserConfigs).WithOne().HasForeignKey<UserConfigs>(c => c.UserId)
             .OnDelete(DeleteBehavior.Cascade);
         builder.Entity<Roles>()
             .HasData(

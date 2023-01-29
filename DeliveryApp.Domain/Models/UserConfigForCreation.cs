@@ -2,9 +2,9 @@
 
 public class UserConfigForCreation
 {
-    public string username { get; set; }
-    public float weight { get; set; }
-    public int height { get; set; }
-    public int age { get; set; }
-    public string sex { get; set; }
+    public string Username { get; set; }
+    public float Weight { get; set; }
+    public int Height { get; set; }
+    public int Age { get; set; }
+    public string Sex { get; set; }
 }

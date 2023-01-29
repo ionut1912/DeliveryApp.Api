@@ -35,14 +35,14 @@ public class UserConfigController : BaseApiController
     {
         return HandleResult(
             await Mediator.Send(new QueryItem<UserConfigs>
-                { id = id }));
+                { Id = id }));
     }
 
     [Authorize]
     [HttpGet("config/{username}")]
     public async Task<ActionResult<UserConfigs>> GetUserConfigByUsername(string username)
     {
-        return HandleResult(await Mediator.Send(new UserConfigQueryItemByUsername { username = username }));
+        return HandleResult(await Mediator.Send(new UserConfigQueryItemByUsername { Username = username }));
     }
 
     [Authorize]
@@ -51,7 +51,7 @@ public class UserConfigController : BaseApiController
         int id, UserConfigForUpdate configs)
     {
         return HandleResult(await Mediator.Send(new UserConfigsUpdateCommand
-            { id = id, configs = configs }));
+            { Id = id, Configs = configs }));
     }
 
     [Authorize]
@@ -59,7 +59,7 @@ public class UserConfigController : BaseApiController
     public async Task<ActionResult<UserConfigs>> AddUserConfigs(UserConfigForCreation userConfig)
     {
         return HandleResult(await Mediator.Send(new UserConfigCreateCommand
-            { userConfigs = userConfig }));
+            { UserConfigs  = userConfig }));
     }
 
     [Authorize]
@@ -67,6 +67,6 @@ public class UserConfigController : BaseApiController
     public async Task<ActionResult<UserConfigs>>
         DeleteRestaurant(Guid id)
     {
-        return HandleResult(await Mediator.Send(new DeleteCommand { id = id }));
+        return HandleResult(await Mediator.Send(new DeleteCommand { Id = id }));
     }
 }

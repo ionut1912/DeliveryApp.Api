@@ -7,11 +7,11 @@ public class MenuItemEditCommandValidator : AbstractValidator<MenuItemEditComman
 {
     public MenuItemEditCommandValidator()
     {
-        RuleFor(x => x.menuItemForUpdate.itemName).NotEmpty().WithMessage("Menu item name should not be empty");
-        RuleFor(x => x.menuItemForUpdate.category).NotEmpty().WithMessage("category should not be empty");
-        RuleFor(x => x.menuItemForUpdate.ingredients).NotEmpty().WithMessage("ingredients should not be empty");
-        RuleFor(x => x.menuItemForUpdate.price).NotEmpty().WithMessage("price should not be empty").GreaterThan(0)
+        RuleFor(x => x.MenuItemForUpdate.ItemName).NotEmpty().WithMessage("Menu item name should not be empty");
+        RuleFor(x => x.MenuItemForUpdate.Category).NotEmpty().WithMessage("category should not be empty");
+        RuleFor(x => x.MenuItemForUpdate.Ingredients).NotEmpty().WithMessage("ingredients should not be empty");
+        RuleFor(x => x.MenuItemForUpdate.Price).NotEmpty().WithMessage("price should not be empty").GreaterThan(0)
             .WithMessage("price should be greater than 0");
-        RuleFor(x => x.menuItemForUpdate.quantity).NotEmpty().WithMessage("quantity should not be empty");
+        RuleFor(x => x.MenuItemForUpdate.Quantity).NotEmpty().WithMessage("quantity should not be empty");
     }
 }

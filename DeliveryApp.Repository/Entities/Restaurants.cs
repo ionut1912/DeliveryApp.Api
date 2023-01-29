@@ -4,7 +4,7 @@ namespace DeliveryApp.Repository.Entities;
 
 public class Restaurants
 {
-    public Guid id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; }
-    public RestaurantAddresses address { get; set; }
+    public RestaurantAddresses Address { get; set; }
 }

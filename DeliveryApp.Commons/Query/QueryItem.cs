@@ -5,5 +5,5 @@ namespace DeliveryApp.Commons.Query;
 
 public class QueryItem<T> : IQuery<Result<T>>
 {
-    public Guid id { get; set; }
+    public Guid Id { get; set; }
 }

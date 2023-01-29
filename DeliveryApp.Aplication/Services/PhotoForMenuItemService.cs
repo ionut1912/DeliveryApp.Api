@@ -22,10 +22,10 @@ public class PhotoForMenuItemService : IPhotoForMenuItemRepository
     public async Task<Result<PhotoForMenuItem>> AddPhotoForMenuItem(PhotoForMenuItemCreateCommand command,
         CancellationToken cancellationToken)
     {
-        var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.id == command.id, cancellationToken);
+        var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
         if (menuItem == null) return null;
 
-        var photoUploadResult = await _photoAccessor.AddPhoto(command.file);
+        var photoUploadResult = await _photoAccessor.AddPhoto(command.File);
         var photo = new PhotoForMenuItem
         {
             Url = photoUploadResult.Url,
@@ -45,10 +45,10 @@ public class PhotoForMenuItemService : IPhotoForMenuItemRepository
     public async Task<Result<Unit>> DeletePhotoForMenuItem(PhotoForMenuItemDeleteCommand command,
         CancellationToken cancellationToken)
     {
-        var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.id == command.itemId, cancellationToken);
+        var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == command.ItemId, cancellationToken);
         if (menuItem == null) return null;
 
-        var photo = menuItem.Photos.FirstOrDefault(x => x.Id == command.photoId);
+        var photo = menuItem.Photos.FirstOrDefault(x => x.Id == command.PhotoId);
         if (photo == null) return null;
 
         if (photo.IsMain) return Result<Unit>.Failure("You can't delete your main photo");
@@ -65,10 +65,10 @@ public class PhotoForMenuItemService : IPhotoForMenuItemRepository
     public async Task<Result<Unit>> SetMainPhotoForMenuItem(PhotoForMenuItemSetMainCommand command,
         CancellationToken cancellationToken)
     {
-        var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.id == command.itemId, cancellationToken);
+        var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == command.ItemId, cancellationToken);
         if (menuItem == null) return null;
 
-        var photo = menuItem.Photos.FirstOrDefault(x => x.Id == command.photoId);
+        var photo = menuItem.Photos.FirstOrDefault(x => x.Id == command.PhotoId);
         if (photo == null) return null;
 
         var currentMain = menuItem.Photos.FirstOrDefault(x => x.IsMain);

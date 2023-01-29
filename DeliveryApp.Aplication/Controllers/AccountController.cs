@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DeliveryApp.Aplication.MailSending;
-using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Aplication.Services;
 using DeliveryApp.Commons.Models;
 using DeliveryApp.Domain.DTO;
@@ -34,7 +33,7 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-        var user = await _userManager.Users.Include(x => x.userAddress).Include(x => x.photos)
+        var user = await _userManager.Users.Include(x => x.UserAddress).Include(x => x.Photos)
             .FirstOrDefaultAsync(x => x.UserName == loginDto.Username);
 
         if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
@@ -48,23 +47,23 @@ public class AccountController : ControllerBase
         return new UserDto
 
         {
-            token = await _tokenService.GenerateToken(user),
-            image = user.photos.FirstOrDefault(x => x.IsMain)?.Url,
-            username = user.UserName,
-            address = _mapper.Map<UserAddressesForCreation>(user.userAddress)
+            Token = await _tokenService.GenerateToken(user),
+            Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+            Username = user.UserName,
+            Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress)
         };
     }
 
     [HttpPost("register")]
     public async Task<ActionResult> Register(RegisterDto registerDto)
     {
-        var address = _mapper.Map<UserAddresses>(registerDto.addressForCreation);
-        address.addressId = Guid.NewGuid();
+        var address = _mapper.Map<UserAddresses>(registerDto.AddressForCreation);
+        address.AddressId = Guid.NewGuid();
         var user = new Users
         {
             Email = registerDto.Email,
             UserName = registerDto.Username,
-            userAddress = address
+            UserAddress = address
         };
 
         var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -85,15 +84,15 @@ public class AccountController : ControllerBase
     [HttpGet("current")]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
-        var user = await _userManager.Users.Include(x => x.photos).Include(x => x.userAddress)
+        var user = await _userManager.Users.Include(x => x.Photos).Include(x => x.UserAddress)
             .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
         return new UserDto
 
         {
-            token = await _tokenService.GenerateToken(user),
-            image = user.photos.FirstOrDefault(x => x.IsMain)?.Url,
-            username = user.UserName,
-            address = _mapper.Map<UserAddressesForCreation>(user.userAddress)
+            Token = await _tokenService.GenerateToken(user),
+            Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+            Username = user.UserName,
+            Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress)
         };
     }
 }

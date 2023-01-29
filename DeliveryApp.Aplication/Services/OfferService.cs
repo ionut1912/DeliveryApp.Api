@@ -23,17 +23,17 @@ public class OfferService : IOfferRepository
 
     public async Task<Result<Offers>> AddOffer(OfferCreateCommand command, CancellationToken cancellationToken)
     {
-        var offer = _mapper.Map<Offers>(command.offerForCreation);
-        offer.id = Guid.NewGuid();
+        var offer = _mapper.Map<Offers>(command.OfferForCreation);
+        offer.Id = Guid.NewGuid();
         var foundMenuItem =
-            await _context.MenuItems.FirstOrDefaultAsync(x => x.id == command.offerForCreation.menuItemId,
+            await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == command.OfferForCreation.MenuItemId,
                 cancellationToken);
         if (foundMenuItem == null) return Result<Offers>.Failure("Menu Item not found");
 
-        offer.active = DateTime.Now <= offer.dateActiveTo;
+        offer.Active = DateTime.Now <= offer.DateActiveTo;
 
-        offer.offerMenuItems.Add(new OfferMenuItems
-            { offerId = offer.id, menuItemId = foundMenuItem.id });
+        offer.OfferMenuItems.Add(new OfferMenuItems
+            { OfferId = offer.Id, MenuItemId = foundMenuItem.Id });
         _context.Offers.Add(offer);
         var result = await _context.SaveChangesAsync(cancellationToken) > 0;
         return !result ? Result<Offers>.Failure("Offer not created") : Result<Offers>.Success(offer);
@@ -41,25 +41,25 @@ public class OfferService : IOfferRepository
 
     public async Task<Result<Unit>> EditOffer(OfferEditCommand command, CancellationToken cancellationToken)
     {
-        var offer = await _context.Offers.FindAsync(command.id);
+        var offer = await _context.Offers.FindAsync(command.Id);
         if (offer == null) return null;
-        offer.active = DateTime.Now <= offer.dateActiveTo;
+        offer.Active = DateTime.Now <= offer.DateActiveTo;
 
-        _mapper.Map(command.offerForUpdate, offer);
+        _mapper.Map(command.OfferForUpdate, offer);
         var result = await _context.SaveChangesAsync(cancellationToken) > 0;
         return !result ? Result<Unit>.Failure("Failed to update offer") : Result<Unit>.Success(Unit.Value);
     }
 
     public async Task<Result<List<Offers>>> GetOffers(ListQuery<Offers> request, CancellationToken cancellationToken)
     {
-        return Result<List<Offers>>.Success(await _context.Offers.Include(x => x.offerMenuItems)
+        return Result<List<Offers>>.Success(await _context.Offers.Include(x => x.OfferMenuItems)
             .ToListAsync(cancellationToken));
     }
 
     public async Task<Result<Offers>> GetOffer(QueryItem<Offers> request, CancellationToken cancellationToken)
     {
-        var offer = await _context.Offers.Include(x => x.offerMenuItems)
-            .FirstOrDefaultAsync(x => x.id == request.id, cancellationToken);
+        var offer = await _context.Offers.Include(x => x.OfferMenuItems)
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
         return offer == null ? Result<Offers>.Failure("Offer not found") : Result<Offers>.Success(offer);
     }
 }

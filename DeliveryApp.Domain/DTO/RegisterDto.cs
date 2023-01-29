@@ -11,5 +11,5 @@ public class RegisterDto
 
     [Required] public string Username { get; set; }
 
-    public UserAddressesForCreation addressForCreation { get; set; }
+    public UserAddressesForCreation AddressForCreation { get; set; }
 }

@@ -7,6 +7,6 @@ namespace DeliveryApp.Aplication.Mediatr.Commands;
 
 public class OfferEditCommand : ICommand<Result<Unit>>
 {
-    public Guid id { get; set; }
-    public OfferForUpdate offerForUpdate { get; set; }
+    public Guid Id { get; set; }
+    public OfferForUpdate OfferForUpdate { get; set; }
 }

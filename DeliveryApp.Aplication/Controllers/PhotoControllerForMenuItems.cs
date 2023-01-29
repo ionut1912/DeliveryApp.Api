@@ -20,7 +20,7 @@ public class PhotoControllerForMenuItems : BaseApiController
     public async Task<ActionResult<PhotoForMenuItem>> AddPhoto(IFormFile file, Guid id)
     {
         return HandleResult(
-            await Mediator.Send(new PhotoForMenuItemCreateCommand { file = file, id = id }));
+            await Mediator.Send(new PhotoForMenuItemCreateCommand { File = file, Id = id }));
     }
 
 
@@ -28,13 +28,13 @@ public class PhotoControllerForMenuItems : BaseApiController
     public async Task<ActionResult<PhotoForMenuItem>> Delete(string photoId, Guid itemId)
     {
         return HandleResult(
-            await Mediator.Send(new PhotoForMenuItemDeleteCommand { photoId = photoId, itemId = itemId }));
+            await Mediator.Send(new PhotoForMenuItemDeleteCommand { PhotoId = photoId, ItemId = itemId }));
     }
 
     [HttpPost("{photoId}/{itemId}/setMain")]
     public async Task<ActionResult<PhotoForMenuItem>> SetMain(string photoId, Guid itemId)
     {
         return HandleResult(
-            await Mediator.Send(new PhotoForMenuItemDeleteCommand { photoId = photoId, itemId = itemId }));
+            await Mediator.Send(new PhotoForMenuItemDeleteCommand { PhotoId = photoId, ItemId = itemId }));
     }
 }

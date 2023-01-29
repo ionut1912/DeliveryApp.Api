@@ -21,7 +21,7 @@ public class MenuItemController : BaseApiController
     public async Task<ActionResult<MenuItems>> AddMenuItem(MenuItemForCreation menuItemForCreation)
     {
         return HandleResult(
-            await Mediator.Send(new MenuItemCreateCommand { menuItemForCreation = menuItemForCreation }));
+            await Mediator.Send(new MenuItemCreateCommand { MenuItemForCreation = menuItemForCreation }));
     }
 
     [HttpGet]
@@ -33,13 +33,13 @@ public class MenuItemController : BaseApiController
     [HttpGet("{id}")]
     public async Task<ActionResult<MenuItems>> GetMenuItems(Guid id)
     {
-        return HandleResult(await Mediator.Send(new QueryItem<MenuItems> { id = id }));
+        return HandleResult(await Mediator.Send(new QueryItem<MenuItems> { Id = id }));
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult<MenuItems>> UpdateMneuItems(Guid id, MenuItemForUpdate menuItemForUpdate)
     {
         return HandleResult(await Mediator.Send(new MenuItemEditCommand
-            { id = id, menuItemForUpdate = menuItemForUpdate }));
+            { Id = id, MenuItemForUpdate = menuItemForUpdate }));
     }
 }

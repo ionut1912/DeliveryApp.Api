@@ -6,6 +6,6 @@ namespace DeliveryApp.Aplication.Mediatr.Commands;
 
 public class PhotoForMenuItemCreateCommand : ICommand<Result<PhotoForMenuItem>>
 {
-    public IFormFile file { get; set; }
-    public Guid id { get; set; }
+    public IFormFile File { get; set; }
+    public Guid Id { get; set; }
 }

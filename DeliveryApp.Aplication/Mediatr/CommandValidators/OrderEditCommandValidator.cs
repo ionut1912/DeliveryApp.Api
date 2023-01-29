@@ -7,6 +7,6 @@ public class OrderEditCommandValidator : AbstractValidator<OrderEditCommand>
 {
     public OrderEditCommandValidator()
     {
-        RuleFor(x => x.orderForUpdate.status).NotEmpty().WithMessage("Status should not be empty");
+        RuleFor(x => x.OrderForUpdate.Status).NotEmpty().WithMessage("Status should not be empty");
     }
 }

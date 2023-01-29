@@ -26,13 +26,13 @@ public class UserConfigService : IUserConfigRepository
     public async Task<Result<UserConfigs>> AddConfig(UserConfigCreateCommand command,
         CancellationToken cancellationToken)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == command.userConfigs.username,
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == command.UserConfigs.Username,
             cancellationToken);
         if (user == null)
-            return Result<UserConfigs>.Failure($"User with username {command.userConfigs.username} does not exists");
-        var config = _mapper.Map<UserConfigs>(command.userConfigs);
-        config.id = Guid.NewGuid();
-        config.userId = user.Id;
+            return Result<UserConfigs>.Failure($"User with username {command.UserConfigs.Username} does not exists");
+        var config = _mapper.Map<UserConfigs>(command.UserConfigs);
+        config.Id = Guid.NewGuid();
+        config.UserId = user.Id;
         _context.UserConfigs.Add(config);
         var result = await _context.SaveChangesAsync(cancellationToken) > 0;
         return result
@@ -53,7 +53,7 @@ public class UserConfigService : IUserConfigRepository
     {
         var config =
             await _context.UserConfigs
-                .FirstOrDefaultAsync(x => x.id == query.id, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
         if (config == null)
             return Result<UserConfigs>.Failure(
                 "Config not found");
@@ -64,26 +64,26 @@ public class UserConfigService : IUserConfigRepository
     public async Task<Result<UserConfigs>> GetConfigByUsername(UserConfigQueryItemByUsername query,
         CancellationToken cancellationToken)
     {
-        var user = _context.Users.FirstOrDefaultAsync(x => x.UserName == query.username, cancellationToken);
-        if (user == null) return Result<UserConfigs>.Failure($"User with username {query.username} does not exists");
+        var user =await _context.Users.FirstOrDefaultAsync(x => x.UserName == query.Username, cancellationToken);
+        if (user == null) return Result<UserConfigs>.Failure($"User with username {query.Username} does not exists");
         var config =
-            await _context.UserConfigs.FirstOrDefaultAsync(x => x.username == query.username, cancellationToken);
+            await _context.UserConfigs.FirstOrDefaultAsync(x => x.Username == query.Username, cancellationToken);
         if (config == null) return Result<UserConfigs>.Failure("Config not found");
         return Result<UserConfigs>.Success(config);
     }
 
     public async Task<Result<Unit>> EditConfig(UserConfigsUpdateCommand command, CancellationToken cancellationToken)
     {
-        var configs = await _context.UserConfigs.FindAsync(command.id);
+        var configs = await _context.UserConfigs.FindAsync(command.Id);
         if (configs == null) return null;
-        _mapper.Map(command.configs, configs);
+        _mapper.Map(command.Configs, configs);
         var result = await _context.SaveChangesAsync(cancellationToken) > 0;
         return !result ? Result<Unit>.Failure("Failed to update config") : Result<Unit>.Success(Unit.Value);
     }
 
     public async Task<Result<Unit>> DeleteConfig(DeleteCommand query, CancellationToken cancellationToken)
     {
-        var config = await _context.UserConfigs.FindAsync(query.id);
+        var config = await _context.UserConfigs.FindAsync(query.Id);
         if (config == null) return null;
         _context.Remove(config);
         var result = await _context.SaveChangesAsync(cancellationToken) > 0;

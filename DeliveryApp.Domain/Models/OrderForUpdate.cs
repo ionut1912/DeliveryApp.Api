@@ -2,5 +2,5 @@
 
 public class OrderForUpdate
 {
-    public string status { get; set; }
+    public string Status { get; set; }
 }

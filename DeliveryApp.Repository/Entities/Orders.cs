@@ -2,11 +2,11 @@
 
 public class Orders
 {
-    public Guid id { get; set; }
-    public DateTime reciviedTime { get; set; }
-    public float finalPrice { get; set; }
-    public string status { get; set; }
-    public Users user { get; set; }
-    public Restaurants restaurant { get; set; }
-    public List<MenuItems> menuItems { get; set; } = new();
+    public Guid Id { get; set; }
+    public DateTime ReciviedTime { get; set; }
+    public float FinalPrice { get; set; }
+    public string Status { get; set; }
+    public Users User { get; set; }
+    public Restaurants Restaurant { get; set; }
+    public List<MenuItems> MenuItems { get; set; } = new();
 }

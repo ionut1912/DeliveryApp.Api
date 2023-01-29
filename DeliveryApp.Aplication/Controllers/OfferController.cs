@@ -20,7 +20,7 @@ public class OfferController : BaseApiController
     [HttpPost]
     public async Task<ActionResult<Offers>> AddOffer(OfferForCreation offerForCreation)
     {
-        return HandleResult(await Mediator.Send(new OfferCreateCommand { offerForCreation = offerForCreation }));
+        return HandleResult(await Mediator.Send(new OfferCreateCommand { OfferForCreation = offerForCreation }));
     }
 
     [HttpGet]
@@ -32,13 +32,13 @@ public class OfferController : BaseApiController
     [HttpGet("{id}")]
     public async Task<ActionResult<Offers>> GetOffer(Guid id)
     {
-        return HandleResult(await Mediator.Send(new QueryItem<Offers> { id = id }));
+        return HandleResult(await Mediator.Send(new QueryItem<Offers> { Id = id }));
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult<Offers>> UpdateOffer(Guid id, OfferForUpdate offerForUpdate)
     {
         return HandleResult(await Mediator.Send(new OfferEditCommand
-            { id = id, offerForUpdate = offerForUpdate }));
+            { Id = id, OfferForUpdate = offerForUpdate }));
     }
 }

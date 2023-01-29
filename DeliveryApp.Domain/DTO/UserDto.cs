@@ -4,8 +4,8 @@ namespace DeliveryApp.Domain.DTO;
 
 public class UserDto
 {
-    public string token { get; set; }
-    public string username { get; set; }
-    public string? image { get; set; }
-    public UserAddressesForCreation address { get; set; }
+    public string Token { get; set; }
+    public string Username { get; set; }
+    public string Image { get; set; }
+    public UserAddressesForCreation Address { get; set; }
 }

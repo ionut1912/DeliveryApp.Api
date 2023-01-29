@@ -24,48 +24,48 @@ public class OrderService : IOrderRepository
 
     public async Task<Result<Orders>> AddOrder(OrderCreateCommand command, CancellationToken cancellationToken)
     {
-        var restaurant = await _context.Restaurants.Include(x => x.address)
-            .FirstOrDefaultAsync(x => x.Name == command.order.restaurantName);
-        var user = await _context.Users.Include(x => x.userAddress)
-            .FirstOrDefaultAsync(x => x.UserName == command.order.username);
-        var order = _mapper.Map<Orders>(command.order);
-        order.id = Guid.NewGuid();
-        order.restaurant = restaurant;
-        order.user = user;
-        foreach (var menuItemName in command.order.menuItemNames)
+        var restaurant = await _context.Restaurants.Include(x => x.Address)
+            .FirstOrDefaultAsync(x => x.Name == command.Order.RestaurantName);
+        var user = await _context.Users.Include(x => x.UserAddress)
+            .FirstOrDefaultAsync(x => x.UserName == command.Order.Username);
+        var order = _mapper.Map<Orders>(command.Order);
+        order.Id = Guid.NewGuid();
+        order.Restaurant = restaurant;
+        order.User = user;
+        foreach (var menuItemName in command.Order.MenuItemNames)
         {
-            var orderMenuItem = await _context.MenuItems.Include(x => x.offerMenuItems).Include(x => x.Photos)
-                .FirstOrDefaultAsync(x => x.itemName == menuItemName);
-            order.menuItems.Add(orderMenuItem);
+            var orderMenuItem = await _context.MenuItems.Include(x => x.OfferMenuItems).Include(x => x.Photos)
+                .FirstOrDefaultAsync(x => x.ItemName == menuItemName);
+            order.MenuItems.Add(orderMenuItem);
         }
 
         float price = 0;
-        foreach (var menuItem in order.menuItems)
-            if (menuItem.offerMenuItems.Any(x => x.offer.active))
+        foreach (var menuItem in order.MenuItems)
+            if (menuItem.OfferMenuItems.Any(x => x.Offer.Active))
             {
-                foreach (var offerMenuItem in menuItem.offerMenuItems)
-                    if (offerMenuItem.offer.active)
+                foreach (var offerMenuItem in menuItem.OfferMenuItems)
+                    if (offerMenuItem.Offer.Active)
                     {
-                        var discount = offerMenuItem.offer.discount;
+                        var discount = offerMenuItem.Offer.Discount;
                         if (discount != 0)
                         {
                             var percentage = discount / 100;
-                            var discountPrice = menuItem.price - percentage * menuItem.price;
+                            var discountPrice = menuItem.Price - percentage * menuItem.Price;
                             price += discountPrice;
                         }
                         else
                         {
-                            price += menuItem.price;
+                            price += menuItem.Price;
                         }
                     }
             }
             else
             {
-                price += menuItem.price;
+                price += menuItem.Price;
             }
 
-        order.finalPrice = price;
-        order.status = "received";
+        order.FinalPrice = price;
+        order.Status = "received";
         _context.Orders.Add(order);
         var result = await _context.SaveChangesAsync(cancellationToken) > 0;
         return result
@@ -77,15 +77,15 @@ public class OrderService : IOrderRepository
     public async Task<Result<List<Orders>>> GetOrders(ListQuery<Orders> command, CancellationToken cancellationToken)
     {
         return Result<List<Orders>>.Success(
-            await _context.Orders.Include(x => x.restaurant).Include(x => x.user).Include(x => x.menuItems)
+            await _context.Orders.Include(x => x.Restaurant).Include(x => x.User).Include(x => x.MenuItems)
                 .ToListAsync(cancellationToken));
     }
 
     public async Task<Result<Orders>> GetOrder(QueryItem<Orders> query, CancellationToken cancellationToken)
     {
         var order =
-            await _context.Orders.Include(x => x.restaurant).Include(x => x.user).Include(x => x.menuItems)
-                .FirstOrDefaultAsync(x => x.id == query.id, cancellationToken);
+            await _context.Orders.Include(x => x.Restaurant).Include(x => x.User).Include(x => x.MenuItems)
+                .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
         if (order == null)
             return Result<Orders>.Failure(
                 "Order not found");
@@ -95,16 +95,16 @@ public class OrderService : IOrderRepository
 
     public async Task<Result<Unit>> EditOrder(OrderEditCommand command, CancellationToken cancellationToken)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(x => x.id == command.id);
+        var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == command.Id);
         if (order == null) return null;
-        _mapper.Map(command.orderForUpdate, order);
+        _mapper.Map(command.OrderForUpdate, order);
         var result = await _context.SaveChangesAsync(cancellationToken) > 0;
         return !result ? Result<Unit>.Failure("Failed to update order") : Result<Unit>.Success(Unit.Value);
     }
 
     public async Task<Result<Unit>> DeleteOrder(DeleteCommand query, CancellationToken cancellationToken)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(x => x.id == query.id);
+        var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == query.Id);
         if (order == null) return null;
 
         _context.Orders.Remove(order);

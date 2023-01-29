@@ -7,5 +7,5 @@ namespace DeliveryApp.Aplication.Mediatr.Commands;
 
 public class UserConfigCreateCommand : ICommand<Result<UserConfigs>>
 {
-    public UserConfigForCreation userConfigs { get; set; }
+    public UserConfigForCreation UserConfigs { get; set; }
 }

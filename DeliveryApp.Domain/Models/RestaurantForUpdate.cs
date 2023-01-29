@@ -4,6 +4,6 @@ namespace DeliveryApp.Domain.Models;
 
 public class RestaurantForUpdate
 {
-    public string name { get; set; }
-    public RestaurantAddressesForUpdate address { get; set; }
+    public string Name { get; set; }
+    public RestaurantAddressesForUpdate Address { get; set; }
 }

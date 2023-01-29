@@ -7,5 +7,5 @@ namespace DeliveryApp.Aplication.Mediatr.Commands;
 
 public class OrderCreateCommand : ICommand<Result<Orders>>
 {
-    public OrderForCreation order { get; set; }
+    public OrderForCreation Order { get; set; }
 }

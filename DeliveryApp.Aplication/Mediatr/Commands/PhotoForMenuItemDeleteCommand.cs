@@ -6,6 +6,6 @@ namespace DeliveryApp.Aplication.Mediatr.Commands;
 
 public class PhotoForMenuItemDeleteCommand : ICommand<Result<Unit>>
 {
-    public string photoId { get; set; }
-    public Guid itemId { get; set; }
+    public string PhotoId { get; set; }
+    public Guid ItemId { get; set; }
 }

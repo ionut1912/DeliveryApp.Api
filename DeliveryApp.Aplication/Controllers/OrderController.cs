@@ -20,7 +20,7 @@ public class OrderController : BaseApiController
     [HttpPost]
     public async Task<ActionResult<Orders>> AddOrder(OrderForCreation orderForCreation)
     {
-        return HandleResult(await Mediator.Send(new OrderCreateCommand { order = orderForCreation }));
+        return HandleResult(await Mediator.Send(new OrderCreateCommand { Order = orderForCreation }));
     }
 
     [HttpGet]
@@ -32,13 +32,13 @@ public class OrderController : BaseApiController
     [HttpGet("{id}")]
     public async Task<ActionResult<Orders>> GetOrder(Guid id)
     {
-        return HandleResult(await Mediator.Send(new QueryItem<Orders> { id = id }));
+        return HandleResult(await Mediator.Send(new QueryItem<Orders> { Id = id }));
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult<Orders>> UpdateOrder(Guid id, OrderForUpdate orderForUpdate)
     {
         return HandleResult(await Mediator.Send(new OrderEditCommand
-            { id = id, orderForUpdate = orderForUpdate }));
+            { Id = id, OrderForUpdate = orderForUpdate }));
     }
 }

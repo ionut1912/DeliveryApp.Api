@@ -6,7 +6,7 @@ namespace DeliveryApp.Repository.Entities;
 
 public class Users : IdentityUser<int>
 {
-    public ICollection<Photo> photos { get; set; } = new List<Photo>();
-    public UserAddresses userAddress { get; set; }
-    public UserConfigs userConfigs { get; set; }
+    public ICollection<Photo> Photos { get; set; } = new List<Photo>();
+    public UserAddresses UserAddress { get; set; }
+    public UserConfigs UserConfigs { get; set; }
 }

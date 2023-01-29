@@ -1,7 +1,6 @@
-﻿namespace DeliveryApp.Aplication.Repositories
+﻿namespace DeliveryApp.Aplication.Repositories;
+
+public interface IUserAccessor
 {
-    public interface IUserAccessor
-    {
-        string GetUsername();
-    }
+    string GetUsername();
 }

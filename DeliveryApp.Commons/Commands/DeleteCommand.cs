@@ -6,5 +6,5 @@ namespace DeliveryApp.Commons.Commands;
 
 public class DeleteCommand : ICommand<Result<Unit>>
 {
-    public Guid id { get; set; }
+    public Guid Id { get; set; }
 }

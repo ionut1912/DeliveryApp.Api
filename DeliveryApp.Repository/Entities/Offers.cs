@@ -2,10 +2,10 @@
 
 public class Offers
 {
-    public Guid id { get; set; }
-    public DateTime dateActiveFrom { get; set; }
-    public DateTime dateActiveTo { get; set; }
-    public int discount { get; set; }
-    public bool active { get; set; }
-    public ICollection<OfferMenuItems> offerMenuItems { get; set; } = new List<OfferMenuItems>();
+    public Guid Id { get; set; }
+    public DateTime DateActiveFrom { get; set; }
+    public DateTime DateActiveTo { get; set; }
+    public int Discount { get; set; }
+    public bool Active { get; set; }
+    public ICollection<OfferMenuItems> OfferMenuItems { get; set; } = new List<OfferMenuItems>();
 }

@@ -7,6 +7,6 @@ namespace DeliveryApp.Aplication.Mediatr.Commands;
 
 public class RestaurantEditCommand : ICommand<Result<Unit>>
 {
-    public Guid id { get; set; }
-    public RestaurantForUpdate restaurantForUpdate { get; set; }
+    public Guid Id { get; set; }
+    public RestaurantForUpdate RestaurantForUpdate { get; set; }
 }

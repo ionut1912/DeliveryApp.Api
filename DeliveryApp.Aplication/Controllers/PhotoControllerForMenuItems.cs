@@ -1,4 +1,5 @@
 ﻿using DeliveryApp.Aplication.Mediatr.Commands;
+using DeliveryApp.Aplication.Mediatr.Commands.Photo;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Domain.Cloudinary.Photo;
 using MediatR;

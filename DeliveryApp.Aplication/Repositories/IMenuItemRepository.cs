@@ -1,4 +1,4 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands;
+﻿using DeliveryApp.Aplication.Mediatr.Commands.MenuItem;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Repository.Entities;

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DeliveryApp.Aplication.Mediatr.Commands;
+using DeliveryApp.Aplication.Mediatr.Commands.MenuItem;
 using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Query;

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DeliveryApp.Aplication.Mediatr.Commands;
+using DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
 using DeliveryApp.Aplication.Mediatr.Query;
 using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Commons.Commands;

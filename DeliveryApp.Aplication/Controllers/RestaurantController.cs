@@ -1,4 +1,5 @@
 ﻿using DeliveryApp.Aplication.Mediatr.Commands;
+using DeliveryApp.Aplication.Mediatr.Commands.Restaurant;
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;

@@ -1,4 +1,4 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands;
+﻿using DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
 using DeliveryApp.Aplication.Mediatr.Query;
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Core;

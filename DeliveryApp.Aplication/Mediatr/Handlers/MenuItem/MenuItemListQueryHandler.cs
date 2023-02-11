@@ -2,11 +2,10 @@
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
-using DeliveryApp.Repository.Entities;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.MenuItem;
 
-public class MenuItemListQueryHandler : IQueryHandler<ListQuery<MenuItems>, Result<List<MenuItems>>>
+public class MenuItemListQueryHandler : IQueryHandler<ListQuery<Domain.Models.MenuItem>, Result<List<Domain.Models.MenuItem>>>
 {
     private readonly IMenuItemRepository _menuItemRepository;
 
@@ -15,7 +14,7 @@ public class MenuItemListQueryHandler : IQueryHandler<ListQuery<MenuItems>, Resu
         _menuItemRepository = menuItemRepository ?? throw new ArgumentNullException(nameof(menuItemRepository));
     }
 
-    public async Task<Result<List<MenuItems>>> Handle(ListQuery<MenuItems> request,
+    public async Task<Result<List<Domain.Models.MenuItem>>> Handle(ListQuery<Domain.Models.MenuItem> request,
         CancellationToken cancellationToken)
     {
         return await _menuItemRepository.GetMenuItems(request, cancellationToken);

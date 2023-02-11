@@ -2,12 +2,11 @@
 using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using DeliveryApp.Repository.Entities;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Restaurant;
 
 public class RestaurantCreateCommandHandler : ICommandHandler<RestaurantCreateCommand,
-    Result<Restaurants>>
+    Result<Domain.Models.Restaurant>>
 {
     private readonly IRestaurantRepository _restaurantRepository;
 
@@ -16,7 +15,7 @@ public class RestaurantCreateCommandHandler : ICommandHandler<RestaurantCreateCo
         _restaurantRepository = restaurantRepository ?? throw new ArgumentNullException(nameof(restaurantRepository));
     }
 
-    public async Task<Result<Restaurants>> Handle(
+    public async Task<Result<Domain.Models.Restaurant>> Handle(
         RestaurantCreateCommand request, CancellationToken cancellationToken)
     {
         return await _restaurantRepository.AddRestaurant(request, cancellationToken);

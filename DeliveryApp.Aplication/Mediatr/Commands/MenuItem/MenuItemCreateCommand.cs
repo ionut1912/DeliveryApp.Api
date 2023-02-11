@@ -1,11 +1,9 @@
 ﻿using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using DeliveryApp.Domain.Models;
-using DeliveryApp.Repository.Entities;
 
 namespace DeliveryApp.Aplication.Mediatr.Commands.MenuItem;
 
-public class MenuItemCreateCommand : ICommand<Result<MenuItems>>
+public class MenuItemCreateCommand : ICommand<Result<Domain.Models.MenuItem>>
 {
-    public MenuItemForCreation MenuItemForCreation { get; set; }
+    public Domain.Models.MenuItem MenuItemForCreation { get; set; }
 }

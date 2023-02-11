@@ -1,5 +1,5 @@
 ﻿using DeliveryApp.Commons.Models;
-using DeliveryApp.Domain.Cloudinary.Photo;
+using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

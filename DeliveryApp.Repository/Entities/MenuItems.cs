@@ -1,4 +1,4 @@
-﻿using DeliveryApp.Domain.Cloudinary.Photo;
+﻿using DeliveryApp.ExternalServices.Cloudinary.Photo;
 
 namespace DeliveryApp.Repository.Entities;
 

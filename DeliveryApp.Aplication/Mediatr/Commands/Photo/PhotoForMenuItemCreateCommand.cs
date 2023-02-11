@@ -1,6 +1,7 @@
 ﻿using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using DeliveryApp.Domain.Cloudinary.Photo;
+using DeliveryApp.ExternalServices.Cloudinary.Photo;
+using Microsoft.AspNetCore.Http;
 
 namespace DeliveryApp.Aplication.Mediatr.Commands.Photo;
 

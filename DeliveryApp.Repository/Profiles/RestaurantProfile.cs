@@ -7,7 +7,6 @@ public class RestaurantProfile : BaseProfile
 {
     public RestaurantProfile()
     {
-        CreateMap<Restaurants, RestaurantForCreation>().ReverseMap();
-        CreateMap<Restaurants, RestaurantForUpdate>().ReverseMap();
+        CreateMap<Restaurants, Restaurant>().ReverseMap();
     }
 }

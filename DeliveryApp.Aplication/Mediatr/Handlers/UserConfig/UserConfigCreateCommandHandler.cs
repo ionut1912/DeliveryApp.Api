@@ -2,11 +2,10 @@
 using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using DeliveryApp.Repository.Entities;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.UserConfig;
 
-public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCommand, Result<UserConfigs>>
+public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCommand, Result<Domain.Models.UserConfig>>
 {
     private readonly IUserConfigRepository _userConfigRepository;
 
@@ -15,7 +14,8 @@ public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCo
         _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
     }
 
-    public async Task<Result<UserConfigs>> Handle(UserConfigCreateCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Domain.Models.UserConfig>> Handle(UserConfigCreateCommand request,
+        CancellationToken cancellationToken)
     {
         return await _userConfigRepository.AddConfig(request, cancellationToken);
     }

@@ -2,13 +2,12 @@
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
-using DeliveryApp.Repository.Entities;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Restaurant;
 
 public class RestaurantQueryItemHandler : IQueryHandler<
-    QueryItem<Restaurants>,
-    Result<Restaurants>>
+    QueryItem<Domain.Models.Restaurant>,
+    Result<Domain.Models.Restaurant>>
 {
     private readonly IRestaurantRepository _restaurantRepository;
 
@@ -17,8 +16,8 @@ public class RestaurantQueryItemHandler : IQueryHandler<
         _restaurantRepository = restaurantRepository ?? throw new ArgumentNullException(nameof(restaurantRepository));
     }
 
-    public async Task<Result<Restaurants>> Handle(
-        QueryItem<Restaurants> request,
+    public async Task<Result<Domain.Models.Restaurant>> Handle(
+        QueryItem<Domain.Models.Restaurant> request,
         CancellationToken cancellationToken)
     {
         return await _restaurantRepository.GetRestaurant(request, cancellationToken);

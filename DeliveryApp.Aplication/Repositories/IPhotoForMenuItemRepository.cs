@@ -1,6 +1,6 @@
 ﻿using DeliveryApp.Aplication.Mediatr.Commands.Photo;
 using DeliveryApp.Commons.Core;
-using DeliveryApp.Domain.Cloudinary.Photo;
+using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using MediatR;
 
 namespace DeliveryApp.Aplication.Repositories;

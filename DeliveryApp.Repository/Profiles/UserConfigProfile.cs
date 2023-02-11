@@ -7,7 +7,6 @@ public class UserConfigProfile : BaseProfile
 {
     public UserConfigProfile()
     {
-        CreateMap<UserConfigs, UserConfigForCreation>().ReverseMap();
-        CreateMap<UserConfigs, UserConfigForUpdate>().ReverseMap();
+        CreateMap<UserConfigs, UserConfig>().ReverseMap();
     }
 }

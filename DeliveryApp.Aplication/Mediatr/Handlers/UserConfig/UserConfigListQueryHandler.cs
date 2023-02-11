@@ -2,11 +2,12 @@
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
-using DeliveryApp.Repository.Entities;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.UserConfig;
 
-public class UserConfigListQueryHandler : IQueryHandler<ListQuery<UserConfigs>, Result<List<UserConfigs>>>
+public class
+    UserConfigListQueryHandler : IQueryHandler<ListQuery<Domain.Models.UserConfig>,
+        Result<List<Domain.Models.UserConfig>>>
 {
     private readonly IUserConfigRepository _userConfigRepository;
 
@@ -15,7 +16,7 @@ public class UserConfigListQueryHandler : IQueryHandler<ListQuery<UserConfigs>, 
         _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
     }
 
-    public async Task<Result<List<UserConfigs>>> Handle(ListQuery<UserConfigs> request,
+    public async Task<Result<List<Domain.Models.UserConfig>>> Handle(ListQuery<Domain.Models.UserConfig> request,
         CancellationToken cancellationToken)
     {
         return await _userConfigRepository.GetConfigs(request, cancellationToken);

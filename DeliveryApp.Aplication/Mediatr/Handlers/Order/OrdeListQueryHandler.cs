@@ -2,13 +2,13 @@
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
-using DeliveryApp.Repository.Entities;
+using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Order;
 
 public class OrdeListQueryHandler : IQueryHandler<
-    ListQuery<Orders>,
-    Result<List<Orders>>>
+    ListQuery<OrderForCreation>,
+    Result<List<OrderForCreation>>>
 {
     private readonly IOrderRepository _orderRepository;
 
@@ -17,8 +17,8 @@ public class OrdeListQueryHandler : IQueryHandler<
         _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
     }
 
-    public async Task<Result<List<Orders>>> Handle(
-        ListQuery<Orders> request,
+    public async Task<Result<List<OrderForCreation>>> Handle(
+        ListQuery<OrderForCreation> request,
         CancellationToken cancellationToken)
     {
         return await _orderRepository.GetOrders(request, cancellationToken);

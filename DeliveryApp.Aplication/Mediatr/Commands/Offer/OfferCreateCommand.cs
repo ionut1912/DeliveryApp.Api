@@ -1,11 +1,9 @@
 ﻿using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using DeliveryApp.Domain.Models;
-using DeliveryApp.Repository.Entities;
 
 namespace DeliveryApp.Aplication.Mediatr.Commands.Offer;
 
-public class OfferCreateCommand : ICommand<Result<Offers>>
+public class OfferCreateCommand : ICommand<Result<Domain.Models.Offer>>
 {
-    public OfferForCreation OfferForCreation { get; set; }
+    public Domain.Models.Offer OfferForCreation { get; set; }
 }

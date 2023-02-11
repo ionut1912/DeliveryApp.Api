@@ -2,7 +2,7 @@
 using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using DeliveryApp.Domain.Cloudinary.Photo;
+using DeliveryApp.ExternalServices.Cloudinary.Photo;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Photo;
 

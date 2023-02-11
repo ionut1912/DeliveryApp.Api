@@ -1,10 +1,12 @@
 ﻿using System.Text.Json;
 using DeliveryApp.Domain.Exceptions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using ApplicationException = DeliveryApp.Domain.Exceptions.ApplicationException;
 
 namespace DeliveryApp.Aplication.Middlewares;
 
-internal sealed class ExceptionHandlingMiddleware : IMiddleware
+public class ExceptionHandlingMiddleware : IMiddleware
 {
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 

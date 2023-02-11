@@ -2,11 +2,10 @@
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
-using DeliveryApp.Repository.Entities;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Offer;
 
-public class OfferListQueryHandler : IQueryHandler<ListQuery<Offers>, Result<List<Offers>>>
+public class OfferListQueryHandler : IQueryHandler<ListQuery<Domain.Models.Offer>, Result<List<Domain.Models.Offer>>>
 {
     private readonly IOfferRepository _offerRepository;
 
@@ -15,7 +14,7 @@ public class OfferListQueryHandler : IQueryHandler<ListQuery<Offers>, Result<Lis
         _offerRepository = offerRepository ?? throw new ArgumentNullException(nameof(offerRepository));
     }
 
-    public async Task<Result<List<Offers>>> Handle(ListQuery<Offers> request,
+    public async Task<Result<List<Domain.Models.Offer>>> Handle(ListQuery<Domain.Models.Offer> request,
         CancellationToken cancellationToken)
     {
         return await _offerRepository.GetOffers(request, cancellationToken);

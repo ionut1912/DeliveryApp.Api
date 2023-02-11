@@ -8,14 +8,7 @@ public class OfferMenuItemProfile : BaseProfile
 {
     public OfferMenuItemProfile()
     {
-        CreateMap<Offers, OfferForCreation>().ReverseMap()
-            .ForMember(option => option.DateActiveFrom,
-                o => o.MapFrom(src =>
-                    DateTime.ParseExact(src.DateActiveFrom, "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)))
-            .ForMember(option => option.DateActiveTo,
-                o => o.MapFrom(src =>
-                    DateTime.ParseExact(src.DateActiveTo, "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
-        CreateMap<Offers, OfferForUpdate>().ReverseMap()
+        CreateMap<Offers, Offer>().ReverseMap()
             .ForMember(option => option.DateActiveFrom,
                 o => o.MapFrom(src =>
                     DateTime.ParseExact(src.DateActiveFrom, "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)))
@@ -23,7 +16,7 @@ public class OfferMenuItemProfile : BaseProfile
                 o => o.MapFrom(src =>
                     DateTime.ParseExact(src.DateActiveTo, "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
 
-        CreateMap<MenuItems, MenuItemForCreation>().ReverseMap();
-        CreateMap<MenuItems, MenuItemForUpdate>().ReverseMap();
+        CreateMap<MenuItems, MenuItem>().ReverseMap();
+     
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace DeliveryApp.Repository.Entities;
+﻿namespace DeliveryApp.Domain.Models;
 
 public class Offer
 {

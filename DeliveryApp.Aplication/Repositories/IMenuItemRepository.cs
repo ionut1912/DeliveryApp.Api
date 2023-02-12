@@ -1,5 +1,5 @@
 ﻿using DeliveryApp.Domain.DTO;
-using DeliveryApp.Repository.Entities;
+using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Aplication.Repositories;
 
@@ -9,7 +9,7 @@ public interface IMenuItemRepository
 
     Task<List<MenuItem>> GetMenuItems(CancellationToken cancellationToken);
 
-    Task<MenuItem> GetMenuItem(Guid id,MenuItemDto menuItemDto,CancellationToken cancellationToken);
+    Task<MenuItem> GetMenuItem(Guid id,CancellationToken cancellationToken);
 
-    Task<bool> EditMenuItem(Guid id, CancellationToken token);
+    Task<bool> EditMenuItem(Guid id,MenuItemDto menuItemDto, CancellationToken token);
 }

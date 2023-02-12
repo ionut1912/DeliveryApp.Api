@@ -7,7 +7,6 @@ public class UserConfigEditCommandValidator : AbstractValidator<UserConfigsUpdat
 {
     public UserConfigEditCommandValidator()
     {
-        RuleFor(x => x.Configs.Username).NotEmpty().WithMessage("Username should not be empty");
         RuleFor(x => x.Configs.Weight).NotEmpty().WithMessage("Weight should not be empty").GreaterThan(0)
             .WithMessage("Weight should be grater than 0");
         RuleFor(x => x.Configs.Height).NotEmpty().WithMessage("Height should not be empty").GreaterThan(0)

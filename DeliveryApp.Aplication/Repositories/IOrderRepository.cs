@@ -1,5 +1,5 @@
 ﻿using DeliveryApp.Domain.DTO;
-using DeliveryApp.Repository.Entities;
+using DeliveryApp.Domain.Models;
 
 
 namespace DeliveryApp.Aplication.Repositories;

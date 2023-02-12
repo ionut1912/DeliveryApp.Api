@@ -1,7 +1,6 @@
 ﻿using DeliveryApp.ExternalServices.Cloudinary;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.ExternalServices.MailSending;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DeliveryApp.ExternalServices.Extensions;

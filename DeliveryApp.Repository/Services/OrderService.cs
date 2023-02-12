@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Domain.DTO;
+using DeliveryApp.Domain.Models;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using Microsoft.EntityFrameworkCore;

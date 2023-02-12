@@ -1,5 +1,6 @@
 ﻿using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Aplication.Mediatr.Query;

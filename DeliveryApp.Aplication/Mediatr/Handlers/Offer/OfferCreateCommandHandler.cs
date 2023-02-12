@@ -5,18 +5,24 @@ using DeliveryApp.Commons.Interfaces;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Offer;
 
-public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, ResultT<Domain.Models.OfferDto>>
+public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, Result>
 {
     private readonly IOfferRepository _offerRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public OfferCreateCommandHandler(IOfferRepository offerRepository)
+    public OfferCreateCommandHandler(IOfferRepository offerRepository, IUnitOfWork unitOfWork)
     {
-        _offerRepository = offerRepository ?? throw new ArgumentNullException(nameof(offerRepository));
+        _offerRepository = offerRepository;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<ResultT<Domain.Models.OfferDto>> Handle(OfferCreateCommand request,
+
+    public async Task<Result> Handle(OfferCreateCommand request,
         CancellationToken cancellationToken)
     {
-        return await _offerRepository.AddOffer(request, cancellationToken);
+         await _offerRepository.AddOffer(request.OfferDto, cancellationToken);
+         await _unitOfWork.SaveChangesAsync(cancellationToken);
+         return Result.Success("Offer created succesfully");
     }
+    
 }

@@ -6,6 +6,7 @@ using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.DTO;
+using DeliveryApp.Domain.Models;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;

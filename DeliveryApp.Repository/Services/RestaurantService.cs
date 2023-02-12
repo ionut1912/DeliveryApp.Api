@@ -6,6 +6,7 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Models;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.DTO;
+using DeliveryApp.Domain.Models;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using MediatR;

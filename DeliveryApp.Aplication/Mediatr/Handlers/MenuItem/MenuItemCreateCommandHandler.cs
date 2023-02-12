@@ -5,18 +5,22 @@ using DeliveryApp.Commons.Interfaces;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.MenuItem;
 
-public class MenuItemCreateCommandHandler : ICommandHandler<MenuItemCreateCommand, ResultT<Domain.Models.MenuItemDto>>
+public class MenuItemCreateCommandHandler : ICommandHandler<MenuItemCreateCommand, Result>
 {
     private readonly IMenuItemRepository _menuItemRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public MenuItemCreateCommandHandler(IMenuItemRepository menuItemRepository)
+    public MenuItemCreateCommandHandler(IMenuItemRepository menuItemRepository, IUnitOfWork unitOfWork)
     {
         _menuItemRepository = menuItemRepository ?? throw new ArgumentNullException(nameof(menuItemRepository));
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<ResultT<Domain.Models.MenuItemDto>> Handle(MenuItemCreateCommand request,
+    public async Task<Result> Handle(MenuItemCreateCommand request,
         CancellationToken cancellationToken)
     {
-        return await _menuItemRepository.AddMenuItems(request, cancellationToken);
+         await _menuItemRepository.AddMenuItems(request.MenuItemDto, cancellationToken);
+         await _unitOfWork.SaveChangesAsync(cancellationToken);
+         return Result.Success("Menu item created succesfully");
     }
 }

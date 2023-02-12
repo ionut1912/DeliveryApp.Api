@@ -3,7 +3,7 @@ using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.DTO;
-using DeliveryApp.Repository.Entities;
+using DeliveryApp.Domain.Models;
 using MediatR;
 
 namespace DeliveryApp.Aplication.Repositories;

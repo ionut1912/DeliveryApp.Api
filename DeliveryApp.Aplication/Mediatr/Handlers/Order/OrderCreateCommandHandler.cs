@@ -6,17 +6,18 @@ using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Order;
 
-public class OrderCreateCommandHandler : ICommandHandler<OrderCreateCommand, ResultT<OrderForCreationDto>>
+public class OrderCreateCommandHandler : ICommandHandler<OrderCreateCommand, Result>
 {
     private readonly IOrderRepository _orderRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public OrderCreateCommandHandler(IOrderRepository orderRepository)
+    public OrderCreateCommandHandler(IOrderRepository _orderRepository,IUnitOfWork _unitOfWork)
     {
-        _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+        
     }
 
-    public async Task<ResultT<OrderForCreationDto>> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
     {
-        return await _orderRepository.AddOrder(request, cancellationToken);
+        
     }
 }

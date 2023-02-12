@@ -5,7 +5,7 @@ using DeliveryApp.Commons.Query;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Offer;
 
-public class OfferListQueryHandler : IQueryHandler<ListQuery<Domain.Models.OfferDto>, ResultT<List<Domain.Models.OfferDto>>>
+public class OfferListQueryHandler : IQueryHandler<ListQuery<Domain.Models.Offer>, ResultT<List<Domain.Models.Offer>>>
 {
     private readonly IOfferRepository _offerRepository;
 
@@ -14,9 +14,10 @@ public class OfferListQueryHandler : IQueryHandler<ListQuery<Domain.Models.Offer
         _offerRepository = offerRepository ?? throw new ArgumentNullException(nameof(offerRepository));
     }
 
-    public async Task<ResultT<List<Domain.Models.OfferDto>>> Handle(ListQuery<Domain.Models.OfferDto> request,
+    public async Task<ResultT<List<Domain.Models.Offer>>> Handle(ListQuery<Domain.Models.Offer> request,
         CancellationToken cancellationToken)
     {
-        return await _offerRepository.GetOffers(request, cancellationToken);
+        var result= await _offerRepository.GetOffers(cancellationToken);
+        return  ResultT<List<Domain.Models.Offer>>.Success(result);
     }
 }

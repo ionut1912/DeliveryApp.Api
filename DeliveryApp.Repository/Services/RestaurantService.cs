@@ -5,11 +5,13 @@ using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Models;
 using DeliveryApp.Commons.Query;
-using DeliveryApp.Domain.Models;
+using DeliveryApp.Domain.DTO;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DeliveryApp.Repository.Services;
 
@@ -25,63 +27,48 @@ public class RestaurantService : IRestaurantRepository
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<Result<Unit>> EditRestaurant(RestaurantEditCommand command, CancellationToken cancellationToken)
-    {
-        var restaurant = await _context.Restaurants.FindAsync(command.Id);
-        if (restaurant == null) return null;
-        _mapper.Map(command.RestaurantForUpdate, restaurant);
-        var result = await _context.SaveChangesAsync(cancellationToken) > 0;
-        return !result ? Result<Unit>.Failure("Failed to update restaurant") : Result<Unit>.Success(Unit.Value);
-    }
-
-    public async Task<Result<Unit>> DeleteRestaurant(DeleteCommand query, CancellationToken cancellationToken)
-    {
-        var restaurant = await _context.Restaurants.FindAsync(query.Id);
-        if (restaurant == null) return null;
-        _context.Remove(restaurant);
-        var result = await _context.SaveChangesAsync(cancellationToken) > 0;
-        return !result ? Result<Unit>.Failure("Failed to delete restaurant") : Result<Unit>.Success(Unit.Value);
-    }
-
-    public async Task<Result<Restaurant>> AddRestaurant(RestaurantCreateCommand command,
-        CancellationToken cancellationToken)
+    public async Task AddRestaurant(RestaurantDto restaurantDto, CancellationToken cancellationToken)
     {
         var restaurant =
-            _mapper.Map<Restaurants>(command.RestaurantForCreation);
-        restaurant.Address = _mapper.Map<RestaurantAddresses>(command.RestaurantForCreation.Address);
+            _mapper.Map<Restaurants>(restaurantDto);
+        restaurant.Address = _mapper.Map<RestaurantAddresses>(restaurantDto.Address);
         restaurant.Id = Guid.NewGuid();
         restaurant.Address.AddressId = Guid.NewGuid();
-        _context.Restaurants.Add(restaurant);
+        await _context.Restaurants.AddAsync(restaurant, cancellationToken);
 
-
-        var result = await _context.SaveChangesAsync(cancellationToken) > 0;
-        var mapped = _mapper.Map<Restaurant>(restaurant);
-        return result
-            ? Result<Restaurant>.Success(mapped)
-            : Result<Restaurant>.Failure(
-                "Failed to create restaurant");
     }
 
-    public async Task<Result<List<Restaurant>>> GetRestaurants(ListQuery<Restaurant> command,
-        CancellationToken cancellationToken)
+    public async Task<List<Restaurant>> GetRestaurants(CancellationToken cancellationToken)
     {
+
         var restaurants = await _context.Restaurants.Include(x => x.Address)
             .ToListAsync(cancellationToken);
-        var mapped = _mapper.Map<List<Restaurant>>(restaurants);
-        return Result<List<Restaurant>>.Success(mapped);
-
+        return _mapper.Map<List<Restaurant>>(restaurants);
     }
 
-    public async Task<Result<Restaurant>> GetRestaurant(QueryItem<Restaurant> query,
-        CancellationToken cancellationToken)
+    public async Task<Restaurant> GetRestaurant(Guid id, CancellationToken cancellationToken)
     {
         var restaurant =
             await _context.Restaurants.Include(x => x.Address)
-                .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
-        if (restaurant == null)
-            return Result<Restaurant>.Failure(
-                "Restaurant not found");
-        var mapped = _mapper.Map<Restaurant>(restaurant);
-        return Result<Restaurant>.Success(mapped);
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return _mapper.Map<Restaurant>(restaurant);
+
+    }
+
+    public async Task<bool> EditRestaurant(Guid id, RestaurantDto restaurantDto, CancellationToken cancellationToken)
+    {
+        var restaurant = await _context.Restaurants.FindAsync(id);
+        if (restaurant == null) return false;
+        var modifieRestaurant = _mapper.Map(restaurantDto, restaurant);
+        _context.Restaurants.Update(modifieRestaurant);
+        return true;
+    }
+
+    public async Task<bool> DeleteRestaurant(Guid id, CancellationToken cancellationToken)
+    {
+        var restaurant = await _context.Restaurants.FindAsync(id);
+        if (restaurant == null) return false;
+        _context.Remove(restaurant);
+        return true;
     }
 }

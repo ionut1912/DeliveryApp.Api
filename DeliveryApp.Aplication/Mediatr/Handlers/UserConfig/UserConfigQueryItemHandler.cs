@@ -6,7 +6,7 @@ using DeliveryApp.Commons.Query;
 namespace DeliveryApp.Aplication.Mediatr.Handlers.UserConfig;
 
 public class
-    UserConfigQueryItemHandler : IQueryHandler<QueryItem<Domain.Models.UserConfig>, Result<Domain.Models.UserConfig>>
+    UserConfigQueryItemHandler : IQueryHandler<QueryItem<Domain.Models.UserConfigDto>, ResultT<Domain.Models.UserConfigDto>>
 {
     private readonly IUserConfigRepository _userConfigRepository;
 
@@ -15,7 +15,7 @@ public class
         _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
     }
 
-    public async Task<Result<Domain.Models.UserConfig>> Handle(QueryItem<Domain.Models.UserConfig> request,
+    public async Task<ResultT<Domain.Models.UserConfigDto>> Handle(QueryItem<Domain.Models.UserConfigDto> request,
         CancellationToken cancellationToken)
     {
         return await _userConfigRepository.GetConfig(request, cancellationToken);

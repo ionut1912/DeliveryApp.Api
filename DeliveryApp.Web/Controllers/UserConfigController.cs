@@ -1,4 +1,5 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
+﻿using System.Net;
+using DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
 using DeliveryApp.Aplication.Mediatr.Query;
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Controllers;
@@ -8,10 +9,11 @@ using DeliveryApp.Repository.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace DeliveryApp.Web.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 public class UserConfigController : BaseApiController
 {
     private IMediator _mediator;
@@ -19,50 +21,60 @@ public class UserConfigController : BaseApiController
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices
         .GetService<IMediator>();
 
-    [Authorize]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserConfigs>>>
+    [ProducesResponseType(typeof(IEnumerable<UserConfigDto>),(int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult),(int)HttpStatusCode.Unauthorized)]
+    [SwaggerOperation(Summary = "Get user configs")]
+    public async Task<ActionResult<IEnumerable<UserConfigDto>>>
         GetUserConfigs()
     {
         return HandleResult(
-            await Mediator.Send(new ListQuery<UserConfigs>()));
+            await Mediator.Send(new ListQuery<UserConfigDto>()));
     }
-
-    [Authorize]
+    
     [HttpGet("{id}")]
-    public async Task<ActionResult<UserConfigs>>
+    [ProducesResponseType(typeof(UserConfigDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
+    [SwaggerOperation(Summary = "Get user config")]
+    public async Task<ActionResult<UserConfigDto>>
         GetUserConfig(Guid id)
     {
         return HandleResult(
-            await Mediator.Send(new QueryItem<UserConfigs>
+            await Mediator.Send(new QueryItem<UserConfigDto>
                 { Id = id }));
     }
 
-    [Authorize]
+   //refactor to use expression builder on previous endpoint
     [HttpGet("config/{username}")]
-    public async Task<ActionResult<UserConfigs>> GetUserConfigByUsername(string username)
+    [ProducesResponseType(typeof(UserConfigDto),(int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
+
+    [SwaggerOperation(Summary = "Get user config")]
+    public async Task<ActionResult<UserConfigDto>> GetUserConfigByUsername(string username)
     {
         return HandleResult(await Mediator.Send(new UserConfigQueryItemByUsername { Username = username }));
     }
 
-    [Authorize]
     [HttpPut("{id}")]
-    public async Task<ActionResult<UserConfigs>> UpdateUserConfig(
-        int id, UserConfig configs)
+    [ProducesResponseType(typeof(UserConfigDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
+
+    [SwaggerOperation(Summary = "Update user config")]
+    public async Task<ActionResult<UserConfigDto>> UpdateUserConfig(
+        int id, UserConfigDto configs)
     {
         return HandleResult(await Mediator.Send(new UserConfigsUpdateCommand
             { Id = id, Configs = configs }));
     }
 
-    [Authorize]
+
     [HttpPost]
-    public async Task<ActionResult<UserConfigs>> AddUserConfigs(UserConfig userConfig)
+    public async Task<ActionResult<UserConfigs>> AddUserConfigs(UserConfigDto userConfig)
     {
         return HandleResult(await Mediator.Send(new UserConfigCreateCommand
             { UserConfigs = userConfig }));
     }
 
-    [Authorize]
     [HttpDelete("{id}")]
     public async Task<ActionResult<UserConfigs>>
         DeleteRestaurant(Guid id)

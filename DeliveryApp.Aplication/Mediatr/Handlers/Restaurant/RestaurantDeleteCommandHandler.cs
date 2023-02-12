@@ -6,7 +6,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Restaurant;
 
-public class RestaurantDeleteCommandHandler : ICommandHandler<DeleteCommand, Result<Unit>>
+public class RestaurantDeleteCommandHandler : ICommandHandler<DeleteCommand, ResultT<Unit>>
 {
     private readonly IRestaurantRepository _restaurantRepository;
 
@@ -16,7 +16,7 @@ public class RestaurantDeleteCommandHandler : ICommandHandler<DeleteCommand, Res
             restaurantRepository ?? throw new ArgumentNullException(nameof(restaurantRepository));
     }
 
-    public async Task<Result<Unit>> Handle(DeleteCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<Unit>> Handle(DeleteCommand request, CancellationToken cancellationToken)
     {
         return await _restaurantRepository.DeleteRestaurant(request, cancellationToken);
     }

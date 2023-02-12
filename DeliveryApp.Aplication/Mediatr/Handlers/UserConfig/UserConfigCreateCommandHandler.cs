@@ -5,7 +5,7 @@ using DeliveryApp.Commons.Interfaces;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.UserConfig;
 
-public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCommand, Result<Domain.Models.UserConfig>>
+public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCommand, ResultT<Domain.Models.UserConfigDto>>
 {
     private readonly IUserConfigRepository _userConfigRepository;
 
@@ -14,7 +14,7 @@ public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCo
         _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
     }
 
-    public async Task<Result<Domain.Models.UserConfig>> Handle(UserConfigCreateCommand request,
+    public async Task<ResultT<Domain.Models.UserConfigDto>> Handle(UserConfigCreateCommand request,
         CancellationToken cancellationToken)
     {
         return await _userConfigRepository.AddConfig(request, cancellationToken);

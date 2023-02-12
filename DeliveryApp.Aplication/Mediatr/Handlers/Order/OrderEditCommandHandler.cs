@@ -6,7 +6,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Order;
 
-public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, Result<Unit>>
+public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, ResultT<Unit>>
 {
     private readonly IOrderRepository _orderRepository;
 
@@ -15,7 +15,7 @@ public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, Result<
         _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
     }
 
-    public async Task<Result<Unit>> Handle(OrderEditCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<Unit>> Handle(OrderEditCommand request, CancellationToken cancellationToken)
     {
         return await _orderRepository.EditOrder(request, cancellationToken);
     }

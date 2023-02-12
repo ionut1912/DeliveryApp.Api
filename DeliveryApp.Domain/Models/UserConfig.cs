@@ -1,7 +1,9 @@
-﻿namespace DeliveryApp.Domain.Models;
+﻿namespace DeliveryApp.Repository.Entities;
 
 public class UserConfig
 {
+    public Guid Id { get; set; }
+    public int UserId { get; set; }
     public string Username { get; set; }
     public float Weight { get; set; }
     public int Height { get; set; }

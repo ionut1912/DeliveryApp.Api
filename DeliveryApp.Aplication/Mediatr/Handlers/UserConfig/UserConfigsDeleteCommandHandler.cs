@@ -6,7 +6,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.UserConfig;
 
-public class UserConfigsDeleteCommandHandler : ICommandHandler<DeleteCommand, Result<Unit>>
+public class UserConfigsDeleteCommandHandler : ICommandHandler<DeleteCommand, ResultT<Unit>>
 {
     private readonly IUserConfigRepository _userConfigRepository;
 
@@ -15,7 +15,7 @@ public class UserConfigsDeleteCommandHandler : ICommandHandler<DeleteCommand, Re
         _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
     }
 
-    public async Task<Result<Unit>> Handle(DeleteCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<Unit>> Handle(DeleteCommand request, CancellationToken cancellationToken)
     {
         return await _userConfigRepository.DeleteConfig(request, cancellationToken);
     }

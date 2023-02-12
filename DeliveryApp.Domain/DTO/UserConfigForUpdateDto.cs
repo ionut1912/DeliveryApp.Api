@@ -1,6 +1,6 @@
-﻿namespace DeliveryApp.Domain.Models;
+﻿namespace DeliveryApp.Domain.DTO;
 
-public class UserConfigForUpdate
+public class UserConfigForUpdateDto
 {
     public string Username { get; set; }
     public float Weight { get; set; }

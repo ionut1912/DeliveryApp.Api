@@ -1,4 +1,5 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.Order;
+﻿using System.Net;
+using DeliveryApp.Aplication.Mediatr.Commands.Order;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.Models;
@@ -6,6 +7,7 @@ using DeliveryApp.Repository.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace DeliveryApp.Web.Controllers;
 
@@ -18,25 +20,35 @@ public class OrderController : BaseApiController
         .GetService<IMediator>();
 
     [HttpPost]
-    public async Task<ActionResult<Orders>> AddOrder(OrderForCreation orderForCreation)
+    [ProducesResponseType(typeof(OrderForCreationDto),(int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(BadRequestResult),(int)HttpStatusCode.BadRequest)]
+    [SwaggerOperation(Summary = "Add order")]
+    public async Task<ActionResult<OrderForCreationDto>> AddOrder(OrderForCreationDto orderForCreation)
     {
         return HandleResult(await Mediator.Send(new OrderCreateCommand { Order = orderForCreation }));
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Orders>>> GetOrders()
+    [ProducesResponseType(typeof(IEnumerable<OrderForCreationDto>),(int)HttpStatusCode.OK)]
+    [SwaggerOperation(Summary = "Get all orders")]
+    public async Task<ActionResult<IEnumerable<OrderForCreationDto>>> GetOrders()
     {
-        return HandleResult(await Mediator.Send(new ListQuery<Orders>()));
+        return HandleResult(await Mediator.Send(new ListQuery<OrderForCreationDto>()));
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Orders>> GetOrder(Guid id)
+    [ProducesResponseType(typeof(IEnumerable<OrderForCreationDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IEnumerable<OrderForCreationDto>), (int)HttpStatusCode.NotFound)]
+    [SwaggerOperation(Summary = "Get order by id")]
+    public async Task<ActionResult<OrderForCreationDto>> GetOrder(Guid id)
     {
-        return HandleResult(await Mediator.Send(new QueryItem<Orders> { Id = id }));
+        return HandleResult(await Mediator.Send(new QueryItem<OrderForCreationDto> { Id = id }));
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<Orders>> UpdateOrder(Guid id, OrderForUpdate orderForUpdate)
+    [ProducesResponseType(typeof(OrderForCreationDto), (int)HttpStatusCode.OK)]
+    [SwaggerOperation(Summary = "Edit order")]
+    public async Task<ActionResult<OrderForCreationDto>> UpdateOrder(Guid id, OrderForUpdateDto orderForUpdate)
     {
         return HandleResult(await Mediator.Send(new OrderEditCommand
             { Id = id, OrderForUpdate = orderForUpdate }));

@@ -5,7 +5,7 @@ using DeliveryApp.Commons.Interfaces;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Photo;
 
-public class PhotoAddCommandHandler : ICommandHandler<PhotoAddCommand, Result<ExternalServices.Cloudinary.Photo.Photo>>
+public class PhotoAddCommandHandler : ICommandHandler<PhotoAddCommand, ResultT<ExternalServices.Cloudinary.Photo.Photo>>
 {
     private readonly IPhotoRepository _photoRepository;
 
@@ -14,7 +14,7 @@ public class PhotoAddCommandHandler : ICommandHandler<PhotoAddCommand, Result<Ex
         _photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
     }
 
-    public async Task<Result<ExternalServices.Cloudinary.Photo.Photo>> Handle(PhotoAddCommand request,
+    public async Task<ResultT<ExternalServices.Cloudinary.Photo.Photo>> Handle(PhotoAddCommand request,
         CancellationToken cancellationToken)
     {
         return await _photoRepository.AddPhoto(request, cancellationToken);

@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Order;
 
-public class OrderCreateCommandHandler : ICommandHandler<OrderCreateCommand, Result<OrderForCreation>>
+public class OrderCreateCommandHandler : ICommandHandler<OrderCreateCommand, ResultT<OrderForCreationDto>>
 {
     private readonly IOrderRepository _orderRepository;
 
@@ -15,7 +15,7 @@ public class OrderCreateCommandHandler : ICommandHandler<OrderCreateCommand, Res
         _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
     }
 
-    public async Task<Result<OrderForCreation>> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<OrderForCreationDto>> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
     {
         return await _orderRepository.AddOrder(request, cancellationToken);
     }

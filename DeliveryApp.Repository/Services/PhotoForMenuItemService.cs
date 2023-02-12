@@ -5,7 +5,9 @@ using DeliveryApp.ExternalServices.Cloudinary;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Context;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DeliveryApp.Repository.Services;
 
@@ -20,13 +22,11 @@ public class PhotoForMenuItemService : IPhotoForMenuItemRepository
         _photoAccessor = photoAccessor ?? throw new ArgumentNullException(nameof(photoAccessor));
     }
 
-    public async Task<Result<PhotoForMenuItem>> AddPhotoForMenuItem(PhotoForMenuItemCreateCommand command,
-        CancellationToken cancellationToken)
+    public async Task AddPhotoForMenuItem(IFormFile file, Guid id, CancellationToken cancellationToken)
     {
-        var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
-        if (menuItem == null) return null;
+        var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-        var photoUploadResult = await _photoAccessor.AddPhoto(command.File);
+        var photoUploadResult = await _photoAccessor.AddPhoto(file);
         var photo = new PhotoForMenuItem
         {
             Url = photoUploadResult.Url,
@@ -35,49 +35,47 @@ public class PhotoForMenuItemService : IPhotoForMenuItemRepository
         if (!menuItem.Photos.Any(x => x.IsMain)) photo.IsMain = true;
 
         menuItem.Photos.Add(photo);
-        _context.PhotosForMenuItem.Add(photo);
+        await  _context.PhotosForMenuItem.AddAsync(photo,cancellationToken);
         _context.MenuItems.Update(menuItem);
-        var result = await _context.SaveChangesAsync(cancellationToken) > 0;
-        return result
-            ? Result<PhotoForMenuItem>.Success(photo)
-            : Result<PhotoForMenuItem>.Failure("Problems adding the photo");
     }
 
-    public async Task<Result<Unit>> DeletePhotoForMenuItem(PhotoForMenuItemDeleteCommand command,
-        CancellationToken cancellationToken)
+    public async Task<bool> DeletePhotoForMenuItem(string photoId, Guid id, CancellationToken cancellationToken)
     {
-        var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == command.ItemId, cancellationToken);
-        if (menuItem == null) return null;
+        var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id ==id , cancellationToken);
+        
 
-        var photo = menuItem.Photos.FirstOrDefault(x => x.Id == command.PhotoId);
-        if (photo == null) return null;
+        var photo = menuItem.Photos.FirstOrDefault(x => x.Id == photoId);
 
-        if (photo.IsMain) return Result<Unit>.Failure("You can't delete your main photo");
+
+        if (photo.IsMain) return false;
 
         var result = await _photoAccessor.DeletePhoto(photo.Id);
-        if (result == null) return Result<Unit>.Failure("Problem deleting photo from Cloudinary");
+        if (result == null) return false;
 
-        menuItem.Photos.Remove(photo);
+        menuItem.Photos.Remove(photo); 
         _context.Remove(photo);
-        var success = await _context.SaveChangesAsync() > 0;
-        return success ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem deleting photo from API");
+        return true;
     }
 
-    public async Task<Result<Unit>> SetMainPhotoForMenuItem(PhotoForMenuItemSetMainCommand command,
-        CancellationToken cancellationToken)
+    public async Task<bool> SetMainPhotoForMenuItem(string photoId, Guid id, CancellationToken cancellationToken)
     {
         var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == command.ItemId, cancellationToken);
-        if (menuItem == null) return null;
+        if (menuItem == null) return false;
 
-        var photo = menuItem.Photos.FirstOrDefault(x => x.Id == command.PhotoId);
-        if (photo == null) return null;
+        var photo = menuItem.Photos.FirstOrDefault(x => x.Id ==photoId);
+        if (photo == null) return false;
 
         var currentMain = menuItem.Photos.FirstOrDefault(x => x.IsMain);
         if (currentMain != null) currentMain.IsMain = false;
 
         photo.IsMain = true;
-        _context.PhotosForMenuItem.Update(photo);
-        var success = await _context.SaveChangesAsync() > 0;
-        return success ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem setting main photo");
+        var modifiedPhoto = menuItem.Photos
+            .Select(x => x.Id == photo.Id ? new PhotoForMenuItem { Id = photo.Id, IsMain = true, Url = photo.Url,MenuItemsid = menuItem.Id} : x)
+            .ToList();
+        menuItem.Photos=modifiedPhoto;
+        _context.MenuItems.Update(menuItem);
+        return true;
+        return true;
     }
+
 }

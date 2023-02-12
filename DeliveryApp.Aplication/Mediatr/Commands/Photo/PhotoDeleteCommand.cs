@@ -4,7 +4,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Commands.Photo;
 
-public class PhotoDeleteCommand : ICommand<Result<Unit>>
+public class PhotoDeleteCommand : ICommand<Result>
 {
     public string Id { get; set; }
 }

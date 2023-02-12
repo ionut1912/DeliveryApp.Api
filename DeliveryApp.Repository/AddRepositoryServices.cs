@@ -53,6 +53,7 @@ public static class AddRepositoryServices
             });
         services.AddAuthorization();
         services.AddScoped<TokenService>();
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
         return services;
     }
 }

@@ -1,8 +1,8 @@
 ﻿using DeliveryApp.Commons.Models;
 
-namespace DeliveryApp.Domain.Models;
+namespace DeliveryApp.Domain.DTO;
 
-public class RestaurantForUpdate
+public class RestaurantForUpdateDto
 {
     public string Name { get; set; }
     public RestaurantAddressesForUpdate Address { get; set; }

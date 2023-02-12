@@ -1,4 +1,5 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.Offer;
+﻿using System.Net;
+using DeliveryApp.Aplication.Mediatr.Commands.Offer;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.Models;
@@ -6,6 +7,7 @@ using DeliveryApp.Repository.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace DeliveryApp.Web.Controllers;
 
@@ -18,25 +20,36 @@ public class OfferController : BaseApiController
         .GetService<IMediator>();
 
     [HttpPost]
-    public async Task<ActionResult<Offers>> AddOffer(Offer offerForCreation)
+    [ProducesResponseType(typeof(OfferDto),(int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(BadRequestResult),(int)HttpStatusCode.BadRequest)]
+    [SwaggerOperation(Summary = "Add offer")]
+    public async Task<ActionResult<OfferDto>> AddOffer(OfferDto offerForCreation)
     {
         return HandleResult(await Mediator.Send(new OfferCreateCommand { OfferForCreation = offerForCreation }));
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Offers>>> GetOffers()
+    [ProducesResponseType(typeof(IEnumerable<OfferDto>),(int)HttpStatusCode.OK)]
+    [SwaggerOperation(Summary = "Get all offers")]
+
+    public async Task<ActionResult<IEnumerable<OfferDto>>> GetOffers()
     {
-        return HandleResult(await Mediator.Send(new ListQuery<Offers>()));
+        return HandleResult(await Mediator.Send(new ListQuery<OfferDto>()));
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Offers>> GetOffer(Guid id)
+    [ProducesResponseType(typeof(OfferDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(NotFoundObjectResult), (int)HttpStatusCode.NotFound)]
+    [SwaggerOperation(Summary = "Get offer")]
+    public async Task<ActionResult<OfferDto>> GetOffer(Guid id)
     {
-        return HandleResult(await Mediator.Send(new QueryItem<Offers> { Id = id }));
+        return HandleResult(await Mediator.Send(new QueryItem<OfferDto> { Id = id }));
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<Offers>> UpdateOffer(Guid id, Offer offerForUpdate)
+    [ProducesResponseType(typeof(OfferDto),(int)HttpStatusCode.OK)]
+    [SwaggerOperation(Summary = "Update offer")]
+    public async Task<ActionResult<OfferDto>> UpdateOffer(Guid id, OfferDto offerForUpdate)
     {
         return HandleResult(await Mediator.Send(new OfferEditCommand
             { Id = id, OfferForUpdate = offerForUpdate }));

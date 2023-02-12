@@ -1,9 +1,10 @@
-﻿namespace DeliveryApp.Domain.Models;
+﻿namespace DeliveryApp.Domain.DTO;
 
-public class OrderForCreation
+public class OrderForCreationDto
 {
     public string RestaurantName { get; set; }
     public string ReceivedTime { get; set; }
     public string Username { get; set; }
+    public RestaurantDto Restaurant { get; set; }
     public List<string> MenuItemNames { get; set; }
 }

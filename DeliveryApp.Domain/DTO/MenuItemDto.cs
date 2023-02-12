@@ -1,14 +1,10 @@
-﻿
+﻿namespace DeliveryApp.Domain.DTO;
 
-namespace DeliveryApp.Repository.Entities;
-
-public class MenuItem
+public class MenuItemDto
 {
-    public Guid Id { get; set; }
     public string ItemName { get; set; }
     public string Category { get; set; }
     public string Ingredients { get; set; }
     public float Price { get; set; }
     public int Quantity { get; set; }
-    public bool Active { get; set; }
 }

@@ -5,7 +5,7 @@ using DeliveryApp.Commons.Interfaces;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Offer;
 
-public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, Result<Domain.Models.Offer>>
+public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, ResultT<Domain.Models.OfferDto>>
 {
     private readonly IOfferRepository _offerRepository;
 
@@ -14,7 +14,7 @@ public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, Res
         _offerRepository = offerRepository ?? throw new ArgumentNullException(nameof(offerRepository));
     }
 
-    public async Task<Result<Domain.Models.Offer>> Handle(OfferCreateCommand request,
+    public async Task<ResultT<Domain.Models.OfferDto>> Handle(OfferCreateCommand request,
         CancellationToken cancellationToken)
     {
         return await _offerRepository.AddOffer(request, cancellationToken);

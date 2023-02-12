@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using DeliveryApp.Commons.Models;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.ExternalServices.MailSending;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace DeliveryApp.Web.Controllers;
 
@@ -30,6 +32,9 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
+    [ProducesResponseType(typeof(ActionResult<UserDto>),(int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult),(int)HttpStatusCode.Unauthorized)]
+    [SwaggerOperation(Summary="Login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = await _userManager.Users.Include(x => x.UserAddress).Include(x => x.Photos)
@@ -54,6 +59,9 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("register")]
+    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(BadRequestResult), (int)HttpStatusCode.BadRequest)]
+    [SwaggerOperation(Summary = "Create account")]
     public async Task<ActionResult> Register(RegisterDto registerDto)
     {
         var address = _mapper.Map<UserAddresses>(registerDto.AddressForCreation);
@@ -80,6 +88,9 @@ public class AccountController : ControllerBase
 
 
     [Authorize]
+    [ProducesResponseType(typeof(ActionResult<UserDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
+    [SwaggerOperation(Summary = "Get current user informations")]
     [HttpGet("current")]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {

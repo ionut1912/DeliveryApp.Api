@@ -6,7 +6,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Photo;
 
-public class PhotoForMenuItemDeleteCommandHandler : ICommandHandler<PhotoForMenuItemDeleteCommand, Result<Unit>>
+public class PhotoForMenuItemDeleteCommandHandler : ICommandHandler<PhotoForMenuItemDeleteCommand, ResultT<Unit>>
 {
     private readonly IPhotoForMenuItemRepository _photoForMenuItemRepository;
 
@@ -16,7 +16,7 @@ public class PhotoForMenuItemDeleteCommandHandler : ICommandHandler<PhotoForMenu
                                       throw new ArgumentNullException(nameof(photoForMenuItemRepository));
     }
 
-    public async Task<Result<Unit>> Handle(PhotoForMenuItemDeleteCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<Unit>> Handle(PhotoForMenuItemDeleteCommand request, CancellationToken cancellationToken)
     {
         return await _photoForMenuItemRepository.DeletePhotoForMenuItem(request, cancellationToken);
     }

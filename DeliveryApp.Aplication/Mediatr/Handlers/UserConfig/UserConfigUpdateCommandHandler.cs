@@ -6,7 +6,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.UserConfig;
 
-public class UserConfigUpdateCommandHandler : ICommandHandler<UserConfigsUpdateCommand, Result<Unit>>
+public class UserConfigUpdateCommandHandler : ICommandHandler<UserConfigsUpdateCommand, ResultT<Unit>>
 {
     private readonly IUserConfigRepository _userConfigRepository;
 
@@ -15,7 +15,7 @@ public class UserConfigUpdateCommandHandler : ICommandHandler<UserConfigsUpdateC
         _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
     }
 
-    public async Task<Result<Unit>> Handle(UserConfigsUpdateCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<Unit>> Handle(UserConfigsUpdateCommand request, CancellationToken cancellationToken)
     {
         return await _userConfigRepository.EditConfig(request, cancellationToken);
     }

@@ -4,7 +4,7 @@ using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
 
-public class UserConfigCreateCommand : ICommand<Result<UserConfig>>
+public class UserConfigCreateCommand : ICommand<ResultT<UserConfigDto>>
 {
-    public UserConfig UserConfigs { get; set; }
+    public UserConfigDto UserConfigs { get; set; }
 }

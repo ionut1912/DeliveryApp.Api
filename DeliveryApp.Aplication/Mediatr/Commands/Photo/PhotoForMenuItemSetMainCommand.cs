@@ -4,7 +4,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Commands.Photo;
 
-public class PhotoForMenuItemSetMainCommand : ICommand<Result<Unit>>
+public class PhotoForMenuItemSetMainCommand : ICommand<ResultT<Unit>>
 {
     public string PhotoId { get; set; }
     public Guid ItemId { get; set; }

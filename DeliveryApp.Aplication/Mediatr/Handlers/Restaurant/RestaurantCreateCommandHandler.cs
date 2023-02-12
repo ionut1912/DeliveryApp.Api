@@ -6,7 +6,7 @@ using DeliveryApp.Commons.Interfaces;
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Restaurant;
 
 public class RestaurantCreateCommandHandler : ICommandHandler<RestaurantCreateCommand,
-    Result<Domain.Models.Restaurant>>
+    ResultT<Domain.Models.RestaurantDto>>
 {
     private readonly IRestaurantRepository _restaurantRepository;
 
@@ -15,7 +15,7 @@ public class RestaurantCreateCommandHandler : ICommandHandler<RestaurantCreateCo
         _restaurantRepository = restaurantRepository ?? throw new ArgumentNullException(nameof(restaurantRepository));
     }
 
-    public async Task<Result<Domain.Models.Restaurant>> Handle(
+    public async Task<ResultT<Domain.Models.RestaurantDto>> Handle(
         RestaurantCreateCommand request, CancellationToken cancellationToken)
     {
         return await _restaurantRepository.AddRestaurant(request, cancellationToken);

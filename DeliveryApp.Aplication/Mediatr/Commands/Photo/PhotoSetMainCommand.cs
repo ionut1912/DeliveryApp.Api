@@ -4,7 +4,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Commands.Photo;
 
-public class PhotoSetMainCommand : ICommand<Result<Unit>>
+public class PhotoSetMainCommand : ICommand<ResultT<Unit>>
 {
     public string Id { get; set; }
 }

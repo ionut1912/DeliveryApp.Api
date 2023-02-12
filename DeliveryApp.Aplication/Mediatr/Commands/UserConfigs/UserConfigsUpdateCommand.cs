@@ -5,8 +5,8 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
 
-public class UserConfigsUpdateCommand : ICommand<Result<Unit>>
+public class UserConfigsUpdateCommand : ICommand<ResultT<Unit>>
 {
     public int Id { get; set; }
-    public UserConfig Configs { get; set; }
+    public UserConfigDto Configs { get; set; }
 }

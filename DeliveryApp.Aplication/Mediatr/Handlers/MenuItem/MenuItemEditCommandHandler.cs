@@ -6,7 +6,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.MenuItem;
 
-public class MenuItemEditCommandHandler : ICommandHandler<MenuItemEditCommand, Result<Unit>>
+public class MenuItemEditCommandHandler : ICommandHandler<MenuItemEditCommand, ResultT<Unit>>
 {
     private readonly IMenuItemRepository _menuItemRepository;
 
@@ -15,7 +15,7 @@ public class MenuItemEditCommandHandler : ICommandHandler<MenuItemEditCommand, R
         _menuItemRepository = menuItemRepository ?? throw new ArgumentNullException(nameof(menuItemRepository));
     }
 
-    public async Task<Result<Unit>> Handle(MenuItemEditCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<Unit>> Handle(MenuItemEditCommand request, CancellationToken cancellationToken)
     {
         return await _menuItemRepository.EditMenuItem(request, cancellationToken);
     }

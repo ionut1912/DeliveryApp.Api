@@ -2,12 +2,13 @@
 using DeliveryApp.Commons.Core;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace DeliveryApp.Aplication.Repositories;
 
 public interface IPhotoRepository
 {
-    Task<Result<Photo>> AddPhoto(PhotoAddCommand command, CancellationToken cancellationToken);
-    Task<Result<Unit>> DeletePhoto(PhotoDeleteCommand command, CancellationToken cancellationToken);
-    Task<Result<Unit>> SetMainPhoto(PhotoSetMainCommand command, CancellationToken cancellationToken);
+    Task AddPhoto(IFormFile file, CancellationToken cancellationToken);
+    Task<bool> DeletePhoto(string id, CancellationToken cancellationToken);
+    Task<bool> SetMainPhoto(string id, CancellationToken cancellationToken);
 }

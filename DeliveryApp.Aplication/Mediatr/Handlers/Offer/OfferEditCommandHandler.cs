@@ -6,7 +6,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Offer;
 
-public class OfferEditCommandHandler : ICommandHandler<OfferEditCommand, Result<Unit>>
+public class OfferEditCommandHandler : ICommandHandler<OfferEditCommand, ResultT<Unit>>
 {
     private readonly IOfferRepository _offerRepository;
 
@@ -15,7 +15,7 @@ public class OfferEditCommandHandler : ICommandHandler<OfferEditCommand, Result<
         _offerRepository = offerRepository ?? throw new ArgumentNullException(nameof(offerRepository));
     }
 
-    public async Task<Result<Unit>> Handle(OfferEditCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<Unit>> Handle(OfferEditCommand request, CancellationToken cancellationToken)
     {
         return await _offerRepository.EditOffer(request, cancellationToken);
     }

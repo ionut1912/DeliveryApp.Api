@@ -7,8 +7,8 @@ using DeliveryApp.Domain.Models;
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Order;
 
 public class OrdeListQueryHandler : IQueryHandler<
-    ListQuery<OrderForCreation>,
-    Result<List<OrderForCreation>>>
+    ListQuery<OrderForCreationDto>,
+    ResultT<List<OrderForCreationDto>>>
 {
     private readonly IOrderRepository _orderRepository;
 
@@ -17,8 +17,8 @@ public class OrdeListQueryHandler : IQueryHandler<
         _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
     }
 
-    public async Task<Result<List<OrderForCreation>>> Handle(
-        ListQuery<OrderForCreation> request,
+    public async Task<ResultT<List<OrderForCreationDto>>> Handle(
+        ListQuery<OrderForCreationDto> request,
         CancellationToken cancellationToken)
     {
         return await _orderRepository.GetOrders(request, cancellationToken);

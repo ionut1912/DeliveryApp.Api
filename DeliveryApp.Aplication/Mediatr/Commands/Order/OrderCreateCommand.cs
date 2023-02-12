@@ -1,10 +1,10 @@
 ﻿using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using DeliveryApp.Domain.Models;
+using DeliveryApp.Domain.DTO;
 
 namespace DeliveryApp.Aplication.Mediatr.Commands.Order;
 
-public class OrderCreateCommand : ICommand<Result<OrderForCreation>>
+public class OrderCreateCommand : ICommand<Result>
 {
-    public OrderForCreation Order { get; set; }
+    public OrderForCreationDto Order { get; set; }
 }

@@ -1,22 +1,20 @@
 ﻿using DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
-using DeliveryApp.Aplication.Mediatr.Query;
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Core;
-using DeliveryApp.Commons.Query;
-using DeliveryApp.Domain.Models;
-using MediatR;
+using DeliveryApp.Domain.DTO;
+using DeliveryApp.Repository.Entities;
 
 namespace DeliveryApp.Aplication.Repositories;
 
 public interface IUserConfigRepository
 {
-    Task<Result<UserConfig>> AddConfig(UserConfigCreateCommand command, CancellationToken cancellationToken);
-    Task<Result<List<UserConfig>>> GetConfigs(ListQuery<UserConfig> command, CancellationToken cancellationToken);
-    Task<Result<UserConfig>> GetConfig(QueryItem<UserConfig> query, CancellationToken cancellationToken);
+    Task<bool> AddConfig(UserConfigDto userConfigDto, CancellationToken cancellationToken);
+    Task<List<UserConfig>> GetConfigs(CancellationToken cancellationToken);
+    Task<UserConfig> GetConfig(Guid id, CancellationToken cancellationToken);
 
-    Task<Result<UserConfig>> GetConfigByUsername(UserConfigQueryItemByUsername query,
+    Task<UserConfig> GetConfigByUsername(
         CancellationToken cancellationToken);
 
-    Task<Result<Unit>> EditConfig(UserConfigsUpdateCommand command, CancellationToken cancellationToken);
-    Task<Result<Unit>> DeleteConfig(DeleteCommand query, CancellationToken cancellationToken);
+    Task<bool> EditConfig(Guid id,UserConfigDto userConfigDto, CancellationToken cancellationToken);
+    Task<bool> DeleteConfig(Guid id, CancellationToken cancellationToken);
 }

@@ -1,18 +1,25 @@
-﻿namespace DeliveryApp.Commons.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class Result<T>
+namespace DeliveryApp.Commons.Core
 {
-    public bool IsSuccess { get; set; }
-    public T Value { get; set; }
-    public string Error { get; set; }
-
-    public static Result<T> Success(T value)
+    public class Result
     {
-        return new Result<T> { IsSuccess = true, Value = value };
-    }
+        public bool IsSuccess { get; set; }
+        public object Value { get; set; }
+        public string Error { get; set; }
 
-    public static Result<T> Failure(string error)
-    {
-        return new Result<T> { IsSuccess = false, Error = error };
+        public static Result Success(object value)
+        {
+            return new Result { IsSuccess = true, Value = value };
+        }
+
+        public static Result Failure(string error)
+        {
+            return new Result { IsSuccess = false, Error = error };
+        }
     }
 }

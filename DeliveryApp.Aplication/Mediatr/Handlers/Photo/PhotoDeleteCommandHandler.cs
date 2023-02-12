@@ -6,7 +6,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Photo;
 
-public class PhotoDeleteCommandHandler : ICommandHandler<PhotoDeleteCommand, Result<Unit>>
+public class PhotoDeleteCommandHandler : ICommandHandler<PhotoDeleteCommand, ResultT<Unit>>
 {
     private readonly IPhotoRepository _photoRepository;
 
@@ -15,7 +15,7 @@ public class PhotoDeleteCommandHandler : ICommandHandler<PhotoDeleteCommand, Res
         _photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
     }
 
-    public async Task<Result<Unit>> Handle(PhotoDeleteCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<Unit>> Handle(PhotoDeleteCommand request, CancellationToken cancellationToken)
     {
         return await _photoRepository.DeletePhoto(request, cancellationToken);
     }

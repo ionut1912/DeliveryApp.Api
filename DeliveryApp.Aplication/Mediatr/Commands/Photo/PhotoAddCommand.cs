@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace DeliveryApp.Aplication.Mediatr.Commands.Photo;
 
-public class PhotoAddCommand : ICommand<Result<ExternalServices.Cloudinary.Photo.Photo>>
+public class PhotoAddCommand : ICommand<Result>
 
 {
     public IFormFile File { get; set; }

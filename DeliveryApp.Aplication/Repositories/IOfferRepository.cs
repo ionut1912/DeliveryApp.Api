@@ -1,19 +1,17 @@
 ﻿using DeliveryApp.Aplication.Mediatr.Commands.Offer;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Query;
-using DeliveryApp.Domain.Models;
-using MediatR;
+using DeliveryApp.Domain.DTO;
+using DeliveryApp.Repository.Entities;
 
 namespace DeliveryApp.Aplication.Repositories;
 
 public interface IOfferRepository
 {
-    Task<Result<Offer>> AddOffer(OfferCreateCommand command, CancellationToken cancellationToken);
-    Task<Result<Unit>> EditOffer(OfferEditCommand command, CancellationToken cancellationToken);
+    Task AddOffer(OfferDto offerDto, CancellationToken cancellationToken);
+    Task<bool> EditOffer(Guid id,OfferDto offerDto, CancellationToken cancellationToken);
 
-    Task<Result<List<Offer>>> GetOffers(ListQuery<Offer> request,
-        CancellationToken cancellationToken);
+    Task<List<Offer>> GetOffers(CancellationToken cancellationToken);
 
-    Task<Result<Offer>> GetOffer(QueryItem<Offer> request, CancellationToken cancellationToken
-    );
+    Task<Offer> GetOffer(Guid id, CancellationToken cancellationToken);
 }

@@ -6,7 +6,7 @@ using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Order;
 
-public class OrderDeleteCommandHandler : ICommandHandler<DeleteCommand, Result<Unit>>
+public class OrderDeleteCommandHandler : ICommandHandler<DeleteCommand, ResultT<Unit>>
 {
     private readonly IOrderRepository _orderRepository;
 
@@ -15,7 +15,7 @@ public class OrderDeleteCommandHandler : ICommandHandler<DeleteCommand, Result<U
         _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
     }
 
-    public async Task<Result<Unit>> Handle(DeleteCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<Unit>> Handle(DeleteCommand request, CancellationToken cancellationToken)
     {
         return await _orderRepository.DeleteOrder(request, cancellationToken);
     }

@@ -4,7 +4,9 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.ExternalServices.Cloudinary;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Context;
+using DeliveryApp.Repository.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryApp.Repository.Services;
@@ -22,13 +24,12 @@ public class PhotoService : IPhotoRepository
         _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
     }
 
-    public async Task<Result<Photo>> AddPhoto(PhotoAddCommand command, CancellationToken cancellationToken)
+    public async Task AddPhoto(IFormFile file, CancellationToken cancellationToken)
     {
         var user = await _context.Users.Include(p => p.Photos)
             .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
-        if (user == null) return null;
 
-        var photoUploadResult = await _photoAccessor.AddPhoto(command.File);
+        var photoUploadResult = await _photoAccessor.AddPhoto(file);
         var photo = new Photo
         {
             Url = photoUploadResult.Url,
@@ -37,48 +38,44 @@ public class PhotoService : IPhotoRepository
         if (!user.Photos.Any(x => x.IsMain)) photo.IsMain = true;
 
         user.Photos.Add(photo);
-        var result = await _context.SaveChangesAsync() > 0;
-        if (result) return Result<Photo>.Success(photo);
-        return Result<Photo>.Failure("Problems adding the photo");
+        await _context.Users.AddAsync(user, cancellationToken);
     }
 
-    public async Task<Result<Unit>> DeletePhoto(PhotoDeleteCommand command, CancellationToken cancellationToken)
+    public async Task<bool> DeletePhoto(string id, CancellationToken cancellationToken)
     {
         var user = await _context.Users.Include(p => p.Photos)
-            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
-        if (user == null) return null;
+            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
 
-        var photo = user.Photos.FirstOrDefault(x => x.Id == command.Id);
-        if (photo == null) return null;
+        var photo = user.Photos.FirstOrDefault(x => x.Id == id);
+        if (photo == null) return false;
 
-        if (photo.IsMain) return Result<Unit>.Failure("You can't delete your main photo");
+        if (photo.IsMain) return false;
 
         var result = await _photoAccessor.DeletePhoto(photo.Id);
-        if (result == null) return Result<Unit>.Failure("Problem deleting photo from Cloudinary");
 
         user.Photos.Remove(photo);
-        var succes = await _context.SaveChangesAsync() > 0;
-        if (succes) return Result<Unit>.Success(Unit.Value);
-
-        return Result<Unit>.Failure("Problem deleting photo from API");
+        _context.Users.Remove(user);
+        return true;
     }
 
-    public async Task<Result<Unit>> SetMainPhoto(PhotoSetMainCommand command, CancellationToken cancellationToken)
+    public async Task<bool> SetMainPhoto(string id, CancellationToken cancellationToken)
     {
         var user = await _context.Users.Include(p => p.Photos)
-            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
-        if (user == null) return null;
+            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
 
-        var photo = user.Photos.FirstOrDefault(x => x.Id == command.Id);
-        if (photo == null) return null;
+
+        var photo = user.Photos.FirstOrDefault(x => x.Id == id);
+        if (photo == null) return false;
 
         var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
         if (currentMain != null) currentMain.IsMain = false;
 
         photo.IsMain = true;
-        var succes = await _context.SaveChangesAsync() > 0;
-        if (succes) return Result<Unit>.Success(Unit.Value);
-
-        return Result<Unit>.Failure("Problem setting main photo");
+        var modifiedPhoto = user.Photos
+                                         .Select(x => x.Id == photo.Id ? new Photo { Id = photo.Id, IsMain = true, Url = photo.Url } : x)
+                                          .ToList();
+        user.Photos = modifiedPhoto;
+        _context.Users.Update(user);
+        return true;
     }
 }

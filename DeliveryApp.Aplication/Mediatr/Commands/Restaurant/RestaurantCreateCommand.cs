@@ -3,7 +3,7 @@ using DeliveryApp.Commons.Interfaces;
 
 namespace DeliveryApp.Aplication.Mediatr.Commands.Restaurant;
 
-public class RestaurantCreateCommand : ICommand<Result<Domain.Models.Restaurant>>
+public class RestaurantCreateCommand : ICommand<ResultT<Domain.Models.RestaurantDto>>
 {
-    public Domain.Models.Restaurant RestaurantForCreation { get; set; }
+    public Domain.Models.RestaurantDto RestaurantForCreation { get; set; }
 }

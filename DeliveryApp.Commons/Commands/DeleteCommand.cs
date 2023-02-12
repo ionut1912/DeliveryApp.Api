@@ -4,7 +4,7 @@ using MediatR;
 
 namespace DeliveryApp.Commons.Commands;
 
-public class DeleteCommand : ICommand<Result<Unit>>
+public class DeleteCommand : ICommand<ResultT<Unit>>
 {
     public Guid Id { get; set; }
 }

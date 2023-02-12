@@ -1,18 +1,17 @@
 ﻿using DeliveryApp.Aplication.Mediatr.Commands.Photo;
-using DeliveryApp.Commons.Core;
-using DeliveryApp.ExternalServices.Cloudinary.Photo;
-using MediatR;
+
+using Microsoft.AspNetCore.Http;
 
 namespace DeliveryApp.Aplication.Repositories;
 
 public interface IPhotoForMenuItemRepository
 {
-    Task<Result<PhotoForMenuItem>> AddPhotoForMenuItem(PhotoForMenuItemCreateCommand command,
+    Task AddPhotoForMenuItem(IFormFile file,Guid id,
         CancellationToken cancellationToken);
 
-    Task<Result<Unit>> DeletePhotoForMenuItem(PhotoForMenuItemDeleteCommand command,
+    Task<bool> DeletePhotoForMenuItem(string photoId,Guid id,
         CancellationToken cancellationToken);
 
-    Task<Result<Unit>> SetMainPhotoForMenuItem(PhotoForMenuItemSetMainCommand command,
+    Task<bool> SetMainPhotoForMenuItem(string photoId,Guid id,
         CancellationToken cancellationToken);
 }

@@ -7,7 +7,7 @@ namespace DeliveryApp.Commons.Controllers;
 [ApiController]
 public class BaseApiController : ControllerBase
 {
-    protected ActionResult HandleResult<T>(Result<T> result)
+    protected ActionResult HandleResult<T>(ResultT<T> result)
     {
         if (result == null) return NotFound();
 

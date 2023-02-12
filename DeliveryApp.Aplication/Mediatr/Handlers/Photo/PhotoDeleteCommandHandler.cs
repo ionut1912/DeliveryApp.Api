@@ -2,21 +2,26 @@
 using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Photo;
 
-public class PhotoDeleteCommandHandler : ICommandHandler<PhotoDeleteCommand, ResultT<Unit>>
+public class PhotoDeleteCommandHandler : ICommandHandler<PhotoDeleteCommand, Result>
 {
     private readonly IPhotoRepository _photoRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public PhotoDeleteCommandHandler(IPhotoRepository photoRepository)
+    public PhotoDeleteCommandHandler(IPhotoRepository photoRepository, IUnitOfWork unitOfWork)
     {
-        _photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
+        _photoRepository = photoRepository;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<ResultT<Unit>> Handle(PhotoDeleteCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(PhotoDeleteCommand request, CancellationToken cancellationToken)
     {
-        return await _photoRepository.DeletePhoto(request, cancellationToken);
+        var result = await _photoRepository.DeletePhoto(request.Id, cancellationToken);
+        if (result is false) return Result.Failure($"Photo with id {request.Id} can not be deleted");
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        return Result.Success("Photo deleted successfully");
     }
 }

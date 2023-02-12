@@ -6,5 +6,5 @@ namespace DeliveryApp.Aplication.Mediatr.Commands.Restaurant;
 
 public class RestaurantCreateCommand : ICommand<Result>
 {
-public RestaurantDto RestaurantDto { get; set; }
+    public RestaurantDto RestaurantDto { get; set; }
 }

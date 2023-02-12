@@ -7,7 +7,7 @@ namespace DeliveryApp.Aplication.Mediatr.Handlers.UserConfig;
 
 public class
     UserConfigQueryItemByUsernameHandler : IQueryHandler<UserConfigQueryItemByUsername,
-        ResultT<Domain.Models.UserConfigDto>>
+        ResultT<Domain.Models.UserConfig>>
 {
     private readonly IUserConfigRepository _userConfigRepository;
 
@@ -16,9 +16,10 @@ public class
         _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
     }
 
-    public async Task<ResultT<Domain.Models.UserConfigDto>> Handle(UserConfigQueryItemByUsername request,
+    public async Task<ResultT<Domain.Models.UserConfig>> Handle(UserConfigQueryItemByUsername request,
         CancellationToken cancellationToken)
     {
-        return await _userConfigRepository.GetConfigByUsername(request, cancellationToken);
+        var result = await _userConfigRepository.GetConfigByUsername(cancellationToken);
+        return ResultT<Domain.Models.UserConfig>.Success(result);
     }
 }

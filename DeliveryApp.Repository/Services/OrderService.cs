@@ -5,6 +5,7 @@ using DeliveryApp.Domain.Models;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
+
 namespace DeliveryApp.Repository.Services;
 
 public class OrderService : IOrderRepository
@@ -17,8 +18,6 @@ public class OrderService : IOrderRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
-
-
 
 
     public async Task AddOrder(OrderForCreationDto orderForCreationDto, CancellationToken cancellationToken)
@@ -50,7 +49,6 @@ public class OrderService : IOrderRepository
         order.FinalPrice = price;
         order.Status = "received";
         await _context.Orders.AddAsync(order, cancellationToken);
-
     }
 
     public async Task<List<Order>> GetOrders(CancellationToken cancellationToken)
@@ -68,11 +66,11 @@ public class OrderService : IOrderRepository
         return _mapper.Map<Order>(order);
     }
 
-    public async Task<bool> EditOrder(Guid id,OrderForUpdateDto orderForUpdateDto, CancellationToken cancellationToken)
+    public async Task<bool> EditOrder(Guid id, OrderForUpdateDto orderForUpdateDto, CancellationToken cancellationToken)
     {
         var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (order == null) return false;
-        var modifiedOrder=_mapper.Map(orderForUpdateDto,order);
+        var modifiedOrder = _mapper.Map(orderForUpdateDto, order);
         _context.Orders.Update(modifiedOrder);
         return true;
     }

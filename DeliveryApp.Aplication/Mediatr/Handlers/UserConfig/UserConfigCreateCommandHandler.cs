@@ -5,18 +5,22 @@ using DeliveryApp.Commons.Interfaces;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.UserConfig;
 
-public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCommand, ResultT<Domain.Models.UserConfigDto>>
+public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCommand, Result>
 {
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IUserConfigRepository _userConfigRepository;
 
-    public UserConfigCreateCommandHandler(IUserConfigRepository userConfigRepository)
+    public UserConfigCreateCommandHandler(IUserConfigRepository userConfigRepository, IUnitOfWork unitOfWork)
     {
         _userConfigRepository = userConfigRepository ?? throw new ArgumentNullException(nameof(userConfigRepository));
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<ResultT<Domain.Models.UserConfigDto>> Handle(UserConfigCreateCommand request,
+    public async Task<Result> Handle(UserConfigCreateCommand request,
         CancellationToken cancellationToken)
     {
-        return await _userConfigRepository.AddConfig(request, cancellationToken);
+        await _userConfigRepository.AddConfig(request.UserConfigs, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        return Result.Success("Config added successfully");
     }
 }

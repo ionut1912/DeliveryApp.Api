@@ -1,10 +1,9 @@
 ﻿using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using MediatR;
 
 namespace DeliveryApp.Commons.Commands;
 
-public class DeleteCommand : ICommand<ResultT<Unit>>
+public class DeleteCommand : ICommand<Result>
 {
     public Guid Id { get; set; }
 }

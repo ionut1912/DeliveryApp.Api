@@ -4,6 +4,7 @@ using DeliveryApp.Aplication.Mediatr.Query;
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
+using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using DeliveryApp.Repository.Entities;
 using MediatR;
@@ -22,63 +23,91 @@ public class UserConfigController : BaseApiController
         .GetService<IMediator>();
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<UserConfigDto>),(int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(UnauthorizedResult),(int)HttpStatusCode.Unauthorized)]
+    [ProducesResponseType(typeof(IEnumerable<UserConfig>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
     [SwaggerOperation(Summary = "Get user configs")]
-    public async Task<ActionResult<IEnumerable<UserConfigDto>>>
+    public async Task<ActionResult<IEnumerable<UserConfig>>>
         GetUserConfigs()
     {
+        var query = new ListQuery<UserConfig>();
         return HandleResult(
-            await Mediator.Send(new ListQuery<UserConfigDto>()));
+            await Mediator.Send(query));
     }
-    
+
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(UserConfigDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UserConfig), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
     [SwaggerOperation(Summary = "Get user config")]
     public async Task<ActionResult<UserConfigDto>>
         GetUserConfig(Guid id)
     {
+        var query = new QueryItem<UserConfig>
+        {
+            Id = id,
+        };
         return HandleResult(
-            await Mediator.Send(new QueryItem<UserConfigDto>
-                { Id = id }));
+            await Mediator.Send(query));
     }
 
-   //refactor to use expression builder on previous endpoint
+    //refactor to use expression builder on previous endpoint
     [HttpGet("config/{username}")]
-    [ProducesResponseType(typeof(UserConfigDto),(int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UserConfig), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
 
     [SwaggerOperation(Summary = "Get user config")]
-    public async Task<ActionResult<UserConfigDto>> GetUserConfigByUsername(string username)
+    public async Task<ActionResult<UserConfig>> GetUserConfigByUsername(string username)
     {
-        return HandleResult(await Mediator.Send(new UserConfigQueryItemByUsername { Username = username }));
+        var query = new UserConfigQueryItemByUsername
+        {
+            Username = username
+        };
+        return HandleResult(await Mediator.Send(query));
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(UserConfigDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
 
     [SwaggerOperation(Summary = "Update user config")]
-    public async Task<ActionResult<UserConfigDto>> UpdateUserConfig(
-        int id, UserConfigDto configs)
+    public async Task<ActionResult> UpdateUserConfig(
+        Guid id, UserConfigDto configs)
     {
-        return HandleResult(await Mediator.Send(new UserConfigsUpdateCommand
-            { Id = id, Configs = configs }));
+        var command = new UserConfigsUpdateCommand
+        {
+            Id = id,
+            Configs = configs
+        };
+        return HandleResult(await Mediator.Send(command));
     }
 
 
     [HttpPost]
-    public async Task<ActionResult<UserConfigs>> AddUserConfigs(UserConfigDto userConfig)
+    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
+
+    [SwaggerOperation(Summary = "Create user config")]
+    public async Task<ActionResult> AddUserConfigs(UserConfigDto userConfig)
     {
-        return HandleResult(await Mediator.Send(new UserConfigCreateCommand
-            { UserConfigs = userConfig }));
+        var command = new UserConfigCreateCommand
+        {
+            UserConfigs = userConfig
+        };
+        return HandleResult(await Mediator.Send(command));
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
+
+    [SwaggerOperation(Summary = "Delete user config")]
     public async Task<ActionResult<UserConfigs>>
         DeleteRestaurant(Guid id)
     {
-        return HandleResult(await Mediator.Send(new DeleteCommand { Id = id }));
+        var command = new DeleteCommand
+        {
+            Id = id
+        };
+        return HandleResult(await Mediator.Send(command));
     }
 }
+

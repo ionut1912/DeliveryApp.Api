@@ -2,24 +2,28 @@
 using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using DeliveryApp.ExternalServices.Cloudinary.Photo;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Photo;
 
 public class
-    PhotoForMenuItemCreateCommandHandler : ICommandHandler<PhotoForMenuItemCreateCommand, ResultT<PhotoForMenuItem>>
+    PhotoForMenuItemCreateCommandHandler : ICommandHandler<PhotoForMenuItemCreateCommand, Result>
 {
     private readonly IPhotoForMenuItemRepository _photoForMenuItemRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public PhotoForMenuItemCreateCommandHandler(IPhotoForMenuItemRepository photoForMenuItemRepository)
+    public PhotoForMenuItemCreateCommandHandler(IPhotoForMenuItemRepository photoForMenuItemRepository,
+        IUnitOfWork unitOfWork)
     {
         _photoForMenuItemRepository = photoForMenuItemRepository ??
                                       throw new ArgumentNullException(nameof(photoForMenuItemRepository));
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<ResultT<PhotoForMenuItem>> Handle(PhotoForMenuItemCreateCommand request,
+    public async Task<Result> Handle(PhotoForMenuItemCreateCommand request,
         CancellationToken cancellationToken)
     {
-        return await _photoForMenuItemRepository.AddPhotoForMenuItem(request, cancellationToken);
+        await _photoForMenuItemRepository.AddPhotoForMenuItem(request.File, request.Id, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        return Result.Success("Photo added successfully");
     }
 }

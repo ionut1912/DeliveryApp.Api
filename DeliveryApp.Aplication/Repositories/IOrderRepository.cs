@@ -1,7 +1,6 @@
 ﻿using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 
-
 namespace DeliveryApp.Aplication.Repositories;
 
 public interface IOrderRepository
@@ -11,6 +10,6 @@ public interface IOrderRepository
     Task<List<Order>> GetOrders(CancellationToken cancellationToken);
 
     Task<Order> GetOrder(Guid id, CancellationToken cancellationToken);
-    Task<bool> EditOrder(Guid id,OrderForUpdateDto oreForUpdateDto, CancellationToken cancellationToken);
+    Task<bool> EditOrder(Guid id, OrderForUpdateDto oreForUpdateDto, CancellationToken cancellationToken);
     Task<bool> DeleteOrder(Guid id, CancellationToken cancellationToken);
 }

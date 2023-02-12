@@ -6,5 +6,5 @@ namespace DeliveryApp.Aplication.Mediatr.Commands.Offer;
 
 public class OfferCreateCommand : ICommand<Result>
 {
-   public  OfferDto OfferDto { get; set; }
+    public OfferDto OfferDto { get; set; }
 }

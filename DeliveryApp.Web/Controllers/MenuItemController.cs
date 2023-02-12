@@ -1,14 +1,13 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.MenuItem;
+﻿using System.Net;
+using DeliveryApp.Aplication.Mediatr.Commands.MenuItem;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
-using DeliveryApp.Repository.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Net;
 
 namespace DeliveryApp.Web.Controllers;
 
@@ -24,35 +23,48 @@ public class MenuItemController : BaseApiController
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(BadRequestResult), (int)HttpStatusCode.BadRequest)]
     [SwaggerOperation(Summary = "Add a menu item")]
-    public async Task<ActionResult<MenuItemDto>> AddMenuItem(MenuItemDto menuItemForCreation)
+    public async Task<ActionResult> AddMenuItem(MenuItemDto menuItemForCreation)
     {
+        var command = new MenuItemCreateCommand
+        {
+            MenuItemDto = menuItemForCreation
+        };
         return HandleResult(
-            await Mediator.Send(new MenuItemCreateCommand { MenuItemForCreation = menuItemForCreation }));
+            await Mediator.Send(command));
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<MenuItemDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IEnumerable<MenuItem>), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Get all menu items")]
-    public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetMenuItems()
+    public async Task<ActionResult<IEnumerable<MenuItem>>> GetMenuItems()
     {
-        return HandleResult(await Mediator.Send(new ListQuery<MenuItemDto>()));
+        var query = new ListQuery<MenuItem>();
+        return HandleResult(await Mediator.Send(query));
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(MenuItemDto),(int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(NotFoundObjectResult),(int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(MenuItem), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(NotFoundObjectResult), (int)HttpStatusCode.NotFound)]
     [SwaggerOperation("Get menu item based on id")]
-    public async Task<ActionResult<MenuItemDto>> GetMenuItems(Guid id)
+    public async Task<ActionResult<MenuItem>> GetMenuItems(Guid id)
     {
-        return HandleResult(await Mediator.Send(new QueryItem<MenuItemDto> { Id = id }));
+        var query = new QueryItem<MenuItem>
+        {
+            Id = id
+        };
+        return HandleResult(await Mediator.Send(query));
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(MenuItemDto),(int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Update menu item")]
-    public async Task<ActionResult<MenuItemDto>> UpdateMneuItems(Guid id, MenuItemDto menuItemForUpdate)
+    public async Task<ActionResult> UpdateMneuItems(Guid id, MenuItemDto menuItemForUpdate)
     {
-        return HandleResult(await Mediator.Send(new MenuItemEditCommand
-            { Id = id, MenuItemForUpdate = menuItemForUpdate }));
+        var command = new MenuItemEditCommand
+        {
+            Id = id,
+            MenuItemDto = menuItemForUpdate
+        };
+        return HandleResult(await Mediator.Send(command));
     }
 }

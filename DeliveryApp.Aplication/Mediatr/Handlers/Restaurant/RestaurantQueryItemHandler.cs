@@ -6,8 +6,8 @@ using DeliveryApp.Commons.Query;
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Restaurant;
 
 public class RestaurantQueryItemHandler : IQueryHandler<
-    QueryItem<Domain.Models.RestaurantDto>,
-    ResultT<Domain.Models.RestaurantDto>>
+    QueryItem<Domain.Models.Restaurant>,
+    ResultT<Domain.Models.Restaurant>>
 {
     private readonly IRestaurantRepository _restaurantRepository;
 
@@ -16,10 +16,13 @@ public class RestaurantQueryItemHandler : IQueryHandler<
         _restaurantRepository = restaurantRepository ?? throw new ArgumentNullException(nameof(restaurantRepository));
     }
 
-    public async Task<ResultT<Domain.Models.RestaurantDto>> Handle(
-        QueryItem<Domain.Models.RestaurantDto> request,
+    public async Task<ResultT<Domain.Models.Restaurant>> Handle(
+        QueryItem<Domain.Models.Restaurant> request,
         CancellationToken cancellationToken)
     {
-        return await _restaurantRepository.GetRestaurant(request, cancellationToken);
+        var result = await _restaurantRepository.GetRestaurant(request.Id, cancellationToken);
+        if (result == null)
+            return ResultT<Domain.Models.Restaurant>.Failure($"Restaurant with id {request.Id} not found");
+        return ResultT<Domain.Models.Restaurant>.Success(result);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using DeliveryApp.Aplication.Middlewares;
 using DeliveryApp.Aplication.Repositories;
-using DeliveryApp.ExternalServices.Cloudinary;
 using DeliveryApp.ExternalServices.MailSending;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
@@ -20,7 +19,6 @@ public static class AddRepositoryServices
     public static IServiceCollection RegisterRepositoryServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddCors();
         services.AddAutoMapper(typeof(BaseProfile).Assembly);
         services.AddDbContext<DeliveryContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DeliveryConnectionString")));
@@ -51,7 +49,7 @@ public static class AddRepositoryServices
                         .GetBytes(configuration["JWTSettings:TokenKey"]))
                 };
             });
-        services.AddAuthorization();
+
         services.AddScoped<TokenService>();
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         return services;

@@ -1,7 +1,4 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
-using DeliveryApp.Commons.Commands;
-using DeliveryApp.Commons.Core;
-using DeliveryApp.Domain.DTO;
+﻿using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Aplication.Repositories;
@@ -15,6 +12,6 @@ public interface IUserConfigRepository
     Task<UserConfig> GetConfigByUsername(
         CancellationToken cancellationToken);
 
-    Task<bool> EditConfig(Guid id,UserConfigDto userConfigDto, CancellationToken cancellationToken);
+    Task<bool> EditConfig(Guid id, UserConfigDto userConfigDto, CancellationToken cancellationToken);
     Task<bool> DeleteConfig(Guid id, CancellationToken cancellationToken);
 }

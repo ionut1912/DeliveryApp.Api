@@ -17,11 +17,8 @@ public class OfferQueryItemHandler : IQueryHandler<QueryItem<Domain.Models.Offer
     public async Task<ResultT<Domain.Models.Offer>> Handle(QueryItem<Domain.Models.Offer> request,
         CancellationToken cancellationToken)
     {
-        var result= await _offerRepository.GetOffer(request.Id, cancellationToken);
-        if (result == null)
-        {
-            return  ResultT<Domain.Models.Offer>.Failure($"Offer with id {request.Id} can not be found");
-        }
-        return  ResultT<Domain.Models.Offer>.Success(result);
+        var result = await _offerRepository.GetOffer(request.Id, cancellationToken);
+        if (result == null) return ResultT<Domain.Models.Offer>.Failure($"Offer with id {request.Id} can not be found");
+        return ResultT<Domain.Models.Offer>.Success(result);
     }
 }

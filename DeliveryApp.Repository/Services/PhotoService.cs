@@ -1,11 +1,6 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.Photo;
-using DeliveryApp.Aplication.Repositories;
-using DeliveryApp.Commons.Core;
-using DeliveryApp.ExternalServices.Cloudinary;
+﻿using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Context;
-using DeliveryApp.Repository.Entities;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -72,8 +67,8 @@ public class PhotoService : IPhotoRepository
 
         photo.IsMain = true;
         var modifiedPhoto = user.Photos
-                                         .Select(x => x.Id == photo.Id ? new Photo { Id = photo.Id, IsMain = true, Url = photo.Url } : x)
-                                          .ToList();
+            .Select(x => x.Id == photo.Id ? new Photo { Id = photo.Id, IsMain = true, Url = photo.Url } : x)
+            .ToList();
         user.Photos = modifiedPhoto;
         _context.Users.Update(user);
         return true;

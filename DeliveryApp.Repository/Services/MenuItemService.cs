@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
-using DeliveryApp.Aplication.Mediatr.Commands.MenuItem;
 using DeliveryApp.Aplication.Repositories;
-using DeliveryApp.Commons.Core;
-using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace DeliveryApp.Repository.Services;
 
@@ -46,16 +41,15 @@ public class MenuItemService : IMenuItemRepository
         var menuItem = await _context.MenuItems.Include(x => x.Photos).Include(x => x.OfferMenuItems)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return _mapper.Map<MenuItem>(menuItem);
-        
     }
 
-    public async Task<bool> EditMenuItem(Guid id,MenuItemDto menuItemDto, CancellationToken token)
+    public async Task<bool> EditMenuItem(Guid id, MenuItemDto menuItemDto, CancellationToken token)
     {
         var menuItem = await _context.MenuItems.FindAsync(id);
         if (menuItem == null) return false;
         var modifiedMenuItem = _mapper.Map(menuItemDto, menuItem);
         modifiedMenuItem.Active = menuItemDto.Quantity > 0;
-        
+
         _context.MenuItems.Update(modifiedMenuItem);
         return true;
     }

@@ -19,8 +19,8 @@ public class MenuItemCreateCommandHandler : ICommandHandler<MenuItemCreateComman
     public async Task<Result> Handle(MenuItemCreateCommand request,
         CancellationToken cancellationToken)
     {
-         await _menuItemRepository.AddMenuItems(request.MenuItemDto, cancellationToken);
-         await _unitOfWork.SaveChangesAsync(cancellationToken);
-         return Result.Success("Menu item created succesfully");
+        await _menuItemRepository.AddMenuItems(request.MenuItemDto, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        return Result.Success("Menu item created succesfully");
     }
 }

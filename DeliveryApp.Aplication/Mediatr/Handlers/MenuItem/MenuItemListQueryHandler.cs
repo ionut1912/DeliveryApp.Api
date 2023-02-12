@@ -5,7 +5,8 @@ using DeliveryApp.Commons.Query;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.MenuItem;
 
-public class MenuItemListQueryHandler : IQueryHandler<ListQuery<Domain.Models.MenuItem>, ResultT<List<Domain.Models.MenuItem>>>
+public class
+    MenuItemListQueryHandler : IQueryHandler<ListQuery<Domain.Models.MenuItem>, ResultT<List<Domain.Models.MenuItem>>>
 {
     private readonly IMenuItemRepository _menuItemRepository;
 
@@ -18,6 +19,6 @@ public class MenuItemListQueryHandler : IQueryHandler<ListQuery<Domain.Models.Me
         CancellationToken cancellationToken)
     {
         var result = await _menuItemRepository.GetMenuItems(cancellationToken);
-        return  ResultT<List<Domain.Models.MenuItem>>.Success(result);
+        return ResultT<List<Domain.Models.MenuItem>>.Success(result);
     }
 }

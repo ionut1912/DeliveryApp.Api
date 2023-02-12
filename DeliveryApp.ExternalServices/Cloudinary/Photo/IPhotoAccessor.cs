@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace DeliveryApp.ExternalServices.Cloudinary.Photo
+namespace DeliveryApp.ExternalServices.Cloudinary.Photo;
+
+public interface IPhotoAccessor
 {
-
-    public interface IPhotoAccessor
-    {
-        Task<PhotoUploadResult> AddPhoto(IFormFile file);
-        Task<string> DeletePhoto(string publicId);
-
-    }
+    Task<PhotoUploadResult> AddPhoto(IFormFile file);
+    Task<string> DeletePhoto(string publicId);
 }

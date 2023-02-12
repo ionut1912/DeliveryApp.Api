@@ -5,7 +5,7 @@ using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Aplication.Mediatr.Query;
 
-public class UserConfigQueryItemByUsername : IQuery<ResultT<UserConfigDto>>
+public class UserConfigQueryItemByUsername : IQuery<ResultT<UserConfig>>
 {
     public string Username { get; set; }
 }

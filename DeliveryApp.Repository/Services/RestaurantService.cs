@@ -1,18 +1,11 @@
 ﻿using AutoMapper;
-using DeliveryApp.Aplication.Mediatr.Commands.Restaurant;
 using DeliveryApp.Aplication.Repositories;
-using DeliveryApp.Commons.Commands;
-using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Models;
-using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DeliveryApp.Repository.Services;
 
@@ -36,12 +29,10 @@ public class RestaurantService : IRestaurantRepository
         restaurant.Id = Guid.NewGuid();
         restaurant.Address.AddressId = Guid.NewGuid();
         await _context.Restaurants.AddAsync(restaurant, cancellationToken);
-
     }
 
     public async Task<List<Restaurant>> GetRestaurants(CancellationToken cancellationToken)
     {
-
         var restaurants = await _context.Restaurants.Include(x => x.Address)
             .ToListAsync(cancellationToken);
         return _mapper.Map<List<Restaurant>>(restaurants);
@@ -53,7 +44,6 @@ public class RestaurantService : IRestaurantRepository
             await _context.Restaurants.Include(x => x.Address)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return _mapper.Map<Restaurant>(restaurant);
-
     }
 
     public async Task<bool> EditRestaurant(Guid id, RestaurantDto restaurantDto, CancellationToken cancellationToken)

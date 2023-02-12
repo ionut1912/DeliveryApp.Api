@@ -1,8 +1,4 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.Photo;
-using DeliveryApp.Commons.Core;
-using DeliveryApp.ExternalServices.Cloudinary.Photo;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace DeliveryApp.Aplication.Repositories;
 

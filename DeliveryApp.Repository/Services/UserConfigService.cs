@@ -1,18 +1,11 @@
 ﻿using AutoMapper;
-using DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
-using DeliveryApp.Aplication.Mediatr.Query;
 using DeliveryApp.Aplication.Repositories;
-using DeliveryApp.Commons.Commands;
-using DeliveryApp.Commons.Core;
-using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DeliveryApp.Repository.Services;
 
@@ -54,7 +47,6 @@ public class UserConfigService : IUserConfigRepository
             await _context.UserConfigs
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return _mapper.Map<UserConfig>(config);
-
     }
 
     public async Task<UserConfig> GetConfigByUsername(CancellationToken cancellationToken)
@@ -68,16 +60,17 @@ public class UserConfigService : IUserConfigRepository
                 cancellationToken);
 
         return _mapper.Map<UserConfig>(config);
-
     }
 
     public async Task<bool> EditConfig(Guid id, UserConfigDto userConfigDto, CancellationToken cancellationToken)
 
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(),
+            cancellationToken);
         if (user == null) return false;
         var config =
-            await _context.UserConfigs.FirstOrDefaultAsync(x => x.Username == _userAccessor.GetUsername(), cancellationToken);
+            await _context.UserConfigs.FirstOrDefaultAsync(x => x.Username == _userAccessor.GetUsername(),
+                cancellationToken);
         if (config == null) return false;
         var modifiedConfig = _mapper.Map(userConfigDto, config);
         _context.UserConfigs.Update(modifiedConfig);

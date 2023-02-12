@@ -20,9 +20,8 @@ public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, Res
     public async Task<Result> Handle(OfferCreateCommand request,
         CancellationToken cancellationToken)
     {
-         await _offerRepository.AddOffer(request.OfferDto, cancellationToken);
-         await _unitOfWork.SaveChangesAsync(cancellationToken);
-         return Result.Success("Offer created succesfully");
+        await _offerRepository.AddOffer(request.OfferDto, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        return Result.Success("Offer created successfully");
     }
-    
 }

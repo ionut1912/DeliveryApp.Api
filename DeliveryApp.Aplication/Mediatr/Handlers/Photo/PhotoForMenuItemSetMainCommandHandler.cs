@@ -2,22 +2,30 @@
 using DeliveryApp.Aplication.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Photo;
 
-public class PhotoForMenuItemSetMainCommandHandler : ICommandHandler<PhotoForMenuItemSetMainCommand, ResultT<Unit>>
+public class PhotoForMenuItemSetMainCommandHandler : ICommandHandler<PhotoForMenuItemSetMainCommand, Result>
 {
     private readonly IPhotoForMenuItemRepository _photoForMenuItemRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public PhotoForMenuItemSetMainCommandHandler(IPhotoForMenuItemRepository photoForMenuItemRepository)
+    public PhotoForMenuItemSetMainCommandHandler(IPhotoForMenuItemRepository photoForMenuItemRepository,
+        IUnitOfWork unitOfWork)
     {
         _photoForMenuItemRepository = photoForMenuItemRepository ??
                                       throw new ArgumentNullException(nameof(photoForMenuItemRepository));
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<ResultT<Unit>> Handle(PhotoForMenuItemSetMainCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(PhotoForMenuItemSetMainCommand request, CancellationToken cancellationToken)
     {
-        return await _photoForMenuItemRepository.SetMainPhotoForMenuItem(request, cancellationToken);
+        var result =
+            await _photoForMenuItemRepository.SetMainPhotoForMenuItem(request.PhotoId, request.ItemId,
+                cancellationToken);
+        if (result is false) return Result.Failure($"Photo with id {request.PhotoId} can not be set as main photo");
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        return Result.Success("Photo was set as main");
     }
 }

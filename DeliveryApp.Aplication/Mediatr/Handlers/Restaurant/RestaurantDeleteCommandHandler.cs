@@ -2,22 +2,26 @@
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using MediatR;
 
 namespace DeliveryApp.Aplication.Mediatr.Handlers.Restaurant;
 
-public class RestaurantDeleteCommandHandler : ICommandHandler<DeleteCommand, ResultT<Unit>>
+public class RestaurantDeleteCommandHandler : ICommandHandler<DeleteCommand, Result>
 {
     private readonly IRestaurantRepository _restaurantRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public RestaurantDeleteCommandHandler(IRestaurantRepository restaurantRepository)
+    public RestaurantDeleteCommandHandler(IRestaurantRepository restaurantRepository, IUnitOfWork unitOfWork)
     {
-        _restaurantRepository =
-            restaurantRepository ?? throw new ArgumentNullException(nameof(restaurantRepository));
+        _restaurantRepository = restaurantRepository ?? throw new ArgumentNullException(nameof(restaurantRepository));
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<ResultT<Unit>> Handle(DeleteCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteCommand request, CancellationToken cancellationToken)
     {
-        return await _restaurantRepository.DeleteRestaurant(request, cancellationToken);
+        var result = await _restaurantRepository.DeleteRestaurant(request.Id, cancellationToken);
+        if (result is false) return Result.Failure($"Restaurant with id {request.Id} can not be deleted");
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        return Result.Success("Restaurant deleted successfully");
     }
 }

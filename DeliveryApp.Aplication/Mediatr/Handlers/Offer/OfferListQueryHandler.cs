@@ -17,7 +17,7 @@ public class OfferListQueryHandler : IQueryHandler<ListQuery<Domain.Models.Offer
     public async Task<ResultT<List<Domain.Models.Offer>>> Handle(ListQuery<Domain.Models.Offer> request,
         CancellationToken cancellationToken)
     {
-        var result= await _offerRepository.GetOffers(cancellationToken);
-        return  ResultT<List<Domain.Models.Offer>>.Success(result);
+        var result = await _offerRepository.GetOffers(cancellationToken);
+        return ResultT<List<Domain.Models.Offer>>.Success(result);
     }
 }

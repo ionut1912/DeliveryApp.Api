@@ -32,9 +32,9 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
-    [ProducesResponseType(typeof(ActionResult<UserDto>),(int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(UnauthorizedResult),(int)HttpStatusCode.Unauthorized)]
-    [SwaggerOperation(Summary="Login")]
+    [ProducesResponseType(typeof(ActionResult<UserDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
+    [SwaggerOperation(Summary = "Login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = await _userManager.Users.Include(x => x.UserAddress).Include(x => x.Photos)

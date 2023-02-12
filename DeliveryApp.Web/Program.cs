@@ -4,7 +4,6 @@ using DeliveryApp.ExternalServices.Cloudinary.Settings;
 using DeliveryApp.ExternalServices.Extensions;
 using DeliveryApp.ExternalServices.MailSending.Settings;
 using DeliveryApp.Repository;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddCors();
+builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
-builder.Services.RegisterRepositoryServices(builder.Configuration);
 builder.Services.RegisterApplicationServices();
+builder.Services.RegisterRepositoryServices(builder.Configuration);
 builder.Services.RegisterExternalServices();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
@@ -29,7 +29,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+    app.UseSwaggerUI();
 }
 
 

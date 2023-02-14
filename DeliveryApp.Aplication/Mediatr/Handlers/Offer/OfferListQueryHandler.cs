@@ -1,9 +1,9 @@
-﻿using DeliveryApp.Aplication.Repositories;
+﻿using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers.Offer;
+namespace DeliveryApp.Application.Mediatr.Handlers.Offer;
 
 public class OfferListQueryHandler : IQueryHandler<ListQuery<Domain.Models.Offer>, ResultT<List<Domain.Models.Offer>>>
 {

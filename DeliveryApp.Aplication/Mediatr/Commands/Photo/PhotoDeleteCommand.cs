@@ -1,7 +1,7 @@
 ﻿using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 
-namespace DeliveryApp.Aplication.Mediatr.Commands.Photo;
+namespace DeliveryApp.Application.Mediatr.Commands.Photo;
 
 public class PhotoDeleteCommand : ICommand<Result>
 {

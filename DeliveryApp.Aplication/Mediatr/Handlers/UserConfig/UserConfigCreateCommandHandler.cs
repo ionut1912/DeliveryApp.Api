@@ -1,9 +1,9 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
-using DeliveryApp.Aplication.Repositories;
+﻿using DeliveryApp.Application.Mediatr.Commands.UserConfigs;
+using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers.UserConfig;
+namespace DeliveryApp.Application.Mediatr.Handlers.UserConfig;
 
 public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCommand, Result>
 {

@@ -1,4 +1,4 @@
-﻿namespace DeliveryApp.Aplication.Repositories;
+﻿namespace DeliveryApp.Application.Repositories;
 
 public interface IUnitOfWork
 {

@@ -1,7 +1,7 @@
 ﻿using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 
-namespace DeliveryApp.Aplication.Repositories;
+namespace DeliveryApp.Application.Repositories;
 
 public interface IUserConfigRepository
 {

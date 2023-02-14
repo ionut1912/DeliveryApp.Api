@@ -2,7 +2,7 @@
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Domain.DTO;
 
-namespace DeliveryApp.Aplication.Mediatr.Commands.Offer;
+namespace DeliveryApp.Application.Mediatr.Commands.Offer;
 
 public class OfferEditCommand : ICommand<Result>
 {

@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using DeliveryApp.Aplication.Mediatr.Commands.Restaurant;
+using DeliveryApp.Application.Mediatr.Commands.Restaurant;
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
@@ -13,7 +13,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DeliveryApp.Web.Controllers;
 
-
 public class RestaurantController : BaseApiController
 {
     private IMediator _mediator;
@@ -24,7 +23,6 @@ public class RestaurantController : BaseApiController
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<Restaurant>), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Get all restaurants")]
-
     public async Task<ActionResult<IEnumerable<Restaurant>>>
         GetRestaurants()
     {
@@ -40,7 +38,7 @@ public class RestaurantController : BaseApiController
     public async Task<ActionResult<Restaurant>>
         GetRestaurant(Guid id)
     {
-        var query = new QueryItem<Restaurant>()
+        var query = new QueryItem<Restaurant>
         {
             Id = id
         };
@@ -72,7 +70,7 @@ public class RestaurantController : BaseApiController
     public async Task<ActionResult> AddRestaurant(
         RestaurantDto restaurantForCreation)
     {
-        var command = new RestaurantCreateCommand()
+        var command = new RestaurantCreateCommand
         {
             RestaurantDto = restaurantForCreation
         };
@@ -91,4 +89,3 @@ public class RestaurantController : BaseApiController
         return HandleResult(await Mediator.Send(command));
     }
 }
-

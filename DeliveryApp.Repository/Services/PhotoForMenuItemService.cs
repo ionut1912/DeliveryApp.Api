@@ -1,4 +1,4 @@
-﻿using DeliveryApp.Aplication.Repositories;
+﻿using DeliveryApp.Application.Repositories;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Context;
 using Microsoft.AspNetCore.Http;

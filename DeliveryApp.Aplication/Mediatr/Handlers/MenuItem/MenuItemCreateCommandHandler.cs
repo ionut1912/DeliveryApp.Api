@@ -1,9 +1,9 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.MenuItem;
-using DeliveryApp.Aplication.Repositories;
+﻿using DeliveryApp.Application.Mediatr.Commands.MenuItem;
+using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers.MenuItem;
+namespace DeliveryApp.Application.Mediatr.Handlers.MenuItem;
 
 public class MenuItemCreateCommandHandler : ICommandHandler<MenuItemCreateCommand, Result>
 {

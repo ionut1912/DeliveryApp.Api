@@ -2,7 +2,7 @@
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Domain.DTO;
 
-namespace DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
+namespace DeliveryApp.Application.Mediatr.Commands.UserConfigs;
 
 public class UserConfigCreateCommand : ICommand<Result>
 {

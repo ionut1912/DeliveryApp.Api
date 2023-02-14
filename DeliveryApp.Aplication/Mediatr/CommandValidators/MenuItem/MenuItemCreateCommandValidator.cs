@@ -1,7 +1,7 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.MenuItem;
+﻿using DeliveryApp.Application.Mediatr.Commands.MenuItem;
 using FluentValidation;
 
-namespace DeliveryApp.Aplication.Mediatr.CommandValidators.MenuItem;
+namespace DeliveryApp.Application.Mediatr.CommandValidators.MenuItem;
 
 public class MenuItemCreateCommandValidator : AbstractValidator<MenuItemCreateCommand>
 {

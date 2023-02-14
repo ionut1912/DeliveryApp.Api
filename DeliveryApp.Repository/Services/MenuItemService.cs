@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DeliveryApp.Aplication.Repositories;
+using DeliveryApp.Application.Repositories;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using DeliveryApp.Repository.Context;

@@ -1,4 +1,4 @@
-﻿using DeliveryApp.Aplication.Repositories;
+﻿using DeliveryApp.Application.Repositories;
 using DeliveryApp.Repository.Context;
 
 namespace DeliveryApp.Repository.Services;

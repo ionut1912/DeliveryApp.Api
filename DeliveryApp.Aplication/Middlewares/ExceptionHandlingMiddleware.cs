@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using ApplicationException = DeliveryApp.Domain.Exceptions.ApplicationException;
 
-namespace DeliveryApp.Aplication.Middlewares;
+namespace DeliveryApp.Application.Middlewares;
 
 public class ExceptionHandlingMiddleware : IMiddleware
 {

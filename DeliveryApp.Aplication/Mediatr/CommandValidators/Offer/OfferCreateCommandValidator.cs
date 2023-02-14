@@ -1,7 +1,7 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.Offer;
+﻿using DeliveryApp.Application.Mediatr.Commands.Offer;
 using FluentValidation;
 
-namespace DeliveryApp.Aplication.Mediatr.CommandValidators.Offer;
+namespace DeliveryApp.Application.Mediatr.CommandValidators.Offer;
 
 public class OfferCreateCommandValidator : AbstractValidator<OfferCreateCommand>
 {

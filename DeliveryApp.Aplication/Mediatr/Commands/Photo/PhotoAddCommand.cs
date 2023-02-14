@@ -2,7 +2,7 @@
 using DeliveryApp.Commons.Interfaces;
 using Microsoft.AspNetCore.Http;
 
-namespace DeliveryApp.Aplication.Mediatr.Commands.Photo;
+namespace DeliveryApp.Application.Mediatr.Commands.Photo;
 
 public class PhotoAddCommand : ICommand<Result>
 

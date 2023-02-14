@@ -1,9 +1,9 @@
-﻿using DeliveryApp.Aplication.Repositories;
+﻿using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers.Restaurant;
+namespace DeliveryApp.Application.Mediatr.Handlers.Restaurant;
 
 public class RestaurantDeleteCommandHandler : ICommandHandler<DeleteCommand, Result>
 {

@@ -1,9 +1,9 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.Offer;
-using DeliveryApp.Aplication.Repositories;
+﻿using DeliveryApp.Application.Mediatr.Commands.Offer;
+using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers.Offer;
+namespace DeliveryApp.Application.Mediatr.Handlers.Offer;
 
 public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, Result>
 {

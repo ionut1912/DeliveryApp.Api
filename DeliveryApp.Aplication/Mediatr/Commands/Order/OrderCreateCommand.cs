@@ -2,7 +2,7 @@
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Domain.DTO;
 
-namespace DeliveryApp.Aplication.Mediatr.Commands.Order;
+namespace DeliveryApp.Application.Mediatr.Commands.Order;
 
 public class OrderCreateCommand : ICommand<Result>
 {

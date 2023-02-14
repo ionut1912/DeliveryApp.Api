@@ -1,9 +1,9 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.Order;
-using DeliveryApp.Aplication.Repositories;
+﻿using DeliveryApp.Application.Mediatr.Commands.Order;
+using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers.Order;
+namespace DeliveryApp.Application.Mediatr.Handlers.Order;
 
 public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, Result>
 {

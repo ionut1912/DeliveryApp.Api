@@ -3,7 +3,7 @@ using FluentValidation;
 using MediatR;
 using ValidationException = DeliveryApp.Domain.Exceptions.ValidationException;
 
-namespace DeliveryApp.Aplication.Pipelines;
+namespace DeliveryApp.Application.Pipelines;
 
 public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : class, ICommand<TResponse>

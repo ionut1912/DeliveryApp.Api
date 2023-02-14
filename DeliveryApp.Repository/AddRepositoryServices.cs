@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using DeliveryApp.Aplication.Middlewares;
-using DeliveryApp.Aplication.Repositories;
+using DeliveryApp.Application.Middlewares;
+using DeliveryApp.Application.Repositories;
 using DeliveryApp.ExternalServices.MailSending;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;

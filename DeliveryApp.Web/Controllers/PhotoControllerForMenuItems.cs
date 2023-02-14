@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using DeliveryApp.Aplication.Mediatr.Commands.Photo;
+using DeliveryApp.Application.Mediatr.Commands.Photo;
 using DeliveryApp.Commons.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

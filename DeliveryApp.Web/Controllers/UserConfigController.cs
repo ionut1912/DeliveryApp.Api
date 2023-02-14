@@ -1,6 +1,6 @@
 ﻿using System.Net;
-using DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
-using DeliveryApp.Aplication.Mediatr.Query;
+using DeliveryApp.Application.Mediatr.Commands.UserConfigs;
+using DeliveryApp.Application.Mediatr.Query;
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
@@ -43,7 +43,7 @@ public class UserConfigController : BaseApiController
     {
         var query = new QueryItem<UserConfig>
         {
-            Id = id,
+            Id = id
         };
         return HandleResult(
             await Mediator.Send(query));
@@ -53,7 +53,6 @@ public class UserConfigController : BaseApiController
     [HttpGet("config/{username}")]
     [ProducesResponseType(typeof(UserConfig), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
-
     [SwaggerOperation(Summary = "Get user config")]
     public async Task<ActionResult<UserConfig>> GetUserConfigByUsername(string username)
     {
@@ -67,7 +66,6 @@ public class UserConfigController : BaseApiController
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
-
     [SwaggerOperation(Summary = "Update user config")]
     public async Task<ActionResult> UpdateUserConfig(
         Guid id, UserConfigDto configs)
@@ -84,7 +82,6 @@ public class UserConfigController : BaseApiController
     [HttpPost]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
-
     [SwaggerOperation(Summary = "Create user config")]
     public async Task<ActionResult> AddUserConfigs(UserConfigDto userConfig)
     {
@@ -98,7 +95,6 @@ public class UserConfigController : BaseApiController
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
-
     [SwaggerOperation(Summary = "Delete user config")]
     public async Task<ActionResult<UserConfigs>>
         DeleteRestaurant(Guid id)
@@ -110,4 +106,3 @@ public class UserConfigController : BaseApiController
         return HandleResult(await Mediator.Send(command));
     }
 }
-

@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\DeliveryApp.Aplication\DeliveryApp.Aplication.csproj" />
+		<ProjectReference Include="..\DeliveryApp.Aplication\DeliveryApp.Application.csproj" />
 		<ProjectReference Include="..\DeliveryApp.Commons\DeliveryApp.Commons.csproj" />
 		<ProjectReference Include="..\DeliveryApp.Domain\DeliveryApp.Domain.csproj" />
 		<ProjectReference Include="..\DeliveryApp.ExternalServices\DeliveryApp.ExternalServices.csproj" />

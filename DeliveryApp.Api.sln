@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.Commons", "Deli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.Domain", "DeliveryApp.Domain\DeliveryApp.Domain.csproj", "{8EEAF5DF-D202-49C6-ACF7-E7FA54ADD524}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeliveryApp.Web", "DeliveryApp.Web\DeliveryApp.Web.csproj", "{7D298E6A-A430-4812-BFA5-B477B1134889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.Web", "DeliveryApp.Web\DeliveryApp.Web.csproj", "{7D298E6A-A430-4812-BFA5-B477B1134889}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeliveryApp.Aplication", "DeliveryApp.Aplication\DeliveryApp.Aplication.csproj", "{EDCD12C4-4A5E-4212-928C-63D068EBBD73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.Application", "DeliveryApp.Aplication\DeliveryApp.Application.csproj", "{EDCD12C4-4A5E-4212-928C-63D068EBBD73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeliveryApp.ExternalServices", "DeliveryApp.ExternalServices\DeliveryApp.ExternalServices.csproj", "{491F77E0-54A3-4760-808B-7D05D531C4A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.ExternalServices", "DeliveryApp.ExternalServices\DeliveryApp.ExternalServices.csproj", "{491F77E0-54A3-4760-808B-7D05D531C4A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

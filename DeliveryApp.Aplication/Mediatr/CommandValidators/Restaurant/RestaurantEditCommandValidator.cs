@@ -1,7 +1,7 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.Restaurant;
+﻿using DeliveryApp.Application.Mediatr.Commands.Restaurant;
 using FluentValidation;
 
-namespace DeliveryApp.Aplication.Mediatr.CommandValidators.Restaurant;
+namespace DeliveryApp.Application.Mediatr.CommandValidators.Restaurant;
 
 public class RestaurantEditCommandValidator : AbstractValidator<RestaurantEditCommand>
 {

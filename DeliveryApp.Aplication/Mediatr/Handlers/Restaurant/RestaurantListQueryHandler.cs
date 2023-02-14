@@ -1,9 +1,9 @@
-﻿using DeliveryApp.Aplication.Repositories;
+﻿using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers.Restaurant;
+namespace DeliveryApp.Application.Mediatr.Handlers.Restaurant;
 
 public class RestaurantListQueryHandler : IQueryHandler<
     ListQuery<Domain.Models.Restaurant>,

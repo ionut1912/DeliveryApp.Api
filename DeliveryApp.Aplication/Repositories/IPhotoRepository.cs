@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace DeliveryApp.Aplication.Repositories;
+namespace DeliveryApp.Application.Repositories;
 
 public interface IPhotoRepository
 {

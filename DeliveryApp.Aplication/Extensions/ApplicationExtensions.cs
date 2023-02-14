@@ -1,10 +1,10 @@
-﻿using DeliveryApp.Aplication.Mediatr;
-using DeliveryApp.Aplication.Pipelines;
+﻿using DeliveryApp.Application.Mediatr;
+using DeliveryApp.Application.Pipelines;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DeliveryApp.Aplication.Extensions;
+namespace DeliveryApp.Application.Extensions;
 
 public static class ApplicationExtensions
 {

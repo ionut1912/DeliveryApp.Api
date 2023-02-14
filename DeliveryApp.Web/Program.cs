@@ -1,5 +1,5 @@
-using DeliveryApp.Aplication.Extensions;
-using DeliveryApp.Aplication.Middlewares;
+using DeliveryApp.Application.Extensions;
+using DeliveryApp.Application.Middlewares;
 using DeliveryApp.ExternalServices.Cloudinary.Settings;
 using DeliveryApp.ExternalServices.Extensions;
 using DeliveryApp.ExternalServices.MailSending.Settings;

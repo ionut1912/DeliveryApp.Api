@@ -1,7 +1,7 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.UserConfigs;
+﻿using DeliveryApp.Application.Mediatr.Commands.UserConfigs;
 using FluentValidation;
 
-namespace DeliveryApp.Aplication.Mediatr.CommandValidators.UserConfig;
+namespace DeliveryApp.Application.Mediatr.CommandValidators.UserConfig;
 
 public class UserConfigEditCommandValidator : AbstractValidator<UserConfigsUpdateCommand>
 {

@@ -1,7 +1,7 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.Order;
+﻿using DeliveryApp.Application.Mediatr.Commands.Order;
 using FluentValidation;
 
-namespace DeliveryApp.Aplication.Mediatr.CommandValidators.Order;
+namespace DeliveryApp.Application.Mediatr.CommandValidators.Order;
 
 public class OrderCreateCommandValidator : AbstractValidator<OrderCreateCommand>
 {

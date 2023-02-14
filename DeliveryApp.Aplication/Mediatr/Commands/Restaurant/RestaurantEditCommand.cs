@@ -2,7 +2,7 @@
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Domain.DTO;
 
-namespace DeliveryApp.Aplication.Mediatr.Commands.Restaurant;
+namespace DeliveryApp.Application.Mediatr.Commands.Restaurant;
 
 public class RestaurantEditCommand : ICommand<Result>
 {

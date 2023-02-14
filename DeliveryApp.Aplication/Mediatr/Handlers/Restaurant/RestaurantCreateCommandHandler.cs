@@ -1,9 +1,9 @@
-﻿using DeliveryApp.Aplication.Mediatr.Commands.Restaurant;
-using DeliveryApp.Aplication.Repositories;
+﻿using DeliveryApp.Application.Mediatr.Commands.Restaurant;
+using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers.Restaurant;
+namespace DeliveryApp.Application.Mediatr.Handlers.Restaurant;
 
 public class RestaurantCreateCommandHandler : ICommandHandler<RestaurantCreateCommand,
     Result>

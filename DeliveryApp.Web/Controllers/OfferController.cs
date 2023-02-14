@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using DeliveryApp.Aplication.Mediatr.Commands.Offer;
+using DeliveryApp.Application.Mediatr.Commands.Offer;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.DTO;

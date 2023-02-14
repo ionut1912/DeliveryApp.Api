@@ -1,9 +1,9 @@
-﻿using DeliveryApp.Aplication.Mediatr.Query;
-using DeliveryApp.Aplication.Repositories;
+﻿using DeliveryApp.Application.Mediatr.Query;
+using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 
-namespace DeliveryApp.Aplication.Mediatr.Handlers.UserConfig;
+namespace DeliveryApp.Application.Mediatr.Handlers.UserConfig;
 
 public class
     UserConfigQueryItemByUsernameHandler : IQueryHandler<UserConfigQueryItemByUsername,

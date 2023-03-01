@@ -70,7 +70,8 @@ public class AccountController : ControllerBase
         {
             Email = registerDto.Email,
             UserName = registerDto.Username,
-            UserAddress = address
+            UserAddress = address,
+            PhoneNumber = registerDto.PhoneNumber
         };
 
         var result = await _userManager.CreateAsync(user, registerDto.Password);

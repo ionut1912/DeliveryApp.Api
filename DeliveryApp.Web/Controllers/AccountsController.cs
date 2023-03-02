@@ -2,6 +2,7 @@
 using AutoMapper;
 using DeliveryApp.Commons.Models;
 using DeliveryApp.Domain.DTO;
+using DeliveryApp.Domain.Models;
 using DeliveryApp.ExternalServices.MailSending;
 using DeliveryApp.Repository.Entities;
 using DeliveryApp.Repository.Services;
@@ -15,14 +16,14 @@ namespace DeliveryApp.Web.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class AccountController : ControllerBase
+public class AccountsController : ControllerBase
 {
     private readonly IMailService _mailService;
     private readonly IMapper _mapper;
     private readonly TokenService _tokenService;
     private readonly UserManager<Users> _userManager;
 
-    public AccountController(IMapper mapper, TokenService tokenService,
+    public AccountsController(IMapper mapper, TokenService tokenService,
         UserManager<Users> userManager, IMailService mailService)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -96,6 +97,7 @@ public class AccountController : ControllerBase
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         var user = await _userManager.Users.Include(x => x.Photos).Include(x => x.UserAddress)
+            .Include(x => x.UserConfigs)
             .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
         return new UserDto
 
@@ -103,7 +105,9 @@ public class AccountController : ControllerBase
             Token = await _tokenService.GenerateToken(user),
             Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
             Username = user.UserName,
-            Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress)
+            Email = user.Email,
+            Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress),
+            UserConfig = _mapper.Map<UserConfig>(user.UserConfigs)
         };
     }
 }

@@ -9,7 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace DeliveryApp.Web.Controllers;
 
 [Authorize]
-public class PhotoControllerForMenuItems : BaseApiController
+public class PhotoForMenuItemsController : BaseApiController
 {
     private IMediator _mediator;
 

@@ -30,6 +30,7 @@ public class UserConfigService : IUserConfigRepository
         var config = _mapper.Map<UserConfigs>(userConfigDto);
         config.Id = Guid.NewGuid();
         config.UserId = user.Id;
+        config.Username = user.UserName;
         await _context.UserConfigs.AddAsync(config, cancellationToken);
         return true;
     }

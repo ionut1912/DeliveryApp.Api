@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DeliveryApp.Web.Controllers;
 
-public class RestaurantController : BaseApiController
+public class RestaurantsController : BaseApiController
 {
     private IMediator _mediator;
 

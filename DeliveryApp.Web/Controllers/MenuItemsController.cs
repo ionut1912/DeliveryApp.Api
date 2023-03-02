@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using DeliveryApp.Application.Mediatr.Commands.Offer;
+using DeliveryApp.Application.Mediatr.Commands.MenuItem;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.DTO;
@@ -12,7 +12,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace DeliveryApp.Web.Controllers;
 
 [AllowAnonymous]
-public class OfferController : BaseApiController
+public class MenuItemsController : BaseApiController
 {
     private IMediator _mediator;
 
@@ -22,32 +22,33 @@ public class OfferController : BaseApiController
     [HttpPost]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(BadRequestResult), (int)HttpStatusCode.BadRequest)]
-    [SwaggerOperation(Summary = "Add offer")]
-    public async Task<ActionResult> AddOffer(OfferDto offerForCreation)
+    [SwaggerOperation(Summary = "Add a menu item")]
+    public async Task<ActionResult> AddMenuItem(MenuItemDto menuItemForCreation)
     {
-        var command = new OfferCreateCommand
+        var command = new MenuItemCreateCommand
         {
-            OfferDto = offerForCreation
+            MenuItemDto = menuItemForCreation
         };
-        return HandleResult(await Mediator.Send(command));
+        return HandleResult(
+            await Mediator.Send(command));
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<Offer>), (int)HttpStatusCode.OK)]
-    [SwaggerOperation(Summary = "Get all offers")]
-    public async Task<ActionResult<IEnumerable<Offer>>> GetOffers()
+    [ProducesResponseType(typeof(IEnumerable<MenuItem>), (int)HttpStatusCode.OK)]
+    [SwaggerOperation(Summary = "Get all menu items")]
+    public async Task<ActionResult<IEnumerable<MenuItem>>> GetMenuItems()
     {
-        var query = new ListQuery<Offer>();
+        var query = new ListQuery<MenuItem>();
         return HandleResult(await Mediator.Send(query));
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(Offer), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(MenuItem), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(NotFoundObjectResult), (int)HttpStatusCode.NotFound)]
-    [SwaggerOperation(Summary = "Get offer")]
-    public async Task<ActionResult<OfferDto>> GetOffer(Guid id)
+    [SwaggerOperation("Get menu item based on id")]
+    public async Task<ActionResult<MenuItem>> GetMenuItems(Guid id)
     {
-        var query = new QueryItem<Offer>
+        var query = new QueryItem<MenuItem>
         {
             Id = id
         };
@@ -56,13 +57,13 @@ public class OfferController : BaseApiController
 
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
-    [SwaggerOperation(Summary = "Update offer")]
-    public async Task<ActionResult<OfferDto>> UpdateOffer(Guid id, OfferDto offerForUpdate)
+    [SwaggerOperation(Summary = "Update menu item")]
+    public async Task<ActionResult> UpdateMneuItems(Guid id, MenuItemDto menuItemForUpdate)
     {
-        var command = new OfferEditCommand
+        var command = new MenuItemEditCommand
         {
             Id = id,
-            OfferDto = offerForUpdate
+            MenuItemDto = menuItemForUpdate
         };
         return HandleResult(await Mediator.Send(command));
     }

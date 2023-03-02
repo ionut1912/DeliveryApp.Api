@@ -12,7 +12,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace DeliveryApp.Web.Controllers;
 
 [AllowAnonymous]
-public class OrderController : BaseApiController
+public class OrdersController : BaseApiController
 {
     private IMediator _mediator;
 

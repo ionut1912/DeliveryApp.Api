@@ -57,7 +57,6 @@ public class AccountsController : ControllerBase
             Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
             Username = user.UserName,
             Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress)
-
         };
     }
 

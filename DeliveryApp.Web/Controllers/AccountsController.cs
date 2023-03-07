@@ -52,10 +52,12 @@ public class AccountsController : ControllerBase
         return new UserDto
 
         {
+            Email = user.Email,
             Token = await _tokenService.GenerateToken(user),
             Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
             Username = user.UserName,
             Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress)
+
         };
     }
 

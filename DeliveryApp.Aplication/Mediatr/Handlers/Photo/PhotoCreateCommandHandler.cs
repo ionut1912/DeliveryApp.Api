@@ -21,7 +21,6 @@ public class PhotoCreateCommandHandler : ICommandHandler<PhotoCreateCommand, Res
     public async Task<Result> Handle(PhotoCreateCommand request,
         CancellationToken cancellationToken)
     {
-    
         await _photoRepository.AddPhoto(request.File, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(DomainMessages.Photo.PhotoAddedSuccessfully);

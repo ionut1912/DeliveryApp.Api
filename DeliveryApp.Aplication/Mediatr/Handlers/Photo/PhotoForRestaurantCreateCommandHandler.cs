@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Photo;
 
@@ -22,6 +23,6 @@ public class PhotoForRestaurantCreateCommandHandler : ICommandHandler<PhotoForRe
     {
         await _photoForRestaurantsRepository.AddPhotoForRestaurant(request.File, request.Id, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Photo for restaurant added successfully");
+        return Result.Success(DomainMessages.PhotoForRestaurant.PhotoAddedSuccessfully);
     }
 }

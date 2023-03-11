@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Photo;
 
@@ -24,6 +25,6 @@ public class
     {
         await _photoForMenuItemRepository.AddPhotoForMenuItem(request.File, request.Id, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Photo added successfully");
+        return Result.Success(DomainMessages.PhotoForMenuItem.PhotoAddedSuccessfully);
     }
 }

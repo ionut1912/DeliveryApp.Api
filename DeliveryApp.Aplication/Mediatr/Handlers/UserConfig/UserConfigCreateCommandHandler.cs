@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.UserConfig;
 
@@ -21,6 +22,6 @@ public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCo
     {
         await _userConfigRepository.AddConfig(request.UserConfigs, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Config added successfully");
+        return Result.Success(DomainMessages.UserConfig.UserConfigAddedSuccessfully);
     }
 }

@@ -4,8 +4,6 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Domain.Messages;
 
-
-
 namespace DeliveryApp.Application.Mediatr.Handlers.Order;
 
 public class OrderCreateCommandHandler : ICommandHandler<OrderCreateCommand, Result>
@@ -23,8 +21,7 @@ public class OrderCreateCommandHandler : ICommandHandler<OrderCreateCommand, Res
     {
         await _orderRepository.AddOrder(request.Order, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-    
+
         return Result.Success(DomainMessages.Order.OrderAddedSuccessfully);
-     
     }
 }

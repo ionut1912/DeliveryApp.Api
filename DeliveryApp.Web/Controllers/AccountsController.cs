@@ -48,7 +48,7 @@ public class AccountsController : ControllerBase
             ToEmail = loginDto.Email,
             UserName = loginDto.Username
         };
-        
+
         await _mailService.SendWelcomeEmailAsync(request);
         return new UserDto
 

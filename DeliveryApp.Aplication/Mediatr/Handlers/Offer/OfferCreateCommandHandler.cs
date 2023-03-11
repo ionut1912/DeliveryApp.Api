@@ -3,8 +3,6 @@ using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Domain.Messages;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Offer;
 
@@ -22,7 +20,7 @@ public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, Res
 
     public async Task<Result> Handle(OfferCreateCommand request,
         CancellationToken cancellationToken)
-    
+
     {
         await _offerRepository.AddOffer(request.OfferDto, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

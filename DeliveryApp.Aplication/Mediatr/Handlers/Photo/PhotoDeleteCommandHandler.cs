@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Photo;
 
@@ -19,9 +20,9 @@ public class PhotoDeleteCommandHandler : ICommandHandler<PhotoDeleteCommand, Res
     public async Task<Result> Handle(PhotoDeleteCommand request, CancellationToken cancellationToken)
     {
         var result = await _photoRepository.DeletePhoto(request.Id, cancellationToken);
-        if (result is false) return Result.Failure($"Photo with id {request.Id} can not be deleted");
+        if (result is false) return Result.Failure(DomainMessages.Photo.CanNotDeletePhoto(request.Id));
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Photo deleted successfully");
+        return Result.Success(DomainMessages.Photo.PhotoDeletedSuccessfully(request.Id));
     }
 }

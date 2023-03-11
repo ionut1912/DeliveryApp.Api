@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Restaurant;
 
@@ -22,6 +23,6 @@ public class RestaurantCreateCommandHandler : ICommandHandler<RestaurantCreateCo
     {
         await _restaurantRepository.AddRestaurant(request.RestaurantDto, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Restaurant added successfully");
+        return Result.Success(DomainMessages.Restaurant.RestaurantAddedSuccessfully);
     }
 }

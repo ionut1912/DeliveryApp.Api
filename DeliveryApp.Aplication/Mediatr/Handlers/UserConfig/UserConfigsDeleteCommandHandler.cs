@@ -2,6 +2,7 @@
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.UserConfig;
 
@@ -19,9 +20,9 @@ public class UserConfigsDeleteCommandHandler : ICommandHandler<DeleteCommand, Re
     public async Task<Result> Handle(DeleteCommand request, CancellationToken cancellationToken)
     {
         var result = await _userConfigRepository.DeleteConfig(request.Id, cancellationToken);
-        if (result is false) return Result.Failure($"Config with id {request.Id} can not be deleted");
+        if (result is false) return Result.Failure(DomainMessages.UserConfig.CanNotDeleteConfig(request.Id));
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Config deleted successfully");
+        return Result.Success(DomainMessages.UserConfig.ConfigDeletedSuccessfully(request.Id));
     }
 }

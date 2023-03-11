@@ -2,6 +2,7 @@
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.UserConfig;
 
@@ -20,7 +21,7 @@ public class
     {
         var result = await _userConfigRepository.GetConfig(request.Id, cancellationToken);
         if (result == null)
-            return ResultT<Domain.Models.UserConfig>.Failure($"Config with id {request.Id} does not exists");
+            return ResultT<Domain.Models.UserConfig>.Failure(DomainMessages.UserConfig.NotFoundUserConfig(request.Id));
         return ResultT<Domain.Models.UserConfig>.Success(result);
     }
 }

@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.UserConfig;
 
@@ -19,9 +20,9 @@ public class UserConfigUpdateCommandHandler : ICommandHandler<UserConfigsUpdateC
     public async Task<Result> Handle(UserConfigsUpdateCommand request, CancellationToken cancellationToken)
     {
         var result = await _userConfigRepository.EditConfig(request.Id, request.Configs, cancellationToken);
-        if (result is false) return Result.Failure($"Config with id {request.Id} does not exists");
+        if (result is false) return Result.Failure(DomainMessages.UserConfig.NotFoundUserConfig(request.Id));
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Config updated successfully");
+        return Result.Success(DomainMessages.UserConfig.ConfigEditedSuccessfully(request.Id));
     }
 }

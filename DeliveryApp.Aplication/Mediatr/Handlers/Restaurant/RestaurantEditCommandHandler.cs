@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Restaurant;
 
@@ -19,9 +20,9 @@ public class RestaurantEditCommandHandler : ICommandHandler<RestaurantEditComman
     public async Task<Result> Handle(RestaurantEditCommand request, CancellationToken cancellationToken)
     {
         var result = await _repository.EditRestaurant(request.Id, request.RestaurantForUpdate, cancellationToken);
-        if (result is false) return Result.Success($"Restaurant with id {request.Id} can not be modified");
+        if (result is false) return Result.Failure(DomainMessages.Restaurant.CanNotEditRestaurant(request.Id));
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Restaurant modified successfully");
+        return Result.Success(DomainMessages.Restaurant.RestaurantEditedSuccessfully(request.Id));
     }
 }

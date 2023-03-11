@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Photo;
 
@@ -23,9 +24,10 @@ public class PhotoForMenuItemSetMainCommandHandler : ICommandHandler<PhotoForMen
         var result =
             await _photoForMenuItemRepository.SetMainPhotoForMenuItem(request.PhotoId, request.ItemId,
                 cancellationToken);
-        if (result is false) return Result.Failure($"Photo with id {request.PhotoId} can not be set as main photo");
+        if (result is false)
+            return Result.Failure(DomainMessages.PhotoForMenuItem.CanNotSetAsMainPhoto(request.PhotoId));
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Photo was set as main");
+        return Result.Success(DomainMessages.PhotoForMenuItem.PhotoSetAsMain(request.PhotoId));
     }
 }

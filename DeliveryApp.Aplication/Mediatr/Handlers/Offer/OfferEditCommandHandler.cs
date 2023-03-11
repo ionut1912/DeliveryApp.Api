@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Offer;
 
@@ -20,9 +21,9 @@ public class OfferEditCommandHandler : ICommandHandler<OfferEditCommand, Result>
     public async Task<Result> Handle(OfferEditCommand request, CancellationToken cancellationToken)
     {
         var result = await _offerRepository.EditOffer(request.Id, request.OfferDto, cancellationToken);
-        if (result is false) return Result.Failure($"Offer with id {request.Id} can not be modified");
+        if (result is false) return Result.Failure(DomainMessages.Offer.CanNotEditOffer(request.Id));
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success($"Offer with id {request.Id} updated successfully");
+        return Result.Success(DomainMessages.Offer.OfferEditedSuccessfully(request.Id));
     }
 }

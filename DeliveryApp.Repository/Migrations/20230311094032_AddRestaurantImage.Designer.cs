@@ -4,6 +4,7 @@ using DeliveryApp.Repository.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeliveryApp.Repository.Migrations
 {
     [DbContext(typeof(DeliveryContext))]
-    partial class DeliveryContextModelSnapshot : ModelSnapshot
+    [Migration("20230311094032_AddRestaurantImage")]
+    partial class AddRestaurantImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,6 +87,10 @@ namespace DeliveryApp.Repository.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsMain")
                         .HasColumnType("bit");
 
@@ -100,51 +106,8 @@ namespace DeliveryApp.Repository.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("PhotosForUser");
-                });
 
-            modelBuilder.Entity("DeliveryApp.ExternalServices.Cloudinary.Photo.PhotoForMenuItem", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsMain")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("MenuItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("MenuItemsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MenuItemsId");
-
-                    b.ToTable("PhotosForMenuItem");
-                });
-
-            modelBuilder.Entity("DeliveryApp.ExternalServices.Cloudinary.Photo.PhotoForRestaurant", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsMain")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("RestaurantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RestaurantPhotos");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Photo");
                 });
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.MenuItems", b =>
@@ -296,14 +259,14 @@ namespace DeliveryApp.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "aaf5e15a-8875-4874-b974-52c9b7b76728",
+                            ConcurrencyStamp = "d6c49717-0bb1-4dc0-ab8c-b60a51679c70",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "6e534def-ff58-464d-b336-fa93d9213535",
+                            ConcurrencyStamp = "15b702c3-30f3-4c5b-869c-7e4d287abe3f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -512,6 +475,31 @@ namespace DeliveryApp.Repository.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DeliveryApp.ExternalServices.Cloudinary.Photo.PhotoForMenuItem", b =>
+                {
+                    b.HasBaseType("DeliveryApp.ExternalServices.Cloudinary.Photo.Photo");
+
+                    b.Property<Guid>("MenuItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MenuItemsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("MenuItemsId");
+
+                    b.HasDiscriminator().HasValue("PhotoForMenuItem");
+                });
+
+            modelBuilder.Entity("DeliveryApp.ExternalServices.Cloudinary.Photo.PhotoForRestaurant", b =>
+                {
+                    b.HasBaseType("DeliveryApp.ExternalServices.Cloudinary.Photo.Photo");
+
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasDiscriminator().HasValue("PhotoForRestaurant");
+                });
+
             modelBuilder.Entity("DeliveryApp.Commons.Models.RestaurantAddresses", b =>
                 {
                     b.HasOne("DeliveryApp.Repository.Entities.Restaurants", null)
@@ -535,13 +523,6 @@ namespace DeliveryApp.Repository.Migrations
                     b.HasOne("DeliveryApp.Repository.Entities.Users", null)
                         .WithMany("Photos")
                         .HasForeignKey("UsersId");
-                });
-
-            modelBuilder.Entity("DeliveryApp.ExternalServices.Cloudinary.Photo.PhotoForMenuItem", b =>
-                {
-                    b.HasOne("DeliveryApp.Repository.Entities.MenuItems", null)
-                        .WithMany("Photos")
-                        .HasForeignKey("MenuItemsId");
                 });
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.MenuItems", b =>
@@ -643,6 +624,13 @@ namespace DeliveryApp.Repository.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DeliveryApp.ExternalServices.Cloudinary.Photo.PhotoForMenuItem", b =>
+                {
+                    b.HasOne("DeliveryApp.Repository.Entities.MenuItems", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("MenuItemsId");
                 });
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.MenuItems", b =>

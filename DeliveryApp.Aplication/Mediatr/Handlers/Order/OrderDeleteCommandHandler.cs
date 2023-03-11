@@ -2,6 +2,7 @@
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Order;
 
@@ -19,9 +20,9 @@ public class OrderDeleteCommandHandler : ICommandHandler<DeleteCommand, Result>
     public async Task<Result> Handle(DeleteCommand request, CancellationToken cancellationToken)
     {
         var result = await _orderRepository.DeleteOrder(request.Id, cancellationToken);
-        if (result is false) return Result.Failure($"Order with id {request.Id} can not be deleted");
+        if (result is false) return Result.Failure(DomainMessages.Order.CanNotDeleteOrder(request.Id));
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Order deleted successfully");
+        return Result.Success(DomainMessages.Order.OrderDeletedSuccessfully(request.Id));
     }
 }

@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.MenuItem;
 
@@ -21,6 +22,6 @@ public class MenuItemCreateCommandHandler : ICommandHandler<MenuItemCreateComman
     {
         await _menuItemRepository.AddMenuItems(request.MenuItemDto, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Menu item created succesfully");
+        return Result.Success(DomainMessages.MenuItem.MenuItemAddedSuccessfully);
     }
 }

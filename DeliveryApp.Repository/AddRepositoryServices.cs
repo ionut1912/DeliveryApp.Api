@@ -7,7 +7,6 @@ using DeliveryApp.Repository.Entities;
 using DeliveryApp.Repository.Profiles;
 using DeliveryApp.Repository.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -20,8 +19,7 @@ public static class AddRepositoryServices
         IConfiguration configuration)
     {
         services.AddAutoMapper(typeof(BaseProfile).Assembly);
-        services.AddDbContext<DeliveryContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DeliveryConnectionString")));
+        services.AddDbContext<DeliveryContext>();
 
         services.AddTransient<IMailService, MailService>();
         services.AddScoped<IMenuItemRepository, MenuItemService>();

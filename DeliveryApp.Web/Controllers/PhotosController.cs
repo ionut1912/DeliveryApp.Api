@@ -23,7 +23,7 @@ public class PhotosController : BaseApiController
     [SwaggerOperation(Summary = "Add photo")]
     public async Task<IActionResult> Add(IFormFile file)
     {
-        var command = new PhotoAddCommand
+        var command = new PhotoCreateCommand
         {
             File = file
         };

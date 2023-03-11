@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace DeliveryApp.Application.Mediatr.Commands.Photo;
 
-public class PhotoAddCommand : ICommand<Result>
-
+public class PhotoForRestaurantCreateCommand : ICommand<Result>
 {
     public IFormFile File { get; set; }
+    public Guid Id { get; set; }
 }

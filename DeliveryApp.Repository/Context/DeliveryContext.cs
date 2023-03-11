@@ -8,10 +8,6 @@ namespace DeliveryApp.Repository.Context;
 
 public class DeliveryContext : IdentityDbContext<Users, Roles, int>
 {
-    public DeliveryContext(DbContextOptions<DeliveryContext> options) : base(options)
-    {
-    }
-
     public DbSet<Offers> Offers { get; set; }
     public DbSet<MenuItems> MenuItems { get; set; }
     public DbSet<OfferMenuItems> OfferMenuItems { get; set; }
@@ -22,6 +18,13 @@ public class DeliveryContext : IdentityDbContext<Users, Roles, int>
     public DbSet<Photo> PhotosForUser { get; set; }
     public DbSet<Orders> Orders { get; set; }
     public DbSet<UserConfigs> UserConfigs { get; set; }
+    public DbSet<PhotoForRestaurant> RestaurantPhotos { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer(
+            "Server=DESKTOP-66P0E8F\\SQLEXPRESS;Database=DELIVERYDB;Trusted_Connection=True;MultipleActiveResultSets=true;");
+    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

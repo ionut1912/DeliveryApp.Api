@@ -2,6 +2,7 @@
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Order;
 
@@ -21,7 +22,7 @@ public class OrdersQueryItemHandler : IQueryHandler<
         CancellationToken cancellationToken)
     {
         var result = await _orderRepository.GetOrder(request.Id, cancellationToken);
-        if (result == null) return ResultT<Domain.Models.Order>.Failure($"Order with id {request.Id} does not exists");
+        if (result is null) return ResultT<Domain.Models.Order>.Failure(DomainMessages.Order.OrderNotFound(request.Id));
         return ResultT<Domain.Models.Order>.Success(result);
     }
 }

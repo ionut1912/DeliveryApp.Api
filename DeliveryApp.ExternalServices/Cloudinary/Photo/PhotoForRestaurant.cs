@@ -1,9 +1,9 @@
 ﻿namespace DeliveryApp.ExternalServices.Cloudinary.Photo;
 
-public class PhotoForMenuItem
+public class PhotoForRestaurant
 {
     public string Id { get; set; }
     public string Url { get; set; }
     public bool IsMain { get; set; }
-    public Guid MenuItemId { get; set; }
+    public Guid RestaurantId { get; set; }
 }

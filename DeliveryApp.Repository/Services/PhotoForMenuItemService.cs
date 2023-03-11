@@ -67,12 +67,11 @@ public class PhotoForMenuItemService : IPhotoForMenuItemRepository
         var modifiedPhoto = menuItem.Photos
             .Select(x =>
                 x.Id == photo.Id
-                    ? new PhotoForMenuItem { Id = photo.Id, IsMain = true, Url = photo.Url, MenuItemsid = menuItem.Id }
+                    ? new PhotoForMenuItem { Id = photo.Id, IsMain = true, Url = photo.Url, MenuItemId = menuItem.Id }
                     : x)
             .ToList();
         menuItem.Photos = modifiedPhoto;
         _context.MenuItems.Update(menuItem);
-        return true;
         return true;
     }
 }

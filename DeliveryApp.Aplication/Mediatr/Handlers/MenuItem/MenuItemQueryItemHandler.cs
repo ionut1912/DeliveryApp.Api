@@ -2,6 +2,7 @@
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.MenuItem;
 
@@ -19,7 +20,7 @@ public class
         CancellationToken cancellationToken)
     {
         var result = await _repository.GetMenuItem(request.Id, cancellationToken);
-        if (result == null) return ResultT<Domain.Models.MenuItem>.Failure($"Menu item with id {request.Id} not found");
+        if (result == null) return ResultT<Domain.Models.MenuItem>.Failure(DomainMessages.MenuItem.NotFoundMenuItem(request.Id));
         return ResultT<Domain.Models.MenuItem>.Success(result);
     }
 }

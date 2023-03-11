@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Order;
 
@@ -19,9 +20,9 @@ public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, Result>
     public async Task<Result> Handle(OrderEditCommand request, CancellationToken cancellationToken)
     {
         var result = await _orderRepository.EditOrder(request.Id, request.OrderForUpdate, cancellationToken);
-        if (result is false) return Result.Failure($"Order with id {request.Id} can not be modified");
+        if (result is false) return Result.Failure(DomainMessages.Order.CanNotEditOrder(request.Id));
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success("Order modified successfully");
+        return Result.Success(DomainMessages.Order.OrderEditedSuccessfully(request.Id));
     }
 }

@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
+using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +13,13 @@ public class OrderService : IOrderRepository
 {
     private readonly DeliveryContext _context;
     private readonly IMapper _mapper;
+    private readonly IUserAccessor _userAccessor;
 
-    public OrderService(DeliveryContext context, IMapper mapper)
+    public OrderService(DeliveryContext context, IMapper mapper, IUserAccessor userAccessor)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _userAccessor = userAccessor ?? throw new ArgumentException(nameof(userAccessor));
     }
 
 
@@ -24,16 +27,17 @@ public class OrderService : IOrderRepository
     {
         var restaurant = await _context.Restaurants
             .Include(x => x.Address)
-            .FirstOrDefaultAsync(x => x.Name == orderForCreationDto.Restaurant.Name, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Name == orderForCreationDto.RestaurantName, cancellationToken);
         var user = await _context.Users
             .Include(x => x.UserAddress)
-            .FirstOrDefaultAsync(x => x.UserName == orderForCreationDto.Username, cancellationToken);
+            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
         var order = _mapper.Map<Orders>(orderForCreationDto);
         order.Id = Guid.NewGuid();
         order.Restaurant = restaurant;
         order.User = user;
         var menuItems = await _context.MenuItems
             .Include(x => x.OfferMenuItems)
+            .ThenInclude(x => x.Offer)
             .Include(x => x.Photos)
             .Where(x => orderForCreationDto.MenuItemNames.Contains(x.ItemName))
             .ToListAsync(cancellationToken);
@@ -44,7 +48,7 @@ public class OrderService : IOrderRepository
                     .Where(x => x.Offer.Active)
                     .Sum(x => x.Offer.Discount == 0
                         ? menuItem.Price
-                        : menuItem.Price - menuItem.Price * (x.Offer.Discount / 100))
+                        : menuItem.Price - menuItem.Price * (x.Offer.Discount / 100.0))
                 : menuItem.Price);
         order.FinalPrice = price;
         order.Status = "received";

@@ -8,7 +8,8 @@ public class RestaurantProfile : BaseProfile
 {
     public RestaurantProfile()
     {
-        CreateMap<Restaurants, Restaurant>().ReverseMap();
+        CreateMap<Restaurants, Restaurant>().ReverseMap()
+            .ForMember(x => x.MenuItems, o => o.MapFrom(x => x.MenuItems));
         CreateMap<Restaurants, RestaurantDto>().ReverseMap();
     }
 }

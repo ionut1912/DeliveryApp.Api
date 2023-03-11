@@ -1,4 +1,6 @@
-﻿namespace DeliveryApp.Domain.Models;
+﻿using DeliveryApp.ExternalServices.Cloudinary.Photo;
+
+namespace DeliveryApp.Domain.Models;
 
 public class MenuItem
 {
@@ -9,4 +11,7 @@ public class MenuItem
     public float Price { get; set; }
     public int Quantity { get; set; }
     public bool Active { get; set; }
+
+    public ICollection<PhotoForMenuItem> Photos { get; set; } =
+        new List<PhotoForMenuItem>();
 }

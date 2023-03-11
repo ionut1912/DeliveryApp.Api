@@ -28,12 +28,17 @@ public class RestaurantService : IRestaurantRepository
         restaurant.Address = _mapper.Map<RestaurantAddresses>(restaurantDto.Address);
         restaurant.Id = Guid.NewGuid();
         restaurant.Address.AddressId = Guid.NewGuid();
+        foreach (var itemName in restaurantDto.menuItemsName)
+            restaurant.MenuItems.Add(
+                await _context.MenuItems.FirstOrDefaultAsync(x => x.ItemName.Contains(itemName), cancellationToken));
         await _context.Restaurants.AddAsync(restaurant, cancellationToken);
     }
 
     public async Task<List<Restaurant>> GetRestaurants(CancellationToken cancellationToken)
     {
         var restaurants = await _context.Restaurants.Include(x => x.Address)
+            .Include(x => x.MenuItems)
+            .Include(x => x.RestaurantPhotos)
             .ToListAsync(cancellationToken);
         return _mapper.Map<List<Restaurant>>(restaurants);
     }
@@ -42,6 +47,8 @@ public class RestaurantService : IRestaurantRepository
     {
         var restaurant =
             await _context.Restaurants.Include(x => x.Address)
+                .Include(x => x.MenuItems)
+                .Include(x => x.RestaurantPhotos)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return _mapper.Map<Restaurant>(restaurant);
     }

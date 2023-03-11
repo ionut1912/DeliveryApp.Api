@@ -6,4 +6,5 @@ public class RestaurantDto
 {
     public string Name { get; set; }
     public RestaurantAddressesForCreation Address { get; set; }
+    public List<string> menuItemsName { get; set; }
 }

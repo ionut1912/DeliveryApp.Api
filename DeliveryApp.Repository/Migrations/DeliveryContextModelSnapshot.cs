@@ -17,7 +17,7 @@ namespace DeliveryApp.Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.11")
+                .HasAnnotation("ProductVersion", "6.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -138,13 +138,18 @@ namespace DeliveryApp.Repository.Migrations
                     b.Property<Guid>("RestaurantId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("RestaurantsId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("RestaurantPhotos");
+                    b.HasIndex("RestaurantsId");
+
+                    b.ToTable("PhotosForRestaurant");
                 });
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.MenuItems", b =>
@@ -174,9 +179,14 @@ namespace DeliveryApp.Repository.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("RestaurantsId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrdersId");
+
+                    b.HasIndex("RestaurantsId");
 
                     b.ToTable("MenuItems");
                 });
@@ -225,8 +235,8 @@ namespace DeliveryApp.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("FinalPrice")
-                        .HasColumnType("real");
+                    b.Property<double>("FinalPrice")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("ReciviedTime")
                         .HasColumnType("datetime2");
@@ -296,14 +306,14 @@ namespace DeliveryApp.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "aaf5e15a-8875-4874-b974-52c9b7b76728",
+                            ConcurrencyStamp = "c7fca2c3-76a7-47ea-a497-97f270268fa1",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "6e534def-ff58-464d-b336-fa93d9213535",
+                            ConcurrencyStamp = "f97e79eb-e0e8-4aa5-9828-a0b78a70a0df",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -544,11 +554,22 @@ namespace DeliveryApp.Repository.Migrations
                         .HasForeignKey("MenuItemsId");
                 });
 
+            modelBuilder.Entity("DeliveryApp.ExternalServices.Cloudinary.Photo.PhotoForRestaurant", b =>
+                {
+                    b.HasOne("DeliveryApp.Repository.Entities.Restaurants", null)
+                        .WithMany("RestaurantPhotos")
+                        .HasForeignKey("RestaurantsId");
+                });
+
             modelBuilder.Entity("DeliveryApp.Repository.Entities.MenuItems", b =>
                 {
                     b.HasOne("DeliveryApp.Repository.Entities.Orders", null)
                         .WithMany("MenuItems")
                         .HasForeignKey("OrdersId");
+
+                    b.HasOne("DeliveryApp.Repository.Entities.Restaurants", null)
+                        .WithMany("MenuItems")
+                        .HasForeignKey("RestaurantsId");
                 });
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.OfferMenuItems", b =>
@@ -665,6 +686,10 @@ namespace DeliveryApp.Repository.Migrations
             modelBuilder.Entity("DeliveryApp.Repository.Entities.Restaurants", b =>
                 {
                     b.Navigation("Address");
+
+                    b.Navigation("MenuItems");
+
+                    b.Navigation("RestaurantPhotos");
                 });
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.Users", b =>

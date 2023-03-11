@@ -12,6 +12,7 @@ public class DeliveryContext : IdentityDbContext<Users, Roles, int>
 {
     private readonly DatabaseSettings _dbSettings;
 
+
     public DeliveryContext(IOptions<DatabaseSettings> optionSettings)
     {
         _dbSettings = optionSettings.Value;
@@ -27,7 +28,7 @@ public class DeliveryContext : IdentityDbContext<Users, Roles, int>
     public DbSet<Photo> PhotosForUser { get; set; }
     public DbSet<Orders> Orders { get; set; }
     public DbSet<UserConfigs> UserConfigs { get; set; }
-    public DbSet<PhotoForRestaurant> RestaurantPhotos { get; set; }
+    public DbSet<PhotoForRestaurant> PhotosForRestaurant { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

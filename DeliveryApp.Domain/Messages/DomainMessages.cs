@@ -4,10 +4,8 @@ public static class DomainMessages
 {
     public static class MenuItem
     {
-        public static string MenuItemAddedSuccessfully()
-        {
-            return "Menu item created successfully";
-        }
+        public static string MenuItemAddedSuccessfully = "Menu item created successfully";
+
 
         public static string CanNotEditMenuItem(Guid id)
         {
@@ -27,10 +25,7 @@ public static class DomainMessages
 
     public static class Offer
     {
-        public static string OfferAddedSuccessfully()
-        {
-            return "Offer created successfully";
-        }
+        public static string OfferAddedSuccessfully = "Offer created successfully";
 
         public static string CanNotEditOffer(Guid id)
         {

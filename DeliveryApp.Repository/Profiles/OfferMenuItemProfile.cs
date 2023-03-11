@@ -12,18 +12,18 @@ public class OfferMenuItemProfile : BaseProfile
         CreateMap<Offers, Offer>().ReverseMap()
             .ForMember(option => option.DateActiveFrom,
                 o => o.MapFrom(src =>
-                    DateTime.ParseExact(src.DateActiveFrom, "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)))
+                    DateTime.ParseExact(src.DateActiveFrom, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)))
             .ForMember(option => option.DateActiveTo,
                 o => o.MapFrom(src =>
-                    DateTime.ParseExact(src.DateActiveTo, "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
+                    DateTime.ParseExact(src.DateActiveTo, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
         CreateMap<Offer, OfferDto>().ReverseMap()
             .ForMember(option => option.DateActiveFrom,
                 o => o.MapFrom(src =>
-                    DateTime.ParseExact(src.DateActiveFrom, "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)))
+                    DateTime.ParseExact(src.DateActiveFrom, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)))
             .ForMember(option => option.DateActiveTo,
                 o => o.MapFrom(src =>
-                    DateTime.ParseExact(src.DateActiveTo, "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
-        CreateMap<MenuItems, MenuItem>().ReverseMap();
-        CreateMap<MenuItems, MenuItemDto>().ReverseMap();
+                    DateTime.ParseExact(src.DateActiveTo, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
+        CreateMap<MenuItem, MenuItems>()
+            .ReverseMap();
     }
 }

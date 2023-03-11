@@ -30,7 +30,7 @@ public class PhotoForRestaurantService : IPhotoForRestaurantsRepository
         if (!restaurant.RestaurantPhotos.Any(x => x.IsMain)) photo.IsMain = true;
 
         restaurant.RestaurantPhotos.Add(photo);
-        await _context.RestaurantPhotos.AddAsync(photo, cancellationToken);
+        await _context.PhotosForRestaurant.AddAsync(photo, cancellationToken);
         _context.Restaurants.Update(restaurant);
     }
 

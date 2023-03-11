@@ -19,6 +19,7 @@ public class OrdersController : BaseApiController
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices
         .GetService<IMediator>();
 
+    [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(BadRequestResult), (int)HttpStatusCode.BadRequest)]

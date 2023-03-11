@@ -6,6 +6,7 @@ using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using DeliveryApp.Repository.Profiles;
 using DeliveryApp.Repository.Services;
+using DeliveryApp.Repository.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +21,7 @@ public static class AddRepositoryServices
     {
         services.AddAutoMapper(typeof(BaseProfile).Assembly);
         services.AddDbContext<DeliveryContext>();
-
+        services.Configure<DatabaseSettings>(configuration.GetSection(nameof(DatabaseSettings)));
         services.AddTransient<IMailService, MailService>();
         services.AddScoped<IMenuItemRepository, MenuItemService>();
         services.AddScoped<IOfferRepository, OfferService>();
@@ -29,6 +30,7 @@ public static class AddRepositoryServices
         services.AddScoped<IPhotoRepository, PhotoService>();
         services.AddScoped<IRestaurantRepository, RestaurantService>();
         services.AddScoped<IUserConfigRepository, UserConfigService>();
+        services.AddScoped<IPhotoForRestaurantsRepository, PhotoForRestaurantService>();
         services.AddTransient<ExceptionHandlingMiddleware>();
 
         services.AddIdentityCore<Users>(opt => { opt.User.RequireUniqueEmail = true; })

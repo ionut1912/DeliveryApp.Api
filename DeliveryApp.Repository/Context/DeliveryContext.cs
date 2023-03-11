@@ -1,13 +1,22 @@
 ﻿using DeliveryApp.Commons.Models;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Entities;
+using DeliveryApp.Repository.Settings;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DeliveryApp.Repository.Context;
 
 public class DeliveryContext : IdentityDbContext<Users, Roles, int>
 {
+    private readonly DatabaseSettings _dbSettings;
+
+    public DeliveryContext(IOptions<DatabaseSettings> optionSettings)
+    {
+        _dbSettings = optionSettings.Value;
+    }
+
     public DbSet<Offers> Offers { get; set; }
     public DbSet<MenuItems> MenuItems { get; set; }
     public DbSet<OfferMenuItems> OfferMenuItems { get; set; }
@@ -22,8 +31,7 @@ public class DeliveryContext : IdentityDbContext<Users, Roles, int>
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(
-            "Server=DESKTOP-66P0E8F\\SQLEXPRESS;Database=DELIVERYDB;Trusted_Connection=True;MultipleActiveResultSets=true;");
+        optionsBuilder.UseSqlServer(_dbSettings.ConnectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

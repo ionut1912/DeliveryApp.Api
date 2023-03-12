@@ -11,7 +11,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DeliveryApp.Web.Controllers;
 
@@ -96,7 +95,7 @@ public class RestaurantsController : BaseApiController
     public async Task<ActionResult<Restaurant>>
         GetRestaurants(string city)
     {
-        var query = new RestaurantQueryItemByCity()
+        var query = new RestaurantQueryItemByCity
         {
             City = city
         };

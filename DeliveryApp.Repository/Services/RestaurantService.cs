@@ -6,7 +6,6 @@ using DeliveryApp.Domain.Models;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Math.EC.Rfc7748;
 
 namespace DeliveryApp.Repository.Services;
 

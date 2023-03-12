@@ -19,7 +19,8 @@ public class PhotoForMenuItemService : IPhotoForMenuItemRepository
 
     public async Task AddPhotoForMenuItem(IFormFile file, Guid id, CancellationToken cancellationToken)
     {
-        var menuItem = await _context.MenuItems.Include(x=>x.Photos).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var menuItem = await _context.MenuItems.Include(x => x.Photos).AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         var photoUploadResult = await _photoAccessor.AddPhoto(file);
         var photo = new PhotoForMenuItem
@@ -37,9 +38,9 @@ public class PhotoForMenuItemService : IPhotoForMenuItemRepository
     public async Task<bool> DeletePhotoForMenuItem(string photoId, Guid id, CancellationToken cancellationToken)
     {
         var menuItem = await _context.MenuItems
-                                              .Include(x=>x.Photos)
-                                              .AsNoTracking()
-                                              .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            .Include(x => x.Photos)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
 
         var photo = menuItem.Photos.FirstOrDefault(x => x.Id == photoId);
@@ -58,9 +59,9 @@ public class PhotoForMenuItemService : IPhotoForMenuItemRepository
     public async Task<bool> SetMainPhotoForMenuItem(string photoId, Guid id, CancellationToken cancellationToken)
     {
         var menuItem = await _context.MenuItems
-                                              .Include(x=>x.Photos)
-                                              .AsNoTracking()
-                                              .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            .Include(x => x.Photos)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         var photo = menuItem?.Photos.FirstOrDefault(x => x.Id == photoId);
         if (photo == null) return false;

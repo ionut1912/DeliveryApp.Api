@@ -33,18 +33,14 @@ public class MenuItemService : IMenuItemRepository
         var menuItems = await _context.MenuItems.Include(x => x.OfferMenuItems)
             .Include(x => x.Photos)
             .ToListAsync(cancellationToken);
-       return _mapper.Map<List<MenuItem>>(menuItems);
-     
-
-
+        return _mapper.Map<List<MenuItem>>(menuItems);
     }
 
     public async Task<MenuItem> GetMenuItem(Guid id, CancellationToken cancellationToken)
     {
         var menuItem = await _context.MenuItems.Include(x => x.Photos).Include(x => x.OfferMenuItems)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-       return _mapper.Map<MenuItem>(menuItem);
-
+        return _mapper.Map<MenuItem>(menuItem);
     }
 
     public async Task<bool> EditMenuItem(Guid id, MenuItemDto menuItemDto, CancellationToken token)

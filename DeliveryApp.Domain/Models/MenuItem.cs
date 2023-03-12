@@ -12,6 +12,5 @@ public class MenuItem
     public int Quantity { get; set; }
     public bool Active { get; set; }
 
-    public ICollection<PhotoForMenuItem> Photos { get; set; } =
-        new List<PhotoForMenuItem>();
+    public string Image { get; set; } 
 }

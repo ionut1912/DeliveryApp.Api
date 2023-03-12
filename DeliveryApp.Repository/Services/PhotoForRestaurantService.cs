@@ -19,7 +19,7 @@ public class PhotoForRestaurantService : IPhotoForRestaurantsRepository
 
     public async Task AddPhotoForRestaurant(IFormFile file, Guid id, CancellationToken cancellationToken)
     {
-        var restaurant = await _context.Restaurants.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var restaurant = await _context.Restaurants.Include(x=>x.RestaurantPhotos).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         var photoUploadResult = await _photoAccessor.AddPhoto(file);
         var photo = new PhotoForRestaurant
@@ -36,7 +36,7 @@ public class PhotoForRestaurantService : IPhotoForRestaurantsRepository
 
     public async Task<bool> DeletePhotoForRestaurant(string photoId, Guid id, CancellationToken cancellationToken)
     {
-        var restaurant = await _context.Restaurants.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var restaurant = await _context.Restaurants.Include(x=>x.RestaurantPhotos).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
 
         var photo = restaurant.RestaurantPhotos.FirstOrDefault(x => x.Id == photoId);
@@ -54,7 +54,7 @@ public class PhotoForRestaurantService : IPhotoForRestaurantsRepository
 
     public async Task<bool> SetMainPhotoForRestaurant(string photoId, Guid id, CancellationToken cancellationToken)
     {
-        var restaurant = await _context.Restaurants.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var restaurant = await _context.Restaurants.Include(x => x.RestaurantPhotos).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (restaurant == null) return false;
 
         var photo = restaurant.RestaurantPhotos.FirstOrDefault(x => x.Id == photoId);

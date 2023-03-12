@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using DeliveryApp.Application.Mediatr.Commands.UserConfigs;
-using DeliveryApp.Application.Mediatr.Query;
+using DeliveryApp.Application.Mediatr.Query.UserConfig;
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;

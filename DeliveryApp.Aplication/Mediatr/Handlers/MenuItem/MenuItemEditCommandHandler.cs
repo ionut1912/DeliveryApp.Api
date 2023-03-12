@@ -11,6 +11,12 @@ public class MenuItemEditCommandHandler : ICommandHandler<MenuItemEditCommand, R
     private readonly IMenuItemRepository _menuItemRepository;
     private readonly IUnitOfWork _unitOfWork;
 
+    public MenuItemEditCommandHandler(IMenuItemRepository menuItemRepository, IUnitOfWork unitOfWork)
+    {
+        _menuItemRepository = menuItemRepository ?? throw new ArgumentNullException(nameof(menuItemRepository));
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+    }
+
     public async Task<Result> Handle(MenuItemEditCommand request, CancellationToken cancellationToken)
     {
         var result = await _menuItemRepository.EditMenuItem(request.Id, request.MenuItemDto, cancellationToken);

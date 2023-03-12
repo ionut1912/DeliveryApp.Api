@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using DeliveryApp.Application.Mediatr.Commands.Restaurant;
+using DeliveryApp.Application.Mediatr.Query.Restaurant;
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
@@ -10,6 +11,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DeliveryApp.Web.Controllers;
 
@@ -87,5 +89,17 @@ public class RestaurantsController : BaseApiController
             Id = id
         };
         return HandleResult(await Mediator.Send(command));
+    }
+
+    [HttpGet("getByCity/{city}")]
+    [ProducesResponseType(typeof(Restaurant), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<Restaurant>>
+        GetRestaurants(string city)
+    {
+        var query = new RestaurantQueryItemByCity()
+        {
+            City = city
+        };
+        return HandleResult(await Mediator.Send(query));
     }
 }

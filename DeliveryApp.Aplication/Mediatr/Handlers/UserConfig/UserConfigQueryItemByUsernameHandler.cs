@@ -1,4 +1,4 @@
-﻿using DeliveryApp.Application.Mediatr.Query;
+﻿using DeliveryApp.Application.Mediatr.Query.UserConfig;
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;

@@ -24,6 +24,10 @@ public class OfferMenuItemProfile : BaseProfile
                 o => o.MapFrom(src =>
                     DateTime.ParseExact(src.DateActiveTo, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
         CreateMap<MenuItem, MenuItems>()
+            .ReverseMap()
+            .ForMember(x => x.Image, opt => opt.MapFrom(src=>src.Photos.FirstOrDefault(x=>x.IsMain).Url));
+        CreateMap<MenuItems, MenuItemDto>()
             .ReverseMap();
+
     }
 }

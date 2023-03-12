@@ -6,6 +6,7 @@ using DeliveryApp.Domain.Models;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Math.EC.Rfc7748;
 
 namespace DeliveryApp.Repository.Services;
 
@@ -53,12 +54,22 @@ public class RestaurantService : IRestaurantRepository
         return _mapper.Map<Restaurant>(restaurant);
     }
 
+    public async Task<List<Restaurant>> GetRestaurantsByCity(string city, CancellationToken cancellationToken)
+    {
+        var restaurants =
+            await _context.Restaurants.Include(x => x.Address)
+                .Include(x => x.MenuItems)
+                .Include(x => x.RestaurantPhotos)
+                .Where(x => x.Address.City == city).ToListAsync(cancellationToken);
+        return _mapper.Map<List<Restaurant>>(restaurants);
+    }
+
     public async Task<bool> EditRestaurant(Guid id, RestaurantDto restaurantDto, CancellationToken cancellationToken)
     {
         var restaurant = await _context.Restaurants.FindAsync(id);
         if (restaurant == null) return false;
-        var modifieRestaurant = _mapper.Map(restaurantDto, restaurant);
-        _context.Restaurants.Update(modifieRestaurant);
+        var modifiedRestaurant = _mapper.Map(restaurantDto, restaurant);
+        _context.Restaurants.Update(modifiedRestaurant);
         return true;
     }
 

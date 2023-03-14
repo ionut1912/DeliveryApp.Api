@@ -50,7 +50,7 @@ public class MailService : IMailService
     public async Task SendWelcomeEmailAsync(WelcomeRequest request)
     {
         var FilePath =
-            "C:\\Users\\nites\\OneDrive\\Desktop\\Projects\\DeliveryApp\\DeliveryApp.Api\\DeliveryApp.ExternalServices\\MailSending\\Templates\\WelcomeTemplate.html";
+            "C:\\Users\\nites\\Desktop\\Projects\\Delivery\\DeliveryApp.Api\\DeliveryApp.ExternalServices\\MailSending\\Templates\\WelcomeTemplate.html";
         var str = new StreamReader(FilePath);
         var MailText = str.ReadToEnd();
         str.Close();

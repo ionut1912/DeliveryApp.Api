@@ -22,7 +22,7 @@ public class PhotoService : IPhotoRepository
     public async Task AddPhoto(IFormFile file, CancellationToken cancellationToken)
     {
         var user = await _context.Users.Include(p => p.Photos)
-            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
+            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(),cancellationToken);
 
         var photoUploadResult = await _photoAccessor.AddPhoto(file);
         var photo = new Photo
@@ -33,7 +33,8 @@ public class PhotoService : IPhotoRepository
         if (!user.Photos.Any(x => x.IsMain)) photo.IsMain = true;
 
         user.Photos.Add(photo);
-        await _context.Users.AddAsync(user, cancellationToken);
+        await _context.PhotosForUser.AddAsync(photo, cancellationToken);
+        _context.Users.Update(user);
     }
 
     public async Task<bool> DeletePhoto(string id, CancellationToken cancellationToken)

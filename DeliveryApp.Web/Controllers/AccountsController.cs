@@ -104,6 +104,7 @@ public class AccountsController : ControllerBase
         return new UserDto
 
         {
+            PhoneNumber= user.PhoneNumber,
             Token = await _tokenService.GenerateToken(user),
             Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
             Username = user.UserName,

@@ -5,6 +5,7 @@ namespace DeliveryApp.Domain.DTO;
 
 public class UserDto
 {
+    public  string PhoneNumber { get; set; }
     public string Token { get; set; }
     public string Username { get; set; }
     public string Image { get; set; }

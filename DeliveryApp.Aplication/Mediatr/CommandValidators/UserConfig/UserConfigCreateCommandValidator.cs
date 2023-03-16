@@ -12,4 +12,4 @@ public class UserConfigCreateCommandValidator : AbstractValidator<UserConfigCrea
         RuleFor(x => x.UserConfigs.Age).NotEmpty();
         RuleFor(x => x.UserConfigs.Sex).NotEmpty();
     }
-}   
+}

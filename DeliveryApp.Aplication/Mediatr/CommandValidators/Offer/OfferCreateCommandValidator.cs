@@ -8,7 +8,6 @@ public class OfferCreateCommandValidator : AbstractValidator<OfferCreateCommand>
     public OfferCreateCommandValidator()
     {
         RuleFor(x => x.OfferDto.DateActiveFrom).NotEmpty()
-
             .GreaterThan(DateTime.Now.ToString());
 
         RuleFor(x => x.OfferDto.DateActiveFrom).NotEmpty()

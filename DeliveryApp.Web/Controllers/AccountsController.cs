@@ -1,36 +1,23 @@
 ﻿using System.Net;
-using AutoMapper;
-using DeliveryApp.Commons.Models;
+using DeliveryApp.Application.Mediatr.Commands.Account;
+using DeliveryApp.Application.Mediatr.Query.Account;
+using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Domain.DTO;
-using DeliveryApp.Domain.Models;
-using DeliveryApp.ExternalServices.MailSending;
-using DeliveryApp.Repository.Entities;
-using DeliveryApp.Repository.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace DeliveryApp.Web.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class AccountsController : ControllerBase
+public class AccountsController : BaseApiController
 {
-    private readonly IMailService _mailService;
-    private readonly IMapper _mapper;
-    private readonly TokenService _tokenService;
-    private readonly UserManager<Users> _userManager;
+    private IMediator _mediator;
 
-    public AccountsController(IMapper mapper, TokenService tokenService,
-        UserManager<Users> userManager, IMailService mailService)
-    {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
-        _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        _mailService = mailService ?? throw new ArgumentNullException(nameof(mailService));
-    }
+    protected IMediator Mediator => _mediator ??= HttpContext.RequestServices
+        .GetService<IMediator>();
 
     [HttpPost("login")]
     [ProducesResponseType(typeof(ActionResult<UserDto>), (int)HttpStatusCode.OK)]
@@ -38,27 +25,11 @@ public class AccountsController : ControllerBase
     [SwaggerOperation(Summary = "Login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-        var user = await _userManager.Users.Include(x => x.UserAddress).Include(x => x.Photos)
-            .FirstOrDefaultAsync(x => x.UserName == loginDto.Username);
-
-        if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
-            return Unauthorized();
-        var request = new WelcomeRequest
+        var command = new LoginCommand
         {
-            ToEmail = loginDto.Email,
-            UserName = loginDto.Username
+            LoginDto = loginDto
         };
-
-        await _mailService.SendWelcomeEmailAsync(request);
-        return new UserDto
-
-        {
-            Email = user.Email,
-            Token = await _tokenService.GenerateToken(user),
-            Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
-            Username = user.UserName,
-            Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress)
-        };
+        return HandleResult(await Mediator.Send(command));
     }
 
     [HttpPost("register")]
@@ -67,27 +38,12 @@ public class AccountsController : ControllerBase
     [SwaggerOperation(Summary = "Create account")]
     public async Task<ActionResult> Register(RegisterDto registerDto)
     {
-        var address = _mapper.Map<UserAddresses>(registerDto.AddressForCreation);
-        address.AddressId = Guid.NewGuid();
-        var user = new Users
+        var command = new CreateAccountCommand
         {
-            Email = registerDto.Email,
-            UserName = registerDto.Username,
-            UserAddress = address,
-            PhoneNumber = registerDto.PhoneNumber
+            RegisterDto = registerDto,
+            ModelState = ModelState
         };
-
-        var result = await _userManager.CreateAsync(user, registerDto.Password);
-        if (!result.Succeeded)
-        {
-            foreach (var error in result.Errors) ModelState.AddModelError(error.Code, error.Description);
-
-            return ValidationProblem();
-        }
-
-        await _userManager.AddToRoleAsync(user, "Member");
-
-        return StatusCode(201);
+        return HandleResult(await Mediator.Send(command));
     }
 
 
@@ -98,19 +54,10 @@ public class AccountsController : ControllerBase
     [HttpGet("current")]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
-        var user = await _userManager.Users.Include(x => x.Photos).Include(x => x.UserAddress)
-            .Include(x => x.UserConfigs)
-            .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
-        return new UserDto
-
+        var query = new GetCurrentUserQuery
         {
-            PhoneNumber= user.PhoneNumber,
-            Token = await _tokenService.GenerateToken(user),
-            Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
-            Username = user.UserName,
-            Email = user.Email,
-            Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress),
-            UserConfig = _mapper.Map<UserConfig>(user.UserConfigs)
+            Username = User.Identity.Name
         };
+        return HandleResult(await Mediator.Send(query));
     }
 }

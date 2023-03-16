@@ -7,7 +7,7 @@ public class RestaurantCreateCommandValidator : AbstractValidator<RestaurantCrea
 {
     public RestaurantCreateCommandValidator()
     {
-        RuleFor(x => x.RestaurantDto.Name).NotEmpty().WithMessage("Restaurant name should not be empty");
-        RuleFor(x => x.RestaurantDto.Address).NotEmpty().WithMessage("Restaurant Address should Not be empty");
+        RuleFor(x => x.RestaurantDto.Name).NotEmpty();   
+        RuleFor(x => x.RestaurantDto.Address).NotEmpty();
     }
 }

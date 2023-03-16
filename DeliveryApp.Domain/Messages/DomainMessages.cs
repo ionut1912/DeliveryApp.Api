@@ -202,4 +202,10 @@ public static class DomainMessages
             return $"Config with id {id} updated successfully";
         }
     }
+
+    public static class Account
+    {
+        public static string ProblemCreatingAccount => "There are issues creating your account";
+        public static string AccountCreatedSuccessfully => "Account was created successfully";
+    }
 }

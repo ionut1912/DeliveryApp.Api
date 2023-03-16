@@ -22,7 +22,7 @@ public class PhotoService : IPhotoRepository
     public async Task AddPhoto(IFormFile file, CancellationToken cancellationToken)
     {
         var user = await _context.Users.Include(p => p.Photos)
-            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(),cancellationToken);
+            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
 
         var photoUploadResult = await _photoAccessor.AddPhoto(file);
         var photo = new Photo

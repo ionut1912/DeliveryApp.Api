@@ -9,7 +9,7 @@ public class OrderCreateCommandValidator : AbstractValidator<OrderCreateCommand>
     {
         RuleFor(x => x.Order.RestaurantName).NotEmpty();
         RuleFor(x => x.Order.ReceivedTime).NotEmpty()
-            .GreaterThan(DateTime.Now.ToString())
+            .GreaterThan(DateTime.Now.ToString());
         RuleFor(x => x.Order.MenuItemNames).NotEmpty();
     }
 }

@@ -206,6 +206,8 @@ public static class DomainMessages
     public static class Account
     {
         public static string ProblemCreatingAccount => "There are issues creating your account";
+        public static string ProblemModifyingAccount => "There are issues modifying your account";
+        public static string AccountModifiedSuccessfully => "Account was modified successfully";
         public static string AccountCreatedSuccessfully => "Account was created successfully";
     }
 }

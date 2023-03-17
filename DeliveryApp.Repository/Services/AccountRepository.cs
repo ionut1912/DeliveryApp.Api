@@ -3,6 +3,7 @@ using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Models;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
+using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.ExternalServices.MailSending;
 using DeliveryApp.Repository.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -16,16 +17,19 @@ public class AccountRepository : IAccountRepository
     private readonly IMailService _mailService;
     private readonly IMapper _mapper;
     private readonly TokenService _tokenService;
+    private readonly IUserAccessor _userAccessor;
     private readonly UserManager<Users> _userManager;
 
     public AccountRepository(IMailService mailService, IMapper mapper, TokenService tokenService,
-        UserManager<Users> userManager)
+        UserManager<Users> userManager, IUserAccessor userAccessor)
     {
         _mailService = mailService ?? throw new ArgumentNullException(nameof(mailService));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+        _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
     }
+
 
     public async Task<bool> Register(RegisterDto registerDto, ModelStateDictionary modelState,
         CancellationToken cancellationToken)
@@ -54,7 +58,7 @@ public class AccountRepository : IAccountRepository
 
     public async Task<UserDto> Login(LoginDto loginDto, CancellationToken cancellationToken)
     {
-        var user = await _userManager.Users.Include(x => x.UserAddress).Include(x => x.Photos)
+        var user = await _userManager.Users.AsNoTracking().Include(x => x.UserAddress).Include(x => x.Photos)
             .FirstOrDefaultAsync(x => x.UserName == loginDto.Username, cancellationToken);
 
         if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
@@ -80,9 +84,13 @@ public class AccountRepository : IAccountRepository
 
     public async Task<UserDto> GetCurrentUser(string username, CancellationToken cancellationToken)
     {
-        var user = await _userManager.Users.Include(x => x.Photos).Include(x => x.UserAddress)
-            .Include(x => x.UserConfigs)
-            .FirstOrDefaultAsync(x => x.UserName == username, cancellationToken);
+        var user = await _userManager.Users
+                                          .AsNoTracking()
+                                          .Include(x => x.Photos)
+                                          .Include(x => x.UserAddress)
+                                          .Include(x => x.UserConfigs)
+                                          .FirstOrDefaultAsync(x => x.UserName == username, cancellationToken);
+
         return new UserDto
 
         {
@@ -94,5 +102,30 @@ public class AccountRepository : IAccountRepository
             Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress),
             UserConfig = _mapper.Map<UserConfig>(user.UserConfigs)
         };
+    }
+
+    public async Task<bool> EditCurrentUser(UserDto userToBeEdited, ModelStateDictionary modelState,
+        CancellationToken cancellationToken)
+    {
+        var user = await _userManager.Users
+                                           .AsNoTracking()
+                                           .Include(x => x.Photos)
+                                           .Include(x => x.UserAddress)
+                                           .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
+        user.SecurityStamp = Guid.NewGuid().ToString();
+        user.PhoneNumber = userToBeEdited.PhoneNumber ?? user.PhoneNumber;
+        user.UserName = userToBeEdited.Username ?? user.UserName;
+
+        user.Email = userToBeEdited.Email ?? user.Email;
+
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors) modelState.AddModelError(error.Code, error.Description);
+
+            return false;
+        }
+
+        return true;
     }
 }

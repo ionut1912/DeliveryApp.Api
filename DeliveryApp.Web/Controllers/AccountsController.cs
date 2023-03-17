@@ -50,7 +50,7 @@ public class AccountsController : BaseApiController
     [Authorize]
     [ProducesResponseType(typeof(ActionResult<UserDto>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
-    [SwaggerOperation(Summary = "Get current user informations")]
+    [SwaggerOperation(Summary = "Get current user information")]
     [HttpGet("current")]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
@@ -59,5 +59,19 @@ public class AccountsController : BaseApiController
             Username = User.Identity.Name
         };
         return HandleResult(await Mediator.Send(query));
+    }
+
+    [Authorize]
+    [ProducesResponseType(typeof(ActionResult<UserDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
+    [HttpPut("current")]
+    public async Task<ActionResult<UserDto>> EditCurrentUser(UserDto userToBeEdited)
+    {
+        var command = new EditUserCommand
+        {
+            UserToBeEdited = userToBeEdited,
+            ModelState = ModelState
+        };
+        return HandleResult(await Mediator.Send(command));
     }
 }

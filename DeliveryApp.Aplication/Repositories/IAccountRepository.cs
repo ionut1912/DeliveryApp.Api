@@ -10,4 +10,7 @@ public interface IAccountRepository
 
     public Task<UserDto> Login(LoginDto loginDto, CancellationToken cancellationToken);
     public Task<UserDto> GetCurrentUser(string username, CancellationToken cancellationToken);
+
+    public Task<bool> EditCurrentUser(UserDto userToBeEdited, ModelStateDictionary modelState,
+        CancellationToken cancellationToken);
 }

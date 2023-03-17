@@ -33,6 +33,7 @@ public class DeliveryContext : IdentityDbContext<Users, Roles, int>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(_dbSettings.ConnectionString);
+        optionsBuilder.EnableSensitiveDataLogging();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

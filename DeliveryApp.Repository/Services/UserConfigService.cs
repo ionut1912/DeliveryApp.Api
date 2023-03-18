@@ -24,7 +24,8 @@ public class UserConfigService : IUserConfigRepository
 
     public async Task<bool> AddConfig(UserConfigDto userConfigDto, CancellationToken cancellationToken)
     {
-        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(),
+        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(
+            x => x.UserName == _userAccessor.GetUsername(),
             cancellationToken);
         if (user == null) return false;
         var config = _mapper.Map<UserConfigs>(userConfigDto);
@@ -53,7 +54,8 @@ public class UserConfigService : IUserConfigRepository
     public async Task<UserConfig> GetConfigByUsername(CancellationToken cancellationToken)
 
     {
-        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(),
+        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(
+            x => x.UserName == _userAccessor.GetUsername(),
             cancellationToken);
 
         var config =

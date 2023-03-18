@@ -5,6 +5,7 @@ using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.ExternalServices.MailSending;
+using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -14,6 +15,7 @@ namespace DeliveryApp.Repository.Services;
 
 public class AccountRepository : IAccountRepository
 {
+    private readonly DeliveryContext _deliveryContext;
     private readonly IMailService _mailService;
     private readonly IMapper _mapper;
     private readonly TokenService _tokenService;
@@ -21,13 +23,14 @@ public class AccountRepository : IAccountRepository
     private readonly UserManager<Users> _userManager;
 
     public AccountRepository(IMailService mailService, IMapper mapper, TokenService tokenService,
-        UserManager<Users> userManager, IUserAccessor userAccessor)
+        UserManager<Users> userManager, IUserAccessor userAccessor, DeliveryContext deliveryContext)
     {
         _mailService = mailService ?? throw new ArgumentNullException(nameof(mailService));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
+        _deliveryContext = deliveryContext ?? throw new ArgumentNullException(nameof(deliveryContext));
     }
 
 
@@ -85,11 +88,11 @@ public class AccountRepository : IAccountRepository
     public async Task<UserDto> GetCurrentUser(string username, CancellationToken cancellationToken)
     {
         var user = await _userManager.Users
-                                          .AsNoTracking()
-                                          .Include(x => x.Photos)
-                                          .Include(x => x.UserAddress)
-                                          .Include(x => x.UserConfigs)
-                                          .FirstOrDefaultAsync(x => x.UserName == username, cancellationToken);
+            .AsNoTracking()
+            .Include(x => x.Photos)
+            .Include(x => x.UserAddress)
+            .Include(x => x.UserConfigs)
+            .FirstOrDefaultAsync(x => x.UserName == username, cancellationToken);
 
         return new UserDto
 
@@ -108,10 +111,10 @@ public class AccountRepository : IAccountRepository
         CancellationToken cancellationToken)
     {
         var user = await _userManager.Users
-                                           .AsNoTracking()
-                                           .Include(x => x.Photos)
-                                           .Include(x => x.UserAddress)
-                                           .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
+            .AsNoTracking()
+            .Include(x => x.Photos)
+            .Include(x => x.UserAddress)
+            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
         user.SecurityStamp = Guid.NewGuid().ToString();
         user.PhoneNumber = userToBeEdited.PhoneNumber ?? user.PhoneNumber;
         user.UserName = userToBeEdited.Username ?? user.UserName;
@@ -126,6 +129,23 @@ public class AccountRepository : IAccountRepository
             return false;
         }
 
+        return true;
+    }
+
+    public async Task<bool> EditCurrentUserAddress(UserAddressesForCreation userAddressesForCreation,
+        CancellationToken cancellationToken)
+    {
+        var user = await _deliveryContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
+        if (user == null) return false;
+        var address = await _deliveryContext.UserAddresses
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.UserId == user.Id, cancellationToken);
+        if (address == null) return false;
+
+        var addressToBeModified = _mapper.Map(userAddressesForCreation, address);
+        _deliveryContext.UserAddresses.Update(addressToBeModified);
         return true;
     }
 }

@@ -38,8 +38,10 @@ public class RestaurantService : IRestaurantRepository
     {
         var restaurants = await _context.Restaurants.Include(x => x.Address)
             .Include(x => x.MenuItems)
+            .ThenInclude(x=>x.Photos)
             .Include(x => x.RestaurantPhotos)
             .ToListAsync(cancellationToken);
+      
         return _mapper.Map<List<Restaurant>>(restaurants);
     }
 
@@ -48,7 +50,9 @@ public class RestaurantService : IRestaurantRepository
         var restaurant =
             await _context.Restaurants.Include(x => x.Address)
                 .Include(x => x.MenuItems)
+                .ThenInclude(x=>x.Photos)
                 .Include(x => x.RestaurantPhotos)
+                
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return _mapper.Map<Restaurant>(restaurant);
     }
@@ -67,7 +71,10 @@ public class RestaurantService : IRestaurantRepository
     {
         var restaurant = await _context.Restaurants.FindAsync(id);
         if (restaurant == null) return false;
+
         var modifiedRestaurant = _mapper.Map(restaurantDto, restaurant);
+        modifiedRestaurant.MenuItems = await _context.MenuItems
+            .Where(x => restaurantDto.menuItemsName.Contains(x.ItemName)).ToListAsync(cancellationToken);
         _context.Restaurants.Update(modifiedRestaurant);
         return true;
     }

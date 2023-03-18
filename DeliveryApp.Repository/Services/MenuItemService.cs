@@ -25,7 +25,7 @@ public class MenuItemService : IMenuItemRepository
         menuItem.Id = Guid.NewGuid();
 
         menuItem.Active = menuItemDto.Quantity > 0;
-        await _context.MenuItems.AddAsync(menuItem);
+        await _context.MenuItems.AddAsync(menuItem, cancellationToken);
     }
 
     public async Task<List<MenuItem>> GetMenuItems(CancellationToken cancellationToken)

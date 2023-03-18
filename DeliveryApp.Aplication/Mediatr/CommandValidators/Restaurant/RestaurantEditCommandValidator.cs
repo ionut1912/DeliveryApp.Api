@@ -8,6 +8,5 @@ public class RestaurantEditCommandValidator : AbstractValidator<RestaurantEditCo
     public RestaurantEditCommandValidator()
     {
         RuleFor(x => x.RestaurantForUpdate.Name).NotEmpty();
-        RuleFor(x => x.RestaurantForUpdate.Address).NotEmpty();
     }
 }

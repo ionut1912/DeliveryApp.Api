@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Mediatr.Commands.Account;
 using DeliveryApp.Application.Mediatr.Query.Account;
 using DeliveryApp.Commons.Controllers;
+using DeliveryApp.Commons.Models;
 using DeliveryApp.Domain.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -62,15 +63,28 @@ public class AccountsController : BaseApiController
     }
 
     [Authorize]
-    [ProducesResponseType(typeof(ActionResult<UserDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
     [HttpPut("current")]
-    public async Task<ActionResult<UserDto>> EditCurrentUser(UserDto userToBeEdited)
+    public async Task<ActionResult> EditCurrentUser(UserDto userToBeEdited)
     {
         var command = new EditUserCommand
         {
             UserToBeEdited = userToBeEdited,
             ModelState = ModelState
+        };
+        return HandleResult(await Mediator.Send(command));
+    }
+
+    [Authorize]
+    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
+    [HttpPut("current/address")]
+    public async Task<ActionResult> EditUserAddress(UserAddressesForCreation userAddressesForCreation)
+    {
+        var command = new EditUserAddressCommand
+        {
+            UserAddressesForCreation = userAddressesForCreation
         };
         return HandleResult(await Mediator.Send(command));
     }

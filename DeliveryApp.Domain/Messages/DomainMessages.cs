@@ -209,5 +209,7 @@ public static class DomainMessages
         public static string ProblemModifyingAccount => "There are issues modifying your account";
         public static string AccountModifiedSuccessfully => "Account was modified successfully";
         public static string AccountCreatedSuccessfully => "Account was created successfully";
+        public static string CanNotModifyAddress => "User address can not be modified";
+        public static string AddressModified => "User address successfully modified";
     }
 }

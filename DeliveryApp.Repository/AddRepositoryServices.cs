@@ -21,7 +21,7 @@ public static class AddRepositoryServices
     {
         services.AddAutoMapper(typeof(BaseProfile).Assembly);
         services.AddDbContext<DeliveryContext>();
-        services.Configure<DatabaseSettings>(configuration.GetSection(nameof(DatabaseSettings)));
+        services.Configure<DatabaseSettings>(configuration.GetSection("DatabaseSettings"));
         services.AddTransient<IMailService, MailService>();
         services.AddScoped<IMenuItemRepository, MenuItemService>();
         services.AddScoped<IOfferRepository, OfferService>();
@@ -32,6 +32,7 @@ public static class AddRepositoryServices
         services.AddScoped<IUserConfigRepository, UserConfigService>();
         services.AddScoped<IPhotoForRestaurantsRepository, PhotoForRestaurantService>();
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<IReviewForMenuItemRepository, ReviewForMenuItemService>();
         services.AddTransient<ExceptionHandlingMiddleware>();
 
         services.AddIdentityCore<Users>(opt => { opt.User.RequireUniqueEmail = true; })

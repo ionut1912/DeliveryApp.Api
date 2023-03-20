@@ -212,4 +212,27 @@ public static class DomainMessages
         public static string CanNotModifyAddress => "User address can not be modified";
         public static string AddressModified => "User address successfully modified";
     }
+
+    public static class ReviewForMenuItem
+    {
+        public static string ReviewCreated => "Review created successfully!";
+
+        public static string CanNotEditReview(Guid id, Guid menuItemId)
+        {
+            return $"Can not edit review {id} for menuItem {menuItemId}";
+        }
+
+        public static string ReviewEdited(Guid id)
+        {
+            return $"Review with id {id} was successfully modified";
+        }
+        public static string CanNoDeleteReview(Guid id, Guid menuItemId)
+        {
+            return $"Can not delete review {id} for menuItem {menuItemId}";
+        }
+        public static string ReviewDeleted(Guid id)
+        {
+            return $"Review with id {id} was successfully deleted";
+        }
+    }
 }

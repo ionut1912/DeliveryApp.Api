@@ -4,8 +4,7 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Restaurant;
-
-internal class
+public class
     RestaurantQueryItemByCityHandler : IQueryHandler<RestaurantQueryItemByCity, ResultT<List<Domain.Models.Restaurant>>>
 {
     private readonly IRestaurantRepository _restaurantRepository;

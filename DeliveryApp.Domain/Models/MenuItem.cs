@@ -10,4 +10,6 @@ public class MenuItem
     public int Quantity { get; set; }
     public bool Active { get; set; }
     public string Image { get; set; }
+     public ICollection<ReviewForMenuItem> Reviews { get; set; } = new List<ReviewForMenuItem>();
+ 
 }

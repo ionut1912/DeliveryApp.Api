@@ -13,7 +13,8 @@ public class DeliveryContext : IdentityDbContext<Users, Roles, int>
     private readonly DatabaseSettings _dbSettings;
 
 
-    public DeliveryContext(DbContextOptions<DeliveryContext> options, IOptions<DatabaseSettings> databaseSettings) : base(options)
+    public DeliveryContext(DbContextOptions<DeliveryContext> options, IOptions<DatabaseSettings> databaseSettings) :
+        base(options)
     {
         _dbSettings = databaseSettings.Value;
     }
@@ -35,6 +36,7 @@ public class DeliveryContext : IdentityDbContext<Users, Roles, int>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(_dbSettings.ConnectionString);
+        optionsBuilder.EnableSensitiveDataLogging();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -66,6 +68,5 @@ public class DeliveryContext : IdentityDbContext<Users, Roles, int>
                 new Roles { Id = 1, Name = "Member", NormalizedName = "MEMBER" },
                 new Roles { Id = 2, Name = "Admin", NormalizedName = "ADMIN" }
             );
-        
     }
 }

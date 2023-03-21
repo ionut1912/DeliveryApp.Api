@@ -226,10 +226,47 @@ public static class DomainMessages
         {
             return $"Review with id {id} was successfully modified";
         }
-        public static string CanNoDeleteReview(Guid id, Guid menuItemId)
+
+        public static string NotFound(Guid id)
         {
-            return $"Can not delete review {id} for menuItem {menuItemId}";
+            return $"Review with id {id} can not be found";
         }
+
+        public static string CanNoDeleteReview(Guid id)
+        {
+            return $"Can not delete review {id}";
+        }
+
+        public static string ReviewDeleted(Guid id)
+        {
+            return $"Review with id {id} was successfully deleted";
+        }
+    }
+
+    public static class ReviewForRestaurant
+    {
+        public static string ReviewCreated => "Review created successfully!";
+
+        public static string CanNotEditReview(Guid id, Guid restaurantId)
+        {
+            return $"Can not edit review {id} for restaurant {restaurantId}";
+        }
+
+        public static string ReviewEdited(Guid id)
+        {
+            return $"Review with id {id} was successfully modified";
+        }
+
+        public static string CanNoDeleteReview(Guid id)
+        {
+            return $"Can not delete review {id}";
+        }
+
+        public static string NotFound(Guid id)
+        {
+            return $"Review with id {id} can not be found";
+        }
+
         public static string ReviewDeleted(Guid id)
         {
             return $"Review with id {id} was successfully deleted";

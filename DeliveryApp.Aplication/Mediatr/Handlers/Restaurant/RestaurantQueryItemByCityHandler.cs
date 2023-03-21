@@ -4,6 +4,7 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Restaurant;
+
 public class
     RestaurantQueryItemByCityHandler : IQueryHandler<RestaurantQueryItemByCity, ResultT<List<Domain.Models.Restaurant>>>
 {

@@ -12,5 +12,7 @@ public class RestaurantProfile : BaseProfile
             .ForMember(x => x.MenuItems, o => o.MapFrom(x => x.MenuItems))
             .ForMember(x => x.Image, opt => opt.MapFrom(src => src.RestaurantPhotos.FirstOrDefault(x => x.IsMain).Url));
         CreateMap<Restaurants, RestaurantDto>().ReverseMap();
+        CreateMap<UserDto, Users>().ReverseMap()
+            .ForMember(src => src.Image, opt => opt.MapFrom(dest => dest.Photos.FirstOrDefault(x => x.IsMain).Url));
     }
 }

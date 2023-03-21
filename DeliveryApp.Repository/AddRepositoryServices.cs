@@ -33,6 +33,7 @@ public static class AddRepositoryServices
         services.AddScoped<IPhotoForRestaurantsRepository, PhotoForRestaurantService>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IReviewForMenuItemRepository, ReviewForMenuItemService>();
+        services.AddScoped<IReviewForRestaurantRepository, ReviewForRestaurantRepository>();
         services.AddTransient<ExceptionHandlingMiddleware>();
 
         services.AddIdentityCore<Users>(opt => { opt.User.RequireUniqueEmail = true; })

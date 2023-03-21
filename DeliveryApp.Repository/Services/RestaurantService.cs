@@ -38,10 +38,13 @@ public class RestaurantService : IRestaurantRepository
     {
         var restaurants = await _context.Restaurants.Include(x => x.Address)
             .Include(x => x.MenuItems)
-            .ThenInclude(x=>x.Photos)
+            .ThenInclude(x => x.Photos)
             .Include(x => x.RestaurantPhotos)
+            .Include(x => x.Reviews)
+            .ThenInclude(x => x.User)
+            .ThenInclude(x => x.Photos)
             .ToListAsync(cancellationToken);
-      
+
         return _mapper.Map<List<Restaurant>>(restaurants);
     }
 
@@ -50,9 +53,12 @@ public class RestaurantService : IRestaurantRepository
         var restaurant =
             await _context.Restaurants.Include(x => x.Address)
                 .Include(x => x.MenuItems)
-                .ThenInclude(x=>x.Photos)
+                .ThenInclude(x => x.Photos)
                 .Include(x => x.RestaurantPhotos)
-                
+                .Include(x => x.Reviews)
+                .ThenInclude(x => x.User)
+                .ThenInclude(x => x.Photos)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return _mapper.Map<Restaurant>(restaurant);
     }
@@ -63,7 +69,8 @@ public class RestaurantService : IRestaurantRepository
             await _context.Restaurants.Include(x => x.Address)
                 .Include(x => x.MenuItems)
                 .Include(x => x.RestaurantPhotos)
-                .Where(x => x.Address.City == city).ToListAsync(cancellationToken);
+                .Where(x => x.Address.City == city)
+                .ToListAsync(cancellationToken);
         return _mapper.Map<List<Restaurant>>(restaurants);
     }
 

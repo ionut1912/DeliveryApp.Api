@@ -28,5 +28,7 @@ public class OfferMenuItemProfile : BaseProfile
             .ForMember(x => x.Image, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(x => x.IsMain).Url));
         CreateMap<MenuItems, MenuItemDto>()
             .ReverseMap();
+        CreateMap<UserDto, Users>().ReverseMap()
+            .ForMember(src => src.Image, opt => opt.MapFrom(dest => dest.Photos.FirstOrDefault(x => x.IsMain).Url));
     }
 }

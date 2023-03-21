@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using DeliveryApp.Application.Mediatr.Commands.ReviewForMenuItem;
+using DeliveryApp.Application.Mediatr.CommandValidators.ReviewForMenuItem;
 using DeliveryApp.Application.Mediatr.Query.ReviewForMenuItem;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Domain.DTO;
@@ -61,7 +62,7 @@ public class ReviewForMenuItemsController : BaseApiController
     [SwaggerOperation(Summary = "Edit review for menuitem")]
     public async Task<IActionResult> EditReviewForMenuItem(Guid id, ReviewForMenuItemDto reviewForMenuItemDto)
     {
-        var command = new ReviewForMenuItemEditCommand()
+        var command = new ReviewForMenuItemEditCommand
         {
             Id = id,
             ReviewForMenuItemDto = reviewForMenuItemDto
@@ -69,17 +70,15 @@ public class ReviewForMenuItemsController : BaseApiController
         return HandleResult(await Mediator.Send(command));
     }
 
-    [HttpDelete("{id}/{menuItemId}")]
+    [HttpDelete("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Delete review for menuitem")]
-    public async Task<IActionResult> DeleteReviewForMenuItem(Guid id, Guid menuItemId)
+    public async Task<IActionResult> DeleteReviewForMenuItem(Guid id)
     {
-        var command = new ReviewForMenuItemDeleteCommand()
+        var command = new ReviewForMenuItemDeleteCommand
         {
-            Id = id,
-            MenuItemId = menuItemId
+            Id = id
         };
         return HandleResult(await Mediator.Send(command));
-
     }
 }

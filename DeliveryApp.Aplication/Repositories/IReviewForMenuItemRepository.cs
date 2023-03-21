@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DeliveryApp.Domain.DTO;
+﻿using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 
-namespace DeliveryApp.Application.Repositories
+namespace DeliveryApp.Application.Repositories;
+
+public interface IReviewForMenuItemRepository
 {
-    public interface IReviewForMenuItemRepository
-    {
-        Task AddReviewForMenuItem(ReviewForMenuItemDto reviewForMenuItemDto,CancellationToken cancellationToken);
-        Task<List<ReviewForMenuItem>> GetReviewsForMenuItem(Guid menuItemId,CancellationToken cancellationToken);
-        Task<ReviewForMenuItem> GetReviewForMenuItem(Guid id,Guid menuItemId,CancellationToken cancellationToken);  
-        Task <bool> EditReviewForMenuItem(Guid id,ReviewForMenuItemDto reviewForMenuItemDto,CancellationToken cancellationToken);
-        Task<bool> DeleteReviewForMenuItem(Guid id,Guid menuItemId, CancellationToken cancellationToken);
-    }
+    Task AddReviewForMenuItem(ReviewForMenuItemDto reviewForMenuItemDto, CancellationToken cancellationToken);
+    Task<List<ReviewForMenuItem>> GetReviewsForMenuItem(Guid menuItemId, CancellationToken cancellationToken);
+    Task<ReviewForMenuItem> GetReviewForMenuItem(Guid id, Guid menuItemId, CancellationToken cancellationToken);
+
+    Task<bool> EditReviewForMenuItem(Guid id, ReviewForMenuItemDto reviewForMenuItemDto,
+        CancellationToken cancellationToken);
+
+    Task<bool> DeleteReviewForMenuItem(Guid id, CancellationToken cancellationToken);
 }

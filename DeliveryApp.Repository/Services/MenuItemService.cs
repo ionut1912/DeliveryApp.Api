@@ -32,10 +32,12 @@ public class MenuItemService : IMenuItemRepository
     {
         var menuItems = await _context.MenuItems.Include(x => x.OfferMenuItems)
             .Include(x => x.Photos)
-            .Include(x=>x.Reviews)
-            .ThenInclude(x=>x.User)
+            .Include(x => x.Reviews)
+            .ThenInclude(x => x.User)
+            .ThenInclude(x => x.Photos)
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
-        
+
         return _mapper.Map<List<MenuItem>>(menuItems);
     }
 
@@ -45,6 +47,9 @@ public class MenuItemService : IMenuItemRepository
             .Include(x => x.Photos)
             .Include(x => x.OfferMenuItems)
             .Include(x => x.Reviews)
+            .ThenInclude(x => x.User)
+            .ThenInclude(x => x.Photos)
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return _mapper.Map<MenuItem>(menuItem);
     }

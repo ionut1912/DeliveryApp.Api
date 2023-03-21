@@ -1,29 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DeliveryApp.Application.Mediatr.Query.ReviewForMenuItem;
+﻿using DeliveryApp.Application.Mediatr.Query.ReviewForMenuItem;
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 
-namespace DeliveryApp.Application.Mediatr.Handlers.ReviewForMenuItem
+namespace DeliveryApp.Application.Mediatr.Handlers.ReviewForMenuItem;
+
+public class
+    ReviewForMenuItemListQueryHandler : IQueryHandler<ReviewForMenuItemListQuery,
+        ResultT<List<Domain.Models.ReviewForMenuItem>>>
 {
-   public class ReviewForMenuItemListQueryHandler:IQueryHandler<ReviewForMenuItemListQuery,ResultT<List<Domain.Models.ReviewForMenuItem>>>
-   {
-       private readonly IReviewForMenuItemRepository _reviewForMenuItemRepository;
+    private readonly IReviewForMenuItemRepository _reviewForMenuItemRepository;
 
-       public ReviewForMenuItemListQueryHandler(IReviewForMenuItemRepository reviewForMenuItemRepository)
-       {
-           _reviewForMenuItemRepository = reviewForMenuItemRepository ??
-                                          throw new ArgumentNullException(nameof(reviewForMenuItemRepository));
-       }
+    public ReviewForMenuItemListQueryHandler(IReviewForMenuItemRepository reviewForMenuItemRepository)
+    {
+        _reviewForMenuItemRepository = reviewForMenuItemRepository ??
+                                       throw new ArgumentNullException(nameof(reviewForMenuItemRepository));
+    }
 
-       public async Task<ResultT<List<Domain.Models.ReviewForMenuItem>>> Handle(ReviewForMenuItemListQuery request, CancellationToken cancellationToken)
-       {
-           var result = await _reviewForMenuItemRepository.GetReviewsForMenuItem(request.MenuItemId, cancellationToken);
-           return  ResultT<List<Domain.Models.ReviewForMenuItem>>.Success(result);
-       }
+    public async Task<ResultT<List<Domain.Models.ReviewForMenuItem>>> Handle(ReviewForMenuItemListQuery request,
+        CancellationToken cancellationToken)
+    {
+        var result = await _reviewForMenuItemRepository.GetReviewsForMenuItem(request.MenuItemId, cancellationToken);
+        return ResultT<List<Domain.Models.ReviewForMenuItem>>.Success(result);
     }
 }

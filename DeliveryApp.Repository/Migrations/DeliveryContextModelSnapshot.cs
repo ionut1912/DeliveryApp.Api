@@ -276,11 +276,11 @@ namespace DeliveryApp.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MenuItemId")
+                    b.Property<Guid>("MenuItemsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("MenuItemsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("NumberOfStars")
+                        .HasColumnType("int");
 
                     b.Property<string>("ReviewDescription")
                         .HasColumnType("nvarchar(max)");
@@ -306,10 +306,10 @@ namespace DeliveryApp.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RestaurantId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("NumberOfStars")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("RestaurantsId")
+                    b.Property<Guid>("RestaurantsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ReviewDescription")
@@ -363,14 +363,14 @@ namespace DeliveryApp.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "153e31dc-ff3f-45da-b25e-91731cb05478",
+                            ConcurrencyStamp = "2726a3b0-2d33-4099-b4b1-7d885b8fa981",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "26023290-4b39-40de-99a1-81c9c5190830",
+                            ConcurrencyStamp = "dc15d528-4be1-4962-a9b7-4700ec665b7b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -667,7 +667,9 @@ namespace DeliveryApp.Repository.Migrations
                 {
                     b.HasOne("DeliveryApp.Repository.Entities.MenuItems", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("MenuItemsId");
+                        .HasForeignKey("MenuItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DeliveryApp.Repository.Entities.Users", "User")
                         .WithMany("ReviewsForMenuItems")
@@ -680,7 +682,9 @@ namespace DeliveryApp.Repository.Migrations
                 {
                     b.HasOne("DeliveryApp.Repository.Entities.Restaurants", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("RestaurantsId");
+                        .HasForeignKey("RestaurantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DeliveryApp.Repository.Entities.Users", "User")
                         .WithMany("ReviewForRestaurants")

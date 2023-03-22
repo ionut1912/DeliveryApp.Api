@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeliveryApp.Repository.Migrations
 {
     [DbContext(typeof(DeliveryContext))]
-    [Migration("20230311184555_Test")]
-    partial class Test
+    [Migration("20230322102604_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -91,7 +91,6 @@ namespace DeliveryApp.Repository.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UsersId")
@@ -119,7 +118,6 @@ namespace DeliveryApp.Repository.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -144,7 +142,6 @@ namespace DeliveryApp.Repository.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -181,9 +178,14 @@ namespace DeliveryApp.Repository.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("RestaurantsId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrdersId");
+
+                    b.HasIndex("RestaurantsId");
 
                     b.ToTable("MenuItems");
                 });
@@ -232,8 +234,8 @@ namespace DeliveryApp.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("FinalPrice")
-                        .HasColumnType("real");
+                    b.Property<double>("FinalPrice")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("ReciviedTime")
                         .HasColumnType("datetime2");
@@ -270,6 +272,66 @@ namespace DeliveryApp.Repository.Migrations
                     b.ToTable("Restaurants");
                 });
 
+            modelBuilder.Entity("DeliveryApp.Repository.Entities.ReviewForMenuItems", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MenuItemsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("NumberOfStars")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReviewDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReviewTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuItemsId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ReviewForMenuItems");
+                });
+
+            modelBuilder.Entity("DeliveryApp.Repository.Entities.ReviewForRestaurants", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("NumberOfStars")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RestaurantsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ReviewDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReviewTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RestaurantsId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ReviewForRestaurants");
+                });
+
             modelBuilder.Entity("DeliveryApp.Repository.Entities.Roles", b =>
                 {
                     b.Property<int>("Id")
@@ -303,14 +365,14 @@ namespace DeliveryApp.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "190d5aa2-5f02-4359-991a-3aa8f165f1df",
+                            ConcurrencyStamp = "2726a3b0-2d33-4099-b4b1-7d885b8fa981",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "6f375714-8dc3-4cd6-a970-8107d32ce8d3",
+                            ConcurrencyStamp = "dc15d528-4be1-4962-a9b7-4700ec665b7b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -563,6 +625,10 @@ namespace DeliveryApp.Repository.Migrations
                     b.HasOne("DeliveryApp.Repository.Entities.Orders", null)
                         .WithMany("MenuItems")
                         .HasForeignKey("OrdersId");
+
+                    b.HasOne("DeliveryApp.Repository.Entities.Restaurants", null)
+                        .WithMany("MenuItems")
+                        .HasForeignKey("RestaurantsId");
                 });
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.OfferMenuItems", b =>
@@ -595,6 +661,36 @@ namespace DeliveryApp.Repository.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Restaurant");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DeliveryApp.Repository.Entities.ReviewForMenuItems", b =>
+                {
+                    b.HasOne("DeliveryApp.Repository.Entities.MenuItems", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("MenuItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DeliveryApp.Repository.Entities.Users", "User")
+                        .WithMany("ReviewsForMenuItems")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DeliveryApp.Repository.Entities.ReviewForRestaurants", b =>
+                {
+                    b.HasOne("DeliveryApp.Repository.Entities.Restaurants", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("RestaurantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DeliveryApp.Repository.Entities.Users", "User")
+                        .WithMany("ReviewForRestaurants")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -664,6 +760,8 @@ namespace DeliveryApp.Repository.Migrations
                     b.Navigation("OfferMenuItems");
 
                     b.Navigation("Photos");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.Offers", b =>
@@ -680,12 +778,20 @@ namespace DeliveryApp.Repository.Migrations
                 {
                     b.Navigation("Address");
 
+                    b.Navigation("MenuItems");
+
                     b.Navigation("RestaurantPhotos");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.Users", b =>
                 {
                     b.Navigation("Photos");
+
+                    b.Navigation("ReviewForRestaurants");
+
+                    b.Navigation("ReviewsForMenuItems");
 
                     b.Navigation("UserAddress");
 

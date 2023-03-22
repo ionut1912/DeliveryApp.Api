@@ -9,4 +9,6 @@ public class Restaurant
     public string Image { get; set; }
     public RestaurantAddresses Address { get; set; }
     public List<MenuItem> MenuItems { get; set; } = new();
+
+    public List<ReviewForRestaurant> Reviews { get; set; }= new();
 }

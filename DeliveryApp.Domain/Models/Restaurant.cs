@@ -10,5 +10,5 @@ public class Restaurant
     public RestaurantAddresses Address { get; set; }
     public List<MenuItem> MenuItems { get; set; } = new();
 
-    public List<ReviewForRestaurant> Reviews { get; set; }= new();
+    public List<ReviewForRestaurant> Reviews { get; set; } = new();
 }

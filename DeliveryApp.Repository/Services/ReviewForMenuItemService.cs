@@ -44,8 +44,7 @@ public class ReviewForMenuItemService : IReviewForMenuItemRepository
         var reviewEntities = await _deliveryContext.ReviewForMenuItems
             .Include(x => x.User)
             .ThenInclude(x => x.Photos).Where(x => x.MenuItemsId == menuItemId)
-            .AsNoTracking()
-            .OrderByDescending(x => x.NumberOfStars)
+            .AsNoTracking().OrderByDescending(x => x.NumberOfStars)
             .ToListAsync(cancellationToken);
         return _mapper.Map<List<ReviewForMenuItem>>(reviewEntities);
     }

@@ -46,6 +46,7 @@ public class ReviewForRestaurantRepository : IReviewForRestaurantRepository
             .Include(x => x.User)
             .ThenInclude(x => x.Photos).Where(x => x.RestaurantsId == restaurantId)
             .AsNoTracking()
+            .OrderByDescending(x=>x.NumberOfStars)
             .ToListAsync(cancellationToken);
         return _mapper.Map<List<ReviewForRestaurant>>(reviewEntities);
     }
@@ -58,6 +59,7 @@ public class ReviewForRestaurantRepository : IReviewForRestaurantRepository
             .ThenInclude(x => x.Photos)
             .AsNoTracking()
             .Where(x => x.RestaurantsId == restaurantId)
+            .OrderByDescending(x=>x.NumberOfStars)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return _mapper.Map<ReviewForRestaurant>(reviewForRestaurantEntity);
     }

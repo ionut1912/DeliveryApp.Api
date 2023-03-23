@@ -57,7 +57,7 @@ public class ReviewForMenuItemService : IReviewForMenuItemRepository
             .ThenInclude(x => x.Photos)
             .AsNoTracking()
             .Where(x => x.MenuItemsId == menuItemId)
-            .OrderByDescending(x=>x.NumberOfStars)
+            .OrderByDescending(x => x.NumberOfStars)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return _mapper.Map<ReviewForMenuItem>(reviewForMenuItemEntity);
     }

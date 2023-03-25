@@ -28,7 +28,7 @@ public class MenuItemService : IMenuItemRepository
         await _context.MenuItems.AddAsync(menuItem, cancellationToken);
     }
 
-    public async Task<List<MenuItem>> GetMenuItems(CancellationToken cancellationToken)
+    public async Task<List<MenuItemWithImage>> GetMenuItems(CancellationToken cancellationToken)
     {
         var menuItems = await _context.MenuItems.Include(x => x.OfferMenuItems)
             .Include(x => x.Photos)
@@ -38,10 +38,10 @@ public class MenuItemService : IMenuItemRepository
             .AsNoTracking()
             .ToListAsync(cancellationToken);
 
-        return _mapper.Map<List<MenuItem>>(menuItems);
+        return _mapper.Map<List<MenuItemWithImage>>(menuItems);
     }
 
-    public async Task<MenuItem> GetMenuItem(Guid id, CancellationToken cancellationToken)
+    public async Task<MenuItemWithImages> GetMenuItem(Guid id, CancellationToken cancellationToken)
     {
         var menuItem = await _context.MenuItems
             .Include(x => x.Photos)
@@ -51,7 +51,13 @@ public class MenuItemService : IMenuItemRepository
             .ThenInclude(x => x.Photos)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        return _mapper.Map<MenuItem>(menuItem);
+        var mappedMenuItem= _mapper.Map<MenuItemWithImages>(menuItem);
+        foreach (var photo in  menuItem.Photos)
+        {
+            mappedMenuItem.Images.Add(photo.Url);
+            
+        }
+        return  mappedMenuItem;
     }
 
     public async Task<bool> EditMenuItem(Guid id, MenuItemDto menuItemDto, CancellationToken token)

@@ -107,7 +107,7 @@ public class AccountRepository : IAccountRepository
         };
     }
 
-    public async Task<bool> EditCurrentUser(UserDto userToBeEdited, ModelStateDictionary modelState,
+    public async Task<EditCurrentUserResponse> EditCurrentUser(UserDto userToBeEdited, ModelStateDictionary modelState,
         CancellationToken cancellationToken)
     {
         var user = await _userManager.Users
@@ -126,10 +126,15 @@ public class AccountRepository : IAccountRepository
         {
             foreach (var error in result.Errors) modelState.AddModelError(error.Code, error.Description);
 
-            return false;
+            throw new Exception("Issues creating your account");
         }
 
-        return true;
+        var response = new EditCurrentUserResponse
+        {
+            Email = user.Email,
+            Token = await _tokenService.GenerateToken(user)
+        };
+        return response;
     }
 
     public async Task<bool> EditCurrentUserAddress(UserAddressesForCreation userAddressesForCreation,

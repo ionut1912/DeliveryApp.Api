@@ -34,21 +34,21 @@ public class MenuItemsController : BaseApiController
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<MenuItem>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IEnumerable<MenuItemWithImage>), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Get all menu items")]
-    public async Task<ActionResult<IEnumerable<MenuItem>>> GetMenuItems()
+    public async Task<ActionResult<IEnumerable<MenuItemWithImage>>> GetMenuItems()
     {
-        var query = new ListQuery<MenuItem>();
+        var query = new ListQuery<MenuItemWithImage>();
         return HandleResult(await Mediator.Send(query));
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(MenuItem), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(MenuItemWithImages), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(NotFoundObjectResult), (int)HttpStatusCode.NotFound)]
     [SwaggerOperation("Get menu item based on id")]
-    public async Task<ActionResult<MenuItem>> GetMenuItems(Guid id)
+    public async Task<ActionResult<MenuItemWithImages>> GetMenuItems(Guid id)
     {
-        var query = new QueryItem<MenuItem>
+        var query = new QueryItem<MenuItemWithImages>
         {
             Id = id
         };

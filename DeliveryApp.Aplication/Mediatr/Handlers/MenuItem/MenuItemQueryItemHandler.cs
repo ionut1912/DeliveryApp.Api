@@ -7,7 +7,7 @@ using DeliveryApp.Domain.Messages;
 namespace DeliveryApp.Application.Mediatr.Handlers.MenuItem;
 
 public class
-    MenuItemQueryItemHandler : IQueryHandler<QueryItem<Domain.Models.MenuItem>, ResultT<Domain.Models.MenuItem>>
+    MenuItemQueryItemHandler : IQueryHandler<QueryItem<Domain.Models.MenuItemWithImages>, ResultT<Domain.Models.MenuItemWithImages>>
 {
     private readonly IMenuItemRepository _repository;
 
@@ -16,12 +16,12 @@ public class
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<ResultT<Domain.Models.MenuItem>> Handle(QueryItem<Domain.Models.MenuItem> request,
+    public async Task<ResultT<Domain.Models.MenuItemWithImages>> Handle(QueryItem<Domain.Models.MenuItemWithImages> request,
         CancellationToken cancellationToken)
     {
         var result = await _repository.GetMenuItem(request.Id, cancellationToken);
         if (result == null)
-            return ResultT<Domain.Models.MenuItem>.Failure(DomainMessages.MenuItem.NotFoundMenuItem(request.Id));
-        return ResultT<Domain.Models.MenuItem>.Success(result);
+            return ResultT<Domain.Models.MenuItemWithImages>.Failure(DomainMessages.MenuItem.NotFoundMenuItem(request.Id));
+        return ResultT<Domain.Models.MenuItemWithImages>.Success(result);
     }
 }

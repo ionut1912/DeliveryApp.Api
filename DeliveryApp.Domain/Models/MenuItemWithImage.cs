@@ -1,6 +1,6 @@
 ﻿namespace DeliveryApp.Domain.Models;
 
-public class MenuItem
+public class MenuItemWithImage
 {
     public Guid Id { get; set; }
     public string ItemName { get; set; }

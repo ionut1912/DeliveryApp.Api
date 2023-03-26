@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\DeliveryApp.Commons\DeliveryApp.Commons.csproj" />
+		<ProjectReference Include="..\DeliveryApp.ExternalServices\DeliveryApp.ExternalServices.csproj" />
 	</ItemGroup>
 
 </Project>

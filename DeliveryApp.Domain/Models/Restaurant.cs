@@ -1,14 +1,15 @@
 ﻿using DeliveryApp.Commons.Models;
+using DeliveryApp.ExternalServices.Cloudinary.Photo;
 
 namespace DeliveryApp.Domain.Models;
 
-public class RestaurantWithImage
+public class Restaurant
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public string Image { get; set; }
+    public List<MenuItem> MenuItems { get; set; } = new();
     public RestaurantAddresses Address { get; set; }
-    public List<MenuItemWithImage> MenuItems { get; set; } = new();
+    public ICollection<PhotoForRestaurant> RestaurantPhotos { get; set; } = new List<PhotoForRestaurant>();
 
     public List<ReviewForRestaurant> Reviews { get; set; } = new();
 }

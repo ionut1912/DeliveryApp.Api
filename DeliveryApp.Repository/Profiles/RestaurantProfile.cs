@@ -8,10 +8,8 @@ public class RestaurantProfile : BaseProfile
 {
     public RestaurantProfile()
     {
-        CreateMap<RestaurantWithImage, Restaurants>().ReverseMap()
-            .ForMember(x => x.MenuItems, o => o.MapFrom(x => x.MenuItems))
-            .ForMember(x => x.Image, opt => opt.MapFrom(src => src.RestaurantPhotos.FirstOrDefault(x => x.IsMain).Url));
-        CreateMap<RestaurantWithImages, Restaurants>().ReverseMap()
+
+        CreateMap<Restaurant, Restaurants>().ReverseMap()
             .ForMember(x => x.MenuItems, o => o.MapFrom(x => x.MenuItems));
         CreateMap<Restaurants, RestaurantDto>().ReverseMap();
         CreateMap<UserDto, Users>().ReverseMap()

@@ -3,12 +3,13 @@ using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.Messages;
+using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Restaurant;
 
 public class RestaurantQueryItemHandler : IQueryHandler<
-    QueryItem<Domain.Models.RestaurantWithImages>,
-    ResultT<Domain.Models.RestaurantWithImages>>
+    QueryItem<Domain.Models.Restaurant>,
+    ResultT<Domain.Models.Restaurant>>
 {
     private readonly IRestaurantRepository _restaurantRepository;
 
@@ -17,13 +18,13 @@ public class RestaurantQueryItemHandler : IQueryHandler<
         _restaurantRepository = restaurantRepository ?? throw new ArgumentNullException(nameof(restaurantRepository));
     }
 
-    public async Task<ResultT<Domain.Models.RestaurantWithImages>> Handle(
-        QueryItem<Domain.Models.RestaurantWithImages> request,
+    public async Task<ResultT<Domain.Models.Restaurant>> Handle(
+        QueryItem<Domain.Models.Restaurant> request,
         CancellationToken cancellationToken)
     {
         var result = await _restaurantRepository.GetRestaurant(request.Id, cancellationToken);
         if (result == null)
-            return ResultT<Domain.Models.RestaurantWithImages>.Failure(DomainMessages.Restaurant.NotFoundRestaurant(request.Id));
-        return ResultT<Domain.Models.RestaurantWithImages>.Success(result);
+            return ResultT<Domain.Models.Restaurant>.Failure(DomainMessages.Restaurant.NotFoundRestaurant(request.Id));
+        return ResultT<Domain.Models.Restaurant>.Success(result);
     }
 }

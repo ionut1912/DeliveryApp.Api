@@ -34,7 +34,7 @@ public class RestaurantService : IRestaurantRepository
         await _context.Restaurants.AddAsync(restaurant, cancellationToken);
     }
 
-    public async Task<List<RestaurantWithImage>> GetRestaurants(CancellationToken cancellationToken)
+    public async Task<List<Restaurant>> GetRestaurants(CancellationToken cancellationToken)
     {
         var restaurants = await _context.Restaurants.Include(x => x.Address)
             .Include(x => x.MenuItems)
@@ -45,10 +45,10 @@ public class RestaurantService : IRestaurantRepository
             .ThenInclude(x => x.Photos)
             .ToListAsync(cancellationToken);
 
-        return _mapper.Map<List<RestaurantWithImage>>(restaurants);
+        return _mapper.Map<List<Restaurant>>(restaurants);
     }
 
-    public async Task<RestaurantWithImages> GetRestaurant(Guid id, CancellationToken cancellationToken)
+    public async Task<Restaurant> GetRestaurant(Guid id, CancellationToken cancellationToken)
     {
         var restaurant =
             await _context.Restaurants.Include(x => x.Address)
@@ -60,16 +60,12 @@ public class RestaurantService : IRestaurantRepository
                 .ThenInclude(x => x.Photos)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        
-       var mappedRestaurant =_mapper.Map<RestaurantWithImages>(restaurant);
-       foreach (var photo in restaurant.RestaurantPhotos)
-       {
-           mappedRestaurant.Images.Add(photo.Url);
-       }
-       return  mappedRestaurant;
+
+        return  _mapper.Map<Restaurant>(restaurant);
+     
     }
 
-    public async Task<List<RestaurantWithImage>> GetRestaurantsByCity(string city, CancellationToken cancellationToken)
+    public async Task<List<Restaurant>> GetRestaurantsByCity(string city, CancellationToken cancellationToken)
     {
         var restaurants =
             await _context.Restaurants.Include(x => x.Address)
@@ -77,7 +73,7 @@ public class RestaurantService : IRestaurantRepository
                 .Include(x => x.RestaurantPhotos)
                 .Where(x => x.Address.City == city)
                 .ToListAsync(cancellationToken);
-        return _mapper.Map<List<RestaurantWithImage>>(restaurants);
+        return _mapper.Map<List<Restaurant>>(restaurants);
     }
 
     public async Task<bool> EditRestaurant(Guid id, RestaurantDto restaurantDto, CancellationToken cancellationToken)

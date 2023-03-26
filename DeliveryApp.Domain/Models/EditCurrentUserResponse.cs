@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace DeliveryApp.Domain.Models;
 
-namespace DeliveryApp.Domain.Models
+public class EditCurrentUserResponse
 {
-    public  class EditCurrentUserResponse
-    {
-        public  string Email { get; set; }
-        public  string Token { get; set; }
-    }
+    public string Email { get; set; }
+    public string Token { get; set; }
 }

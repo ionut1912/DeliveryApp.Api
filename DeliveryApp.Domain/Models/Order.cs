@@ -9,6 +9,6 @@ public class Order
     public double FinalPrice { get; set; }
     public string Status { get; set; }
     public UserDto User { get; set; }
-    public RestaurantWithImage Restaurant { get; set; }
-    public List<MenuItemWithImage> MenuItems { get; set; } = new();
+    public Restaurant Restaurant { get; set; }
+    public List<MenuItem> MenuItems { get; set; } = new();
 }

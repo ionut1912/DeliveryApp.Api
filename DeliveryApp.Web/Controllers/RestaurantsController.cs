@@ -22,24 +22,24 @@ public class RestaurantsController : BaseApiController
         .GetService<IMediator>();
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<RestaurantWithImage>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IEnumerable<Restaurant>), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Get all restaurants")]
-    public async Task<ActionResult<IEnumerable<RestaurantWithImage>>>
+    public async Task<ActionResult<IEnumerable<Restaurant>>>
         GetRestaurants()
     {
-        var query = new ListQuery<RestaurantWithImage>();
+        var query = new ListQuery<Restaurant>();
         return HandleResult(
             await Mediator.Send(query));
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(RestaurantWithImages), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Restaurant), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(NotFoundObjectResult), (int)HttpStatusCode.NotFound)]
     [SwaggerOperation(Summary = "Get restaurant based on id")]
-    public async Task<ActionResult<RestaurantWithImages>>
+    public async Task<ActionResult<Restaurant>>
         GetRestaurant(Guid id)
     {
-        var query = new QueryItem<RestaurantWithImages>
+        var query = new QueryItem<Restaurant>
         {
             Id = id
         };
@@ -91,8 +91,8 @@ public class RestaurantsController : BaseApiController
     }
 
     [HttpGet("getByCity/{city}")]
-    [ProducesResponseType(typeof(RestaurantWithImage), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<RestaurantWithImage>>
+    [ProducesResponseType(typeof(Restaurant), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<Restaurant>>
         GetRestaurants(string city)
     {
         var query = new RestaurantQueryItemByCity

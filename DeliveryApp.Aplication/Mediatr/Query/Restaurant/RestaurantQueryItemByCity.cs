@@ -4,7 +4,7 @@ using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Application.Mediatr.Query.Restaurant;
 
-public class RestaurantQueryItemByCity : IQuery<ResultT<List<RestaurantWithImage>>>
+public class RestaurantQueryItemByCity : IQuery<ResultT<List<Domain.Models.Restaurant>>>
 {
     public string City { get; set; }
 }

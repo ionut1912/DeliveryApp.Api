@@ -10,10 +10,10 @@ public static class ApplicationExtensions
 {
     public static IServiceCollection RegisterApplicationServices(this IServiceCollection services)
     {
-        var mediatrAssembly = typeof(MediatrAssemblyReference).Assembly;
-        services.AddMediatR(mediatrAssembly);
+        var mediatorAssembly = typeof(MediatrAssemblyReference).Assembly;
+        services.AddMediatR(mediatorAssembly);
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        services.AddValidatorsFromAssembly(mediatrAssembly);
+        services.AddValidatorsFromAssembly(mediatorAssembly);
         return services;
     }
 }

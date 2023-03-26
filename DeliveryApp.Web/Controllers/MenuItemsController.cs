@@ -58,7 +58,7 @@ public class MenuItemsController : BaseApiController
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Update menu item")]
-    public async Task<ActionResult> UpdateMneuItems(Guid id, MenuItemDto menuItemForUpdate)
+    public async Task<ActionResult> UpdateMenuItems(Guid id, MenuItemDto menuItemForUpdate)
     {
         var command = new MenuItemEditCommand
         {

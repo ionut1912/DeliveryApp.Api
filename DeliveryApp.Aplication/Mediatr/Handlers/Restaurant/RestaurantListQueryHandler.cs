@@ -2,7 +2,6 @@
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Commons.Query;
-using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Restaurant;
 

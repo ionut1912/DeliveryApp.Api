@@ -54,6 +54,8 @@ public class RestaurantService : IRestaurantRepository
             await _context.Restaurants.Include(x => x.Address)
                 .Include(x => x.MenuItems)
                 .ThenInclude(x => x.Photos)
+                .Include(x => x.MenuItems)
+                .ThenInclude(x => x.OfferMenuItems)
                 .Include(x => x.RestaurantPhotos)
                 .Include(x => x.Reviews)
                 .ThenInclude(x => x.User)
@@ -61,8 +63,7 @@ public class RestaurantService : IRestaurantRepository
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-        return  _mapper.Map<Restaurant>(restaurant);
-     
+        return _mapper.Map<Restaurant>(restaurant);
     }
 
     public async Task<List<Restaurant>> GetRestaurantsByCity(string city, CancellationToken cancellationToken)

@@ -23,10 +23,20 @@ public class OfferMenuItemProfile : BaseProfile
             .ForMember(option => option.DateActiveTo,
                 o => o.MapFrom(src =>
                     DateTime.ParseExact(src.DateActiveTo, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
+        CreateMap<Offers, OfferDto>().ReverseMap()
+            .ForMember(option => option.DateActiveFrom,
+                o => o.MapFrom(src =>
+                    DateTime.ParseExact(src.DateActiveFrom, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)))
+            .ForMember(option => option.DateActiveTo,
+                o => o.MapFrom(src =>
+                    DateTime.ParseExact(src.DateActiveTo, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
         CreateMap<MenuItem, MenuItems>()
-            .ReverseMap();
+            .ReverseMap()
+            .ForMember(x => x.OfferMenuItems, opt => opt.MapFrom(src => src.OfferMenuItems));
+
         CreateMap<MenuItems, MenuItemDto>()
             .ReverseMap();
+        CreateMap<OfferMenuItems, OfferMenuItem>().ReverseMap();
         CreateMap<UserDto, Users>().ReverseMap()
             .ForMember(src => src.Image, opt => opt.MapFrom(dest => dest.Photos.FirstOrDefault(x => x.IsMain).Url));
     }

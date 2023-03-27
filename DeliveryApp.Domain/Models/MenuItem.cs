@@ -15,5 +15,6 @@ public class MenuItem
     public ICollection<PhotoForMenuItem> Photos { get; set; } =
         new List<PhotoForMenuItem>();
 
+    public ICollection<OfferMenuItem> OfferMenuItems { get; set; } = new List<OfferMenuItem>();
     public ICollection<ReviewForMenuItem> Reviews { get; set; } = new List<ReviewForMenuItem>();
 }

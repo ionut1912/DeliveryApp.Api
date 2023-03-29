@@ -30,7 +30,11 @@ public class RestaurantService : IRestaurantRepository
         restaurant.Address.AddressId = Guid.NewGuid();
         foreach (var itemName in restaurantDto.menuItemsName)
             restaurant.MenuItems.Add(
-                await _context.MenuItems.FirstOrDefaultAsync(x => x.ItemName.Contains(itemName), cancellationToken));
+                await _context.MenuItems.AsNoTracking().FirstOrDefaultAsync(x => x.ItemName.Contains(itemName), cancellationToken));
+        foreach (var item in  restaurant.MenuItems)
+        {
+            _context.MenuItems.Update(item);
+        }
         await _context.Restaurants.AddAsync(restaurant, cancellationToken);
     }
 
@@ -43,6 +47,7 @@ public class RestaurantService : IRestaurantRepository
             .Include(x => x.Reviews)
             .ThenInclude(x => x.User)
             .ThenInclude(x => x.Photos)
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
 
         return _mapper.Map<List<Restaurant>>(restaurants);
@@ -72,6 +77,7 @@ public class RestaurantService : IRestaurantRepository
             await _context.Restaurants.Include(x => x.Address)
                 .Include(x => x.MenuItems)
                 .Include(x => x.RestaurantPhotos)
+                .AsNoTracking()
                 .Where(x => x.Address.City == city)
                 .ToListAsync(cancellationToken);
         return _mapper.Map<List<Restaurant>>(restaurants);
@@ -83,7 +89,7 @@ public class RestaurantService : IRestaurantRepository
         if (restaurant == null) return false;
 
         var modifiedRestaurant = _mapper.Map(restaurantDto, restaurant);
-        modifiedRestaurant.MenuItems = await _context.MenuItems
+        modifiedRestaurant.MenuItems = await _context.MenuItems.AsNoTracking()
             .Where(x => restaurantDto.menuItemsName.Contains(x.ItemName)).ToListAsync(cancellationToken);
         _context.Restaurants.Update(modifiedRestaurant);
         return true;

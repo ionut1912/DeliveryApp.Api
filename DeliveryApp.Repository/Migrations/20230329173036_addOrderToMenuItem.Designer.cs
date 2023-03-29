@@ -4,6 +4,7 @@ using DeliveryApp.Repository.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeliveryApp.Repository.Migrations
 {
     [DbContext(typeof(DeliveryContext))]
-    partial class DeliveryContextModelSnapshot : ModelSnapshot
+    [Migration("20230329173036_addOrderToMenuItem")]
+    partial class addOrderToMenuItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -358,14 +360,14 @@ namespace DeliveryApp.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "df19313d-4bfd-49d6-a464-1d9efceb3cb7",
+                            ConcurrencyStamp = "a6566c79-8ca0-40eb-b1a4-f5addb5d0543",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "9a7976ae-6e4a-4858-9285-09d5a0e976bb",
+                            ConcurrencyStamp = "7056883c-7e94-469f-9ce3-7e1df7711a31",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

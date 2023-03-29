@@ -25,14 +25,14 @@ public class OfferService : IOfferRepository
         var offer = _mapper.Map<Offers>(offerDto);
         offer.Id = Guid.NewGuid();
         var foundMenuItem =
-            await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == offerDto.MenuItemId,
+            await _context.MenuItems.AsNoTracking().FirstOrDefaultAsync(x => x.Id == offerDto.MenuItemId,
                 cancellationToken);
 
         offer.Active = DateTime.Now <= offer.DateActiveTo;
 
         offer.OfferMenuItems.Add(new OfferMenuItems
             { OfferId = offer.Id, MenuItemId = foundMenuItem.Id });
-        await _context.Offers.AddAsync(offer);
+        await _context.Offers.AddAsync(offer,cancellationToken);
     }
 
     public async Task<bool> EditOffer(Guid id, OfferDto offerDto, CancellationToken cancellationToken)

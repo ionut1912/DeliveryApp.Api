@@ -36,7 +36,7 @@ public class OrdersController : BaseApiController
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<Order>), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Get all orders")]
-    public async Task<ActionResult<IEnumerable<OrderForCreationDto>>> GetOrders()
+    public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
     {
         var query = new ListQuery<Order>();
         return HandleResult(await Mediator.Send(query));
@@ -54,6 +54,7 @@ public class OrdersController : BaseApiController
         };
         return HandleResult(await Mediator.Send(query));
     }
+    
 
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
@@ -68,4 +69,5 @@ public class OrdersController : BaseApiController
         return HandleResult(await Mediator.Send(
             command));
     }
+
 }

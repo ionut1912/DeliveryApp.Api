@@ -4,6 +4,7 @@ using DeliveryApp.Repository.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeliveryApp.Repository.Migrations
 {
     [DbContext(typeof(DeliveryContext))]
-    partial class DeliveryContextModelSnapshot : ModelSnapshot
+    [Migration("20230329171316_addOrderToUser")]
+    partial class addOrderToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,6 +169,9 @@ namespace DeliveryApp.Repository.Migrations
                     b.Property<string>("ItemName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("OrdersId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
@@ -177,6 +182,8 @@ namespace DeliveryApp.Repository.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrdersId");
 
                     b.HasIndex("RestaurantsId");
 
@@ -358,14 +365,14 @@ namespace DeliveryApp.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "df19313d-4bfd-49d6-a464-1d9efceb3cb7",
+                            ConcurrencyStamp = "d4d2c455-1c3a-409f-819a-7e3144f37722",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "9a7976ae-6e4a-4858-9285-09d5a0e976bb",
+                            ConcurrencyStamp = "d588dc2a-830e-469a-8fd6-4c2e635df142",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -469,21 +476,6 @@ namespace DeliveryApp.Repository.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("MenuItemsOrders", b =>
-                {
-                    b.Property<Guid>("MenuItemsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OrdersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("MenuItemsId", "OrdersId");
-
-                    b.HasIndex("OrdersId");
-
-                    b.ToTable("MenuItemsOrders");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -630,6 +622,10 @@ namespace DeliveryApp.Repository.Migrations
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.MenuItems", b =>
                 {
+                    b.HasOne("DeliveryApp.Repository.Entities.Orders", null)
+                        .WithMany("MenuItems")
+                        .HasForeignKey("OrdersId");
+
                     b.HasOne("DeliveryApp.Repository.Entities.Restaurants", null)
                         .WithMany("MenuItems")
                         .HasForeignKey("RestaurantsId");
@@ -709,21 +705,6 @@ namespace DeliveryApp.Repository.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MenuItemsOrders", b =>
-                {
-                    b.HasOne("DeliveryApp.Repository.Entities.MenuItems", null)
-                        .WithMany()
-                        .HasForeignKey("MenuItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DeliveryApp.Repository.Entities.Orders", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("DeliveryApp.Repository.Entities.Roles", null)
@@ -791,6 +772,8 @@ namespace DeliveryApp.Repository.Migrations
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.Orders", b =>
                 {
+                    b.Navigation("MenuItems");
+
                     b.Navigation("Restaurants");
                 });
 

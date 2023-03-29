@@ -10,13 +10,10 @@ public class OrderProfile : BaseProfile
     public OrderProfile()
     {
         CreateMap<Orders, Order>().ReverseMap()
-            .ForMember(option => option.ReciviedTime,
+            .ForMember(option => option.ReceivedTime,
                 o => o.MapFrom(src =>
                     DateTime.ParseExact(src.ReceivedTime, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
-        CreateMap<Orders, OrderForCreationDto>().ReverseMap()
-            .ForMember(option => option.ReciviedTime,
-                o => o.MapFrom(src =>
-                    DateTime.ParseExact(src.ReceivedTime, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
+        CreateMap<Orders, OrderForCreationDto>().ReverseMap();
         CreateMap<Orders, OrderForUpdateDto>().ReverseMap();
     }
 }

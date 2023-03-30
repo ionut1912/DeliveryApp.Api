@@ -30,11 +30,9 @@ public class RestaurantService : IRestaurantRepository
         restaurant.Address.AddressId = Guid.NewGuid();
         foreach (var itemName in restaurantDto.menuItemsName)
             restaurant.MenuItems.Add(
-                await _context.MenuItems.AsNoTracking().FirstOrDefaultAsync(x => x.ItemName.Contains(itemName), cancellationToken));
-        foreach (var item in  restaurant.MenuItems)
-        {
-            _context.MenuItems.Update(item);
-        }
+                await _context.MenuItems.AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.ItemName.Contains(itemName), cancellationToken));
+        foreach (var item in restaurant.MenuItems) _context.MenuItems.Update(item);
         await _context.Restaurants.AddAsync(restaurant, cancellationToken);
     }
 

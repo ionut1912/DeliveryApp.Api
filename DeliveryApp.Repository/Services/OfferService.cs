@@ -32,7 +32,7 @@ public class OfferService : IOfferRepository
 
         offer.OfferMenuItems.Add(new OfferMenuItems
             { OfferId = offer.Id, MenuItemId = foundMenuItem.Id });
-        await _context.Offers.AddAsync(offer,cancellationToken);
+        await _context.Offers.AddAsync(offer, cancellationToken);
     }
 
     public async Task<bool> EditOffer(Guid id, OfferDto offerDto, CancellationToken cancellationToken)

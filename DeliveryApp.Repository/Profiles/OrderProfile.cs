@@ -15,5 +15,6 @@ public class OrderProfile : BaseProfile
                     DateTime.ParseExact(src.ReceivedTime, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
         CreateMap<Orders, OrderForCreationDto>().ReverseMap();
         CreateMap<Orders, OrderForUpdateDto>().ReverseMap();
+        CreateMap<UserDto, Users>().ReverseMap();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using DeliveryApp.Application.Mediatr.Commands.Order;
+using DeliveryApp.Application.Mediatr.Query.Orders;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.DTO;
@@ -42,6 +43,16 @@ public class OrdersController : BaseApiController
         return HandleResult(await Mediator.Send(query));
     }
 
+    [Authorize]
+    [HttpGet("current")]
+    [ProducesResponseType(typeof(IEnumerable<Order>), (int)HttpStatusCode.OK)]
+    [SwaggerOperation(Summary = "Get current user orders")]
+    public async Task<ActionResult<IEnumerable<Order>>> GetCurrentUserOrders()
+    {
+        var query = new CurrentUserOrdersQuery();
+        return HandleResult(await Mediator.Send(query));
+    }
+
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(NotFoundObjectResult), (int)HttpStatusCode.NotFound)]
@@ -54,7 +65,7 @@ public class OrdersController : BaseApiController
         };
         return HandleResult(await Mediator.Send(query));
     }
-    
+
 
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
@@ -69,5 +80,4 @@ public class OrdersController : BaseApiController
         return HandleResult(await Mediator.Send(
             command));
     }
-
 }

@@ -1,5 +1,4 @@
-﻿using DeliveryApp.Domain.Messages;
-using DeliveryApp.ExternalServices.Cloudinary.Photo;
+﻿using DeliveryApp.ExternalServices.Cloudinary.Photo;
 
 namespace DeliveryApp.Repository.Entities;
 
@@ -18,5 +17,5 @@ public class MenuItems
         new List<PhotoForMenuItem>();
 
     public ICollection<ReviewForMenuItems> Reviews { get; set; } = new List<ReviewForMenuItems>();
-    public List<Orders> Orders { get; set; }=new List<Orders>();
+    public List<Orders> Orders { get; set; } = new();
 }

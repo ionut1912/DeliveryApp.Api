@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DeliveryApp.Application.Repositories;
+using DeliveryApp.Commons.Models;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
@@ -41,16 +42,16 @@ public class OrderService : IOrderRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
         var order = _mapper.Map<Orders>(orderForCreationDto);
-        order.MenuItems = new();
+        order.MenuItems = new List<MenuItems>();
         order.Id = Guid.NewGuid();
         order.Restaurants = restaurants;
-    
+
         order.User = user;
         foreach (var menuItem in orderForCreationDto.MenuItems)
         {
             var dbItem = await _context.MenuItems.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == menuItem.Id, cancellationToken);
-            
+
             if (menuItem.Quantity > dbItem.Quantity)
                 throw new Exception("The quantity that is requested is bigger than the available quantity");
             order.MenuItems.Add(dbItem);
@@ -75,33 +76,88 @@ public class OrderService : IOrderRepository
 
         order.FinalPrice = price;
         order.Status = "Received";
-        
+
         user.Orders.Add(order);
 
-        foreach (var  menuItem in order.MenuItems)
+        foreach (var menuItem in order.MenuItems)
         {
             menuItem.Quantity--;
             _context.MenuItems.Update(menuItem);
-
         }
+
         _context.Users.Update(user);
         await _context.Orders.AddAsync(order, cancellationToken);
     }
 
     public async Task<List<Order>> GetOrders(CancellationToken cancellationToken)
     {
-        var orders = await _context.Orders.Include(x => x.Restaurants).Include(x => x.User).Include(x => x.MenuItems)
+        var orders = await _context.Orders
+            .Include(x => x.Restaurants)
+            .Include(x => x.User)
+            .ThenInclude(x => x.UserAddress)
+            .Include(x => x.MenuItems)
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
-        return _mapper.Map<List<Order>>(orders);
+        return orders.Select(x => new Order
+        {
+            Id = x.Id,
+            ReceivedTime = x.ReceivedTime.ToString(),
+            FinalPrice = x.FinalPrice,
+            Status = x.Status,
+            User = new UserDto
+            {
+                PhoneNumber = x.User.PhoneNumber,
+                Username = x.User.UserName,
+                Email = x.User.Email,
+                Address = _mapper.Map<UserAddressesForCreation>(x.User.UserAddress)
+            },
+            Restaurants = _mapper.Map<List<Restaurant>>(x.Restaurants),
+            MenuItems=_mapper.Map<List<MenuItem>>(x.MenuItems)
+
+        }).ToList();
+    }
+
+    public async Task<List<Order>> GetCurrentUserOrders(CancellationToken cancellationToken)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(),
+                cancellationToken);
+        var orders = await _context.Orders
+            .Include(x => x.Restaurants)
+            .Include(x => x.User)
+            .ThenInclude(x => x.UserAddress)
+            .Include(x => x.MenuItems)
+            .Where(x => x.User == user)
+            .ToListAsync(cancellationToken);
+        return orders.Select(x => new Order
+        {
+            Id = x.Id,
+            ReceivedTime = x.ReceivedTime.ToString(),
+            FinalPrice = x.FinalPrice,
+            Status = x.Status,
+            User = new UserDto
+            {
+                PhoneNumber = x.User.PhoneNumber,
+                Username = x.User.UserName,
+                Email = x.User.Email,
+                Address = _mapper.Map<UserAddressesForCreation>(x.User.UserAddress)
+            },
+            Restaurants = _mapper.Map<List<Restaurant>>(x.Restaurants),
+            MenuItems = _mapper.Map<List<MenuItem>>(x.MenuItems)
+
+        }).ToList();
     }
 
     public async Task<Order> GetOrder(Guid id, CancellationToken cancellationToken)
     {
         var order =
-            await _context.Orders.Include(x => x.Restaurants).Include(x => x.User).Include(x => x.MenuItems)
-               
+            await _context.Orders.Include(x => x.Restaurants).Include(x => x.User).ThenInclude(x => x.UserAddress)
+                .Include(x => x.MenuItems)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        return _mapper.Map<Order>(order);
+        var mappedOrder = _mapper.Map<Order>(order);
+        var userAddress = order.User.UserAddress;
+        mappedOrder.User.Address = _mapper.Map<UserAddressesForCreation>(userAddress);
+        return mappedOrder;
     }
 
     public async Task<bool> EditOrder(Guid id, OrderForUpdateDto orderForUpdateDto, CancellationToken cancellationToken)

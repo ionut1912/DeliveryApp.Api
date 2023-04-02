@@ -6,6 +6,7 @@ using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace DeliveryApp.Repository.Services;
 
@@ -39,16 +40,7 @@ public class UserConfigService : IUserConfigRepository
         else
             bmr = 447.6 + 9.2 * config.Weight + 3.1 * config.Height - 4.3 * config.Age;
 
-        if (userConfigDto.SportActivity == 0)
-            config.NumberOfCaloriesAllowed = bmr * 1.2;
-        else if (userConfigDto.SportActivity >= 1 && userConfigDto.SportActivity < 3)
-            config.NumberOfCaloriesAllowed = bmr * 1.375;
-        else if (userConfigDto.SportActivity >= 3 && userConfigDto.SportActivity <= 5)
-            config.NumberOfCaloriesAllowed = bmr * 1.55;
-        else
-            config.NumberOfCaloriesAllowed = bmr * 1.725;
-
-        config.NumberOfCaloriesConsumed = 0;
+        config.NumberOfCaloriesAllowed = CalculateNumberOfCalories(userConfigDto.SportActivity, bmr);
 
         await _context.UserConfigs.AddAsync(config, cancellationToken);
         return true;
@@ -72,10 +64,6 @@ public class UserConfigService : IUserConfigRepository
     public async Task<UserConfig> GetConfigByUsername(CancellationToken cancellationToken)
 
     {
-        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(
-            x => x.UserName == _userAccessor.GetUsername(),
-            cancellationToken);
-
         var config =
             await _context.UserConfigs.FirstOrDefaultAsync(x => x.Username == _userAccessor.GetUsername(),
                 cancellationToken);
@@ -86,9 +74,7 @@ public class UserConfigService : IUserConfigRepository
     public async Task<bool> EditConfig(Guid id, UserConfigDto userConfigDto, CancellationToken cancellationToken)
 
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(),
-            cancellationToken);
-        if (user == null) return false;
+      
         var config =
             await _context.UserConfigs.FirstOrDefaultAsync(x => x.Username == _userAccessor.GetUsername(),
                 cancellationToken);
@@ -101,14 +87,7 @@ public class UserConfigService : IUserConfigRepository
         else
             bmr = 447.6 + 9.2 * config.Weight + 3.1 * config.Height - 4.3 * config.Age;
 
-        if (userConfigDto.SportActivity == 0)
-            config.NumberOfCaloriesAllowed = bmr * 1.2;
-        else if (userConfigDto.SportActivity >= 1 && userConfigDto.SportActivity < 3)
-            config.NumberOfCaloriesAllowed = bmr * 1.375;
-        else if (userConfigDto.SportActivity >= 3 && userConfigDto.SportActivity <= 5)
-            config.NumberOfCaloriesAllowed = bmr * 1.55;
-        else
-            config.NumberOfCaloriesAllowed = bmr * 1.725;
+        config.NumberOfCaloriesAllowed = CalculateNumberOfCalories(userConfigDto.SportActivity, bmr);
 
         _context.UserConfigs.Update(modifiedConfig);
         return true;
@@ -120,5 +99,16 @@ public class UserConfigService : IUserConfigRepository
         if (config == null) return false;
         _context.Remove(config);
         return true;
+    }
+
+    private double CalculateNumberOfCalories(int sportActivity,double bmr)
+    {
+        return sportActivity switch
+        {
+            0 => bmr * 1.2,
+            >= 1 and < 3 => bmr * 1.375,
+            >= 3 and <= 5 => bmr * 1.55,
+            _ => bmr * 1.725
+        };
     }
 }

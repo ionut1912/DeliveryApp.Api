@@ -96,6 +96,16 @@ public static class DomainMessages
         {
             return $"Photo with id {id} was set as main";
         }
+
+        public static string CanNotModifyMainPhoto()
+        {
+            return "Main photo can not be modified";
+        }
+
+        public static string MainPhotoModified()
+        {
+            return "Main photo was modified";
+        }
     }
 
     public static class PhotoForMenuItem

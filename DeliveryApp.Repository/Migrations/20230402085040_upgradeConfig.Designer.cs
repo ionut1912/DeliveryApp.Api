@@ -4,6 +4,7 @@ using DeliveryApp.Repository.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeliveryApp.Repository.Migrations
 {
     [DbContext(typeof(DeliveryContext))]
-    partial class DeliveryContextModelSnapshot : ModelSnapshot
+    [Migration("20230402085040_upgradeConfig")]
+    partial class upgradeConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -361,14 +363,14 @@ namespace DeliveryApp.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b460f9d6-d4a1-411d-a1f1-216f20eb41a9",
+                            ConcurrencyStamp = "a52c26ff-6e7d-40f3-aae9-79c571b14cf7",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "f05b568d-70fc-4324-b683-7ab0dfa732c0",
+                            ConcurrencyStamp = "8d16c80a-156b-4dfe-8195-ce64885f14e3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -386,11 +388,11 @@ namespace DeliveryApp.Repository.Migrations
                     b.Property<int>("Height")
                         .HasColumnType("int");
 
-                    b.Property<double>("NumberOfCaloriesAllowed")
-                        .HasColumnType("float");
+                    b.Property<int>("NumberOfCaloriesAllowed")
+                        .HasColumnType("int");
 
-                    b.Property<double>("NumberOfCaloriesConsumed")
-                        .HasColumnType("float");
+                    b.Property<int>("NumberOfCaloriesConsumed")
+                        .HasColumnType("int");
 
                     b.Property<string>("Sex")
                         .HasColumnType("nvarchar(max)");

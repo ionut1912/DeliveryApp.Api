@@ -39,21 +39,31 @@ public class OrderService : IOrderRepository
 
         var user = await _context.Users.AsNoTracking()
             .Include(x => x.UserAddress)
+            .Include(x => x.UserConfigs)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
         var order = _mapper.Map<Orders>(orderForCreationDto);
         order.MenuItems = new List<MenuItems>();
         order.Id = Guid.NewGuid();
         order.Restaurants = restaurants;
-
+        var orderCalories = 0d;
         order.User = user;
         foreach (var menuItem in orderForCreationDto.MenuItems)
         {
+            var orders = await GetOrders(cancellationToken);
+            var lastOrderDateTime = DateTime.Parse(orders.Last().ReceivedTime);
+            var difference = DateTime.Now - lastOrderDateTime;
+            if (difference.Days < 1) orderCalories = user.UserConfigs.NumberOfCaloriesConsumed;
+
             var dbItem = await _context.MenuItems.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == menuItem.Id, cancellationToken);
 
+            orderCalories += menuItem.NumberOfCalories * menuItem.Quantity;
+            if (orderCalories > user.UserConfigs.NumberOfCaloriesAllowed)
+                throw new Exception("The number of calories allowed were exceeded");
             if (menuItem.Quantity > dbItem.Quantity)
                 throw new Exception("The quantity that is requested is bigger than the available quantity");
+            user.UserConfigs.NumberOfCaloriesConsumed = orderCalories;
             order.MenuItems.Add(dbItem);
         }
 
@@ -97,37 +107,8 @@ public class OrderService : IOrderRepository
             .ThenInclude(x => x.UserAddress)
             .Include(x => x.MenuItems)
             .AsNoTracking()
-            .ToListAsync(cancellationToken);
-        return orders.Select(x => new Order
-        {
-            Id = x.Id,
-            ReceivedTime = x.ReceivedTime.ToString(),
-            FinalPrice = x.FinalPrice,
-            Status = x.Status,
-            User = new UserDto
-            {
-                PhoneNumber = x.User.PhoneNumber,
-                Username = x.User.UserName,
-                Email = x.User.Email,
-                Address = _mapper.Map<UserAddressesForCreation>(x.User.UserAddress)
-            },
-            Restaurants = _mapper.Map<List<Restaurant>>(x.Restaurants),
-            MenuItems=_mapper.Map<List<MenuItem>>(x.MenuItems)
-
-        }).ToList();
-    }
-
-    public async Task<List<Order>> GetCurrentUserOrders(CancellationToken cancellationToken)
-    {
-        var user = await _context.Users
-            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(),
-                cancellationToken);
-        var orders = await _context.Orders
-            .Include(x => x.Restaurants)
-            .Include(x => x.User)
-            .ThenInclude(x => x.UserAddress)
-            .Include(x => x.MenuItems)
-            .Where(x => x.User == user)
+            .Where(x => x.Status != "Canceled")
+            .OrderBy(x => x.ReceivedTime)
             .ToListAsync(cancellationToken);
         return orders.Select(x => new Order
         {
@@ -144,7 +125,38 @@ public class OrderService : IOrderRepository
             },
             Restaurants = _mapper.Map<List<Restaurant>>(x.Restaurants),
             MenuItems = _mapper.Map<List<MenuItem>>(x.MenuItems)
+        }).ToList();
+    }
 
+    public async Task<List<Order>> GetCurrentUserOrders(CancellationToken cancellationToken)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(),
+                cancellationToken);
+        var orders = await _context.Orders
+            .Include(x => x.Restaurants)
+            .Include(x => x.User)
+            .ThenInclude(x => x.UserAddress)
+            .Include(x => x.MenuItems)
+            .Where(x => x.User == user)
+            .Where(x => x.Status != "Canceled")
+            .OrderBy(x => x.ReceivedTime)
+            .ToListAsync(cancellationToken);
+        return orders.Select(x => new Order
+        {
+            Id = x.Id,
+            ReceivedTime = x.ReceivedTime.ToString(),
+            FinalPrice = x.FinalPrice,
+            Status = x.Status,
+            User = new UserDto
+            {
+                PhoneNumber = x.User.PhoneNumber,
+                Username = x.User.UserName,
+                Email = x.User.Email,
+                Address = _mapper.Map<UserAddressesForCreation>(x.User.UserAddress)
+            },
+            Restaurants = _mapper.Map<List<Restaurant>>(x.Restaurants),
+            MenuItems = _mapper.Map<List<MenuItem>>(x.MenuItems)
         }).ToList();
     }
 
@@ -153,6 +165,8 @@ public class OrderService : IOrderRepository
         var order =
             await _context.Orders.Include(x => x.Restaurants).Include(x => x.User).ThenInclude(x => x.UserAddress)
                 .Include(x => x.MenuItems)
+                .Where(x => x.Status != "Canceled")
+                .OrderBy(x => x.ReceivedTime)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         var mappedOrder = _mapper.Map<Order>(order);
         var userAddress = order.User.UserAddress;

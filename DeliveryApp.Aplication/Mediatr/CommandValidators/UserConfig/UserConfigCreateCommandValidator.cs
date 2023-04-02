@@ -11,5 +11,6 @@ public class UserConfigCreateCommandValidator : AbstractValidator<UserConfigCrea
         RuleFor(x => x.UserConfigs.Height).NotEmpty().GreaterThan(0);
         RuleFor(x => x.UserConfigs.Age).NotEmpty();
         RuleFor(x => x.UserConfigs.Sex).NotEmpty();
+        RuleFor(x => x.UserConfigs.SportActivity).NotEmpty();
     }
 }

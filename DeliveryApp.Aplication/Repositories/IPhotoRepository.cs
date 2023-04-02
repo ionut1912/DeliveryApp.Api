@@ -7,4 +7,5 @@ public interface IPhotoRepository
     Task AddPhoto(IFormFile file, CancellationToken cancellationToken);
     Task<bool> DeletePhoto(string id, CancellationToken cancellationToken);
     Task<bool> SetMainPhoto(string id, CancellationToken cancellationToken);
+    Task<bool> ModifyMainPhoto(IFormFile file, CancellationToken cancellationToken);
 }

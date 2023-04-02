@@ -74,4 +74,17 @@ public class PhotoService : IPhotoRepository
         _context.Users.Update(user);
         return true;
     }
+
+    public async Task<bool> ModifyMainPhoto(IFormFile file, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users.Include(p => p.Photos)
+            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
+        var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
+        if (currentMain == null) return false;
+        currentMain.IsMain = false;
+        var deletePhotoResult = await DeletePhoto(currentMain.Id, cancellationToken);
+        if (deletePhotoResult is false) return false;
+        await AddPhoto(file, cancellationToken);
+        return true;
+    }
 }

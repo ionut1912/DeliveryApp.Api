@@ -11,6 +11,7 @@ public class MenuItems
     public float Price { get; set; }
     public int Quantity { get; set; }
     public bool Active { get; set; }
+    public int NumberOfCalories { get; set; }
     public ICollection<OfferMenuItems> OfferMenuItems { get; set; }
 
     public ICollection<PhotoForMenuItem> Photos { get; set; } =

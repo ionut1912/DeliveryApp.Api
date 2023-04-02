@@ -32,6 +32,24 @@ public class UserConfigService : IUserConfigRepository
         config.Id = Guid.NewGuid();
         config.UserId = user.Id;
         config.Username = user.UserName;
+        double bmr = 0;
+
+        if (config.Sex == "Male")
+            bmr = 88.36 + 13.4 * config.Weight + 4.8 * config.Height - 5.7 * config.Age;
+        else
+            bmr = 447.6 + 9.2 * config.Weight + 3.1 * config.Height - 4.3 * config.Age;
+
+        if (userConfigDto.SportActivity == 0)
+            config.NumberOfCaloriesAllowed = bmr * 1.2;
+        else if (userConfigDto.SportActivity >= 1 && userConfigDto.SportActivity < 3)
+            config.NumberOfCaloriesAllowed = bmr * 1.375;
+        else if (userConfigDto.SportActivity >= 3 && userConfigDto.SportActivity <= 5)
+            config.NumberOfCaloriesAllowed = bmr * 1.55;
+        else
+            config.NumberOfCaloriesAllowed = bmr * 1.725;
+
+        config.NumberOfCaloriesConsumed = 0;
+
         await _context.UserConfigs.AddAsync(config, cancellationToken);
         return true;
     }
@@ -76,6 +94,22 @@ public class UserConfigService : IUserConfigRepository
                 cancellationToken);
         if (config == null) return false;
         var modifiedConfig = _mapper.Map(userConfigDto, config);
+        double bmr = 0;
+
+        if (config.Sex == "Male")
+            bmr = 88.36 + 13.4 * config.Weight + 4.8 * config.Height - 5.7 * config.Age;
+        else
+            bmr = 447.6 + 9.2 * config.Weight + 3.1 * config.Height - 4.3 * config.Age;
+
+        if (userConfigDto.SportActivity == 0)
+            config.NumberOfCaloriesAllowed = bmr * 1.2;
+        else if (userConfigDto.SportActivity >= 1 && userConfigDto.SportActivity < 3)
+            config.NumberOfCaloriesAllowed = bmr * 1.375;
+        else if (userConfigDto.SportActivity >= 3 && userConfigDto.SportActivity <= 5)
+            config.NumberOfCaloriesAllowed = bmr * 1.55;
+        else
+            config.NumberOfCaloriesAllowed = bmr * 1.725;
+
         _context.UserConfigs.Update(modifiedConfig);
         return true;
     }

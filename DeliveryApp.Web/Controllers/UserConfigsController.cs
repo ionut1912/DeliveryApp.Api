@@ -49,7 +49,7 @@ public class UserConfigsController : BaseApiController
             await Mediator.Send(query));
     }
 
-    //refactor to use expression builder on previous endpoint
+
     [HttpGet("config/{username}")]
     [ProducesResponseType(typeof(UserConfig), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]

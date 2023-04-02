@@ -9,4 +9,6 @@ public class UserConfig
     public int Height { get; set; }
     public int Age { get; set; }
     public string Sex { get; set; }
+    public double NumberOfCaloriesConsumed { get; set; }
+    public double NumberOfCaloriesAllowed { get; set; }
 }

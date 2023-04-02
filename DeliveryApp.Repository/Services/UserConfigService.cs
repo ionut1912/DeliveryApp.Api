@@ -6,7 +6,6 @@ using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace DeliveryApp.Repository.Services;
 
@@ -74,7 +73,6 @@ public class UserConfigService : IUserConfigRepository
     public async Task<bool> EditConfig(Guid id, UserConfigDto userConfigDto, CancellationToken cancellationToken)
 
     {
-      
         var config =
             await _context.UserConfigs.FirstOrDefaultAsync(x => x.Username == _userAccessor.GetUsername(),
                 cancellationToken);
@@ -101,7 +99,7 @@ public class UserConfigService : IUserConfigRepository
         return true;
     }
 
-    private double CalculateNumberOfCalories(int sportActivity,double bmr)
+    private double CalculateNumberOfCalories(int sportActivity, double bmr)
     {
         return sportActivity switch
         {

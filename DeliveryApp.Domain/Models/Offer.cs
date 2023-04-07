@@ -7,4 +7,5 @@ public class Offer
     public string DateActiveTo { get; set; }
     public int Discount { get; set; }
     public bool Active { get; set; }
+    public List<OfferMenuItem> OfferMenuItems { get; set; }
 }

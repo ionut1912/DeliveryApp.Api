@@ -15,7 +15,8 @@ public class OfferMenuItemProfile : BaseProfile
                     DateTime.ParseExact(src.DateActiveFrom, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)))
             .ForMember(option => option.DateActiveTo,
                 o => o.MapFrom(src =>
-                    DateTime.ParseExact(src.DateActiveTo, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
+                    DateTime.ParseExact(src.DateActiveTo, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)))
+            .ForMember(option => option.OfferMenuItems, opt => opt.MapFrom(src => src.OfferMenuItems));
         CreateMap<Offer, OfferDto>().ReverseMap()
             .ForMember(option => option.DateActiveFrom,
                 o => o.MapFrom(src =>

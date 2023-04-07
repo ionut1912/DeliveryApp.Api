@@ -48,7 +48,7 @@ public class OfferService : IOfferRepository
     public async Task<List<Offer>> GetOffers(CancellationToken cancellationToken)
     {
         var offers = await _context.Offers.Include(x => x.OfferMenuItems)
-            .Where(x=>x.Active)
+            .Where(x => x.Active)
             .ToListAsync(cancellationToken);
         return _mapper.Map<List<Offer>>(offers);
     }
@@ -56,7 +56,7 @@ public class OfferService : IOfferRepository
     public async Task<Offer> GetOffer(Guid id, CancellationToken cancellationToken)
     {
         var offer = await _context.Offers.Include(x => x.OfferMenuItems)
-            .Where(x=>x.Active)
+            .Where(x => x.Active)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return _mapper.Map<Offer>(offer);
     }

@@ -10,6 +10,6 @@ public class Restaurant
     public List<MenuItem> MenuItems { get; set; } = new();
     public RestaurantAddresses Address { get; set; }
     public ICollection<PhotoForRestaurant> RestaurantPhotos { get; set; } = new List<PhotoForRestaurant>();
-
+    public  List<Order> Orders { get; set; } = new();
     public List<ReviewForRestaurant> Reviews { get; set; } = new();
 }

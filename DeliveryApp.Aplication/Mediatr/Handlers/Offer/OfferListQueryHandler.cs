@@ -12,7 +12,6 @@ public class OfferListQueryHandler : IQueryHandler<ListQuery<Domain.Models.Offer
     public OfferListQueryHandler(IOfferRepository offerRepository)
     {
         _offerRepository = offerRepository ?? throw new ArgumentNullException(nameof(offerRepository));
-
     }
 
     public async Task<ResultT<List<Domain.Models.Offer>>> Handle(ListQuery<Domain.Models.Offer> request,

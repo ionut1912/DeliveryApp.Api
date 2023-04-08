@@ -20,12 +20,12 @@ public class OfferService : IOfferRepository
     }
 
 
-    public async Task AddOffer(OfferDto offerDto, CancellationToken cancellationToken)
+    public async Task AddOffer(OfferDtoForCreation offerDto, CancellationToken cancellationToken)
     {
         var offer = _mapper.Map<Offers>(offerDto);
         offer.Id = Guid.NewGuid();
         var foundMenuItem =
-            await _context.MenuItems.AsNoTracking().FirstOrDefaultAsync(x => x.Id == offerDto.MenuItemId,
+            await _context.MenuItems.AsNoTracking().FirstOrDefaultAsync(x => x.ItemName == offerDto.MenuItemName,
                 cancellationToken);
 
         offer.Active = DateTime.Now <= offer.DateActiveTo;
@@ -35,12 +35,11 @@ public class OfferService : IOfferRepository
         await _context.Offers.AddAsync(offer, cancellationToken);
     }
 
-    public async Task<bool> EditOffer(Guid id, OfferDto offerDto, CancellationToken cancellationToken)
+    public async Task<bool> EditOffer(Guid id, OfferDtoForEdit offerDto, CancellationToken cancellationToken)
     {
         var offer = await _context.Offers.FindAsync(id);
         if (offer == null) return false;
         var modifiedOffer = _mapper.Map(offerDto, offer);
-        modifiedOffer.Active = DateTime.Now <= offer.DateActiveTo;
         _context.Offers.Update(modifiedOffer);
         return true;
     }

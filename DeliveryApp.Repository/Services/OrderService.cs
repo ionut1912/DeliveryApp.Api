@@ -51,9 +51,14 @@ public class OrderService : IOrderRepository
         foreach (var menuItem in orderForCreationDto.MenuItems)
         {
             var orders = await GetOrders(cancellationToken);
-            var lastOrderDateTime = DateTime.Parse(orders.Last().ReceivedTime);
-            var difference = DateTime.Now - lastOrderDateTime;
-            if (difference.Days < 1) orderCalories = user.UserConfigs.NumberOfCaloriesConsumed;
+            if (orders.Any())
+            {
+                var lastOrderDateTime = DateTime.Parse(orders.Last().ReceivedTime);
+
+                var difference = DateTime.Now - lastOrderDateTime;
+                if (difference.Days < 1) orderCalories = user.UserConfigs.NumberOfCaloriesConsumed;
+            }
+          
 
             var dbItem = await _context.MenuItems.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == menuItem.Id, cancellationToken);

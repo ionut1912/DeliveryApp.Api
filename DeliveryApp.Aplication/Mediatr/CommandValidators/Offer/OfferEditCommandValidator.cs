@@ -7,14 +7,7 @@ public class OfferEditCommandValidator : AbstractValidator<OfferEditCommand>
 {
     public OfferEditCommandValidator()
     {
-        RuleFor(x => x.OfferDto.DateActiveFrom)
-            .NotEmpty()
-            .GreaterThan(DateTime.Now.ToString());
-
-        RuleFor(x => x.OfferDto.DateActiveTo)
-            .NotEmpty()
-            .GreaterThan(DateTime.Now.ToString());
-        RuleFor(x => x.OfferDto.MenuItemId)
-            .NotEmpty();
+        RuleFor(x => x.Id).NotEmpty();
+        RuleFor(x => x.OfferDto.Discount).NotEmpty();
     }
 }

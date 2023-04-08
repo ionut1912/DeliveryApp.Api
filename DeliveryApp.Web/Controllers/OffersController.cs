@@ -23,7 +23,7 @@ public class OffersController : BaseApiController
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(BadRequestResult), (int)HttpStatusCode.BadRequest)]
     [SwaggerOperation(Summary = "Add offer")]
-    public async Task<ActionResult> AddOffer(OfferDto offerForCreation)
+    public async Task<ActionResult> AddOffer(OfferDtoForCreation offerForCreation)
     {
         var command = new OfferCreateCommand
         {
@@ -45,7 +45,7 @@ public class OffersController : BaseApiController
     [ProducesResponseType(typeof(Offer), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(NotFoundObjectResult), (int)HttpStatusCode.NotFound)]
     [SwaggerOperation(Summary = "Get offer")]
-    public async Task<ActionResult<OfferDto>> GetOffer(Guid id)
+    public async Task<ActionResult<OfferDtoForCreation>> GetOffer(Guid id)
     {
         var query = new QueryItem<Offer>
         {
@@ -57,7 +57,7 @@ public class OffersController : BaseApiController
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Update offer")]
-    public async Task<ActionResult<OfferDto>> UpdateOffer(Guid id, OfferDto offerForUpdate)
+    public async Task<ActionResult> UpdateOffer(Guid id, OfferDtoForEdit offerForUpdate)
     {
         var command = new OfferEditCommand
         {

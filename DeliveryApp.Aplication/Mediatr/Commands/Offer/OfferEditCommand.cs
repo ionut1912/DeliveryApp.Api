@@ -7,5 +7,5 @@ namespace DeliveryApp.Application.Mediatr.Commands.Offer;
 public class OfferEditCommand : ICommand<Result>
 {
     public Guid Id { get; set; }
-    public OfferDto OfferDto { get; set; }
+    public OfferDtoForEdit OfferDto { get; set; }
 }

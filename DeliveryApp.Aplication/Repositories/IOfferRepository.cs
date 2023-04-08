@@ -5,8 +5,8 @@ namespace DeliveryApp.Application.Repositories;
 
 public interface IOfferRepository
 {
-    Task AddOffer(OfferDto offerDto, CancellationToken cancellationToken);
-    Task<bool> EditOffer(Guid id, OfferDto offerDto, CancellationToken cancellationToken);
+    Task AddOffer(OfferDtoForCreation offerDto, CancellationToken cancellationToken);
+    Task<bool> EditOffer(Guid id, OfferDtoForEdit offerDto, CancellationToken cancellationToken);
 
     Task<List<Offer>> GetOffers(CancellationToken cancellationToken);
 

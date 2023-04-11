@@ -4,14 +4,14 @@ using DeliveryApp.ExternalServices.Cloudinary.Settings;
 using DeliveryApp.ExternalServices.Extensions;
 using DeliveryApp.ExternalServices.MailSending.Settings;
 using DeliveryApp.Repository;
-using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 );
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();

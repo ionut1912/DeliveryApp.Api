@@ -15,6 +15,7 @@ public class OrderService : IOrderRepository
     private readonly DeliveryContext _context;
     private readonly IMapper _mapper;
     private readonly IUserAccessor _userAccessor;
+    private const string CancelStatus = "Canceled";
 
     public OrderService(DeliveryContext context, IMapper mapper, IUserAccessor userAccessor)
     {
@@ -58,7 +59,7 @@ public class OrderService : IOrderRepository
                 var difference = DateTime.Now - lastOrderDateTime;
                 if (difference.Days < 1) orderCalories = user.UserConfigs.NumberOfCaloriesConsumed;
             }
-          
+
 
             var dbItem = await _context.MenuItems.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == menuItem.Id, cancellationToken);
@@ -112,7 +113,7 @@ public class OrderService : IOrderRepository
             .ThenInclude(x => x.UserAddress)
             .Include(x => x.MenuItems)
             .AsNoTracking()
-            .Where(x => x.Status != "Canceled")
+            .Where(x => x.Status != CancelStatus)
             .OrderBy(x => x.ReceivedTime)
             .ToListAsync(cancellationToken);
         return orders.Select(x => new Order
@@ -144,7 +145,7 @@ public class OrderService : IOrderRepository
             .ThenInclude(x => x.UserAddress)
             .Include(x => x.MenuItems)
             .Where(x => x.User == user)
-            .Where(x => x.Status != "Canceled")
+            .Where(x => x.Status !=CancelStatus )
             .OrderBy(x => x.ReceivedTime)
             .ToListAsync(cancellationToken);
         return orders.Select(x => new Order
@@ -170,7 +171,7 @@ public class OrderService : IOrderRepository
         var order =
             await _context.Orders.Include(x => x.Restaurants).Include(x => x.User).ThenInclude(x => x.UserAddress)
                 .Include(x => x.MenuItems)
-                .Where(x => x.Status != "Canceled")
+                .Where(x => x.Status != CancelStatus)
                 .OrderBy(x => x.ReceivedTime)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         var mappedOrder = _mapper.Map<Order>(order);

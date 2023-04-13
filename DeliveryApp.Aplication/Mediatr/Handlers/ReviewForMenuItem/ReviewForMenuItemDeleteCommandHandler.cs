@@ -6,7 +6,8 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.ReviewForMenuItem;
 
-public class ReviewForMenuItemDeleteCommandHandler : ICommandHandler<ReviewForMenuItemDeleteCommand, Result>
+public class
+    ReviewForMenuItemDeleteCommandHandler : ICommandHandler<ReviewForMenuItemDeleteCommand, ResultT<JsonResponse>>
 {
     private readonly IReviewForMenuItemRepository _rebvForMenuItemRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -19,15 +20,27 @@ public class ReviewForMenuItemDeleteCommandHandler : ICommandHandler<ReviewForMe
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(ReviewForMenuItemDeleteCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(ReviewForMenuItemDeleteCommand request,
+        CancellationToken cancellationToken)
     {
         var result =
             await _rebvForMenuItemRepository.DeleteReviewForMenuItem(request.Id,
                 cancellationToken);
         if (result is false)
-            return Result.Failure(DomainMessages.ReviewForMenuItem.CanNoDeleteReview(request.Id));
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.ReviewForMenuItem.CanNoDeleteReview(request.Id)
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.ReviewForMenuItem.ReviewDeleted(request.Id));
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.ReviewForMenuItem.ReviewDeleted(request.Id)
+        };
+
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

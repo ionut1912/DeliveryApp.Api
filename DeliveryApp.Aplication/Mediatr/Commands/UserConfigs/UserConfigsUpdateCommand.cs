@@ -4,7 +4,7 @@ using DeliveryApp.Domain.DTO;
 
 namespace DeliveryApp.Application.Mediatr.Commands.UserConfigs;
 
-public class UserConfigsUpdateCommand : ICommand<Result>
+public class UserConfigsUpdateCommand : ICommand<ResultT<JsonResponse>>
 {
     public Guid Id { get; set; }
     public UserConfigDto Configs { get; set; }

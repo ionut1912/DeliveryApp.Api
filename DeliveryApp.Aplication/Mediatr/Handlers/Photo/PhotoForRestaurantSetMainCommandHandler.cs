@@ -6,7 +6,8 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Photo;
 
-public class PhotoForRestaurantSetMainCommandHandler : ICommandHandler<PhotoForRestaurantSetMainCommand, Result>
+public class
+    PhotoForRestaurantSetMainCommandHandler : ICommandHandler<PhotoForRestaurantSetMainCommand, ResultT<JsonResponse>>
 {
     private readonly IPhotoForRestaurantsRepository _photoForRestaurantsRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -19,15 +20,27 @@ public class PhotoForRestaurantSetMainCommandHandler : ICommandHandler<PhotoForR
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(PhotoForRestaurantSetMainCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(PhotoForRestaurantSetMainCommand request,
+        CancellationToken cancellationToken)
     {
         var result =
             await _photoForRestaurantsRepository.SetMainPhotoForRestaurant(request.PhotoId, request.Id,
                 cancellationToken);
         if (result is false)
-            return Result.Failure(DomainMessages.PhotoForRestaurant.CanNotSetAsMainPhoto(request.PhotoId));
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.PhotoForRestaurant.CanNotSetAsMainPhoto(request.PhotoId)
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.PhotoForRestaurant.PhotoSetAsMain(request.PhotoId));
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.PhotoForRestaurant.PhotoSetAsMain(request.PhotoId)
+        };
+
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

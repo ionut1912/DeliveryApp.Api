@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace DeliveryApp.Application.Mediatr.Commands.Photo;
 
-public class PhotoForMenuItemCreateCommand : ICommand<Result>
+public class PhotoForMenuItemCreateCommand : ICommand<ResultT<JsonResponse>>
 {
     public IFormFile File { get; set; }
     public Guid Id { get; set; }

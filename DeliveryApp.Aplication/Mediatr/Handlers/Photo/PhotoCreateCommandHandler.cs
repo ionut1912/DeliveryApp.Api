@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Photo;
 
-public class PhotoCreateCommandHandler : ICommandHandler<PhotoCreateCommand, Result>
+public class PhotoCreateCommandHandler : ICommandHandler<PhotoCreateCommand, ResultT<JsonResponse>>
 {
     private readonly IPhotoRepository _photoRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -18,11 +18,16 @@ public class PhotoCreateCommandHandler : ICommandHandler<PhotoCreateCommand, Res
     }
 
 
-    public async Task<Result> Handle(PhotoCreateCommand request,
+    public async Task<ResultT<JsonResponse>> Handle(PhotoCreateCommand request,
         CancellationToken cancellationToken)
     {
         await _photoRepository.AddPhoto(request.File, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.Photo.PhotoAddedSuccessfully);
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.Photo.PhotoAddedSuccessfully
+        };
+
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

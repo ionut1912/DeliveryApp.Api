@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.MenuItem;
 
-public class MenuItemCreateCommandHandler : ICommandHandler<MenuItemCreateCommand, Result>
+public class MenuItemCreateCommandHandler : ICommandHandler<MenuItemCreateCommand, ResultT<JsonResponse>>
 {
     private readonly IMenuItemRepository _menuItemRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -17,11 +17,15 @@ public class MenuItemCreateCommandHandler : ICommandHandler<MenuItemCreateComman
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(MenuItemCreateCommand request,
+    public async Task<ResultT<JsonResponse>> Handle(MenuItemCreateCommand request,
         CancellationToken cancellationToken)
     {
         await _menuItemRepository.AddMenuItems(request.MenuItemDto, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.MenuItem.MenuItemAddedSuccessfully);
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.MenuItem.MenuItemAddedSuccessfully
+        };
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

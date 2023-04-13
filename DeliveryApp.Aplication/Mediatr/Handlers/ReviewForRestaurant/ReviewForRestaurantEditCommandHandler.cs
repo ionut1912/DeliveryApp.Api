@@ -6,7 +6,8 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.ReviewForRestaurant;
 
-public class ReviewForRestaurantEditCommandHandler : ICommandHandler<ReviewForRestaurantEditCommand, Result>
+public class
+    ReviewForRestaurantEditCommandHandler : ICommandHandler<ReviewForRestaurantEditCommand, ResultT<JsonResponse>>
 {
     private readonly IReviewForRestaurantRepository _reviewForRestaurantRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -19,17 +20,28 @@ public class ReviewForRestaurantEditCommandHandler : ICommandHandler<ReviewForRe
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(ReviewForRestaurantEditCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(ReviewForRestaurantEditCommand request,
+        CancellationToken cancellationToken)
     {
         var result =
             await _reviewForRestaurantRepository.EditReviewForRestaurant(request.Id, request.ReviewForRestaurant,
                 cancellationToken);
         if (result is false)
-            return Result.Failure(
-                DomainMessages.ReviewForRestaurant.CanNotEditReview(request.Id,
-                    request.ReviewForRestaurant.RestaurantId));
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.ReviewForRestaurant.CanNotEditReview(request.Id,
+                    request.ReviewForRestaurant.RestaurantId)
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
+
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.ReviewForRestaurant.ReviewEdited(request.Id));
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.ReviewForRestaurant.ReviewEdited(request.Id)
+        };
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

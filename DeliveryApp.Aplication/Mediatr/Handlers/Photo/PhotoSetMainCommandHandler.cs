@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Photo;
 
-public class PhotoSetMainCommandHandler : ICommandHandler<PhotoSetMainCommand, Result>
+public class PhotoSetMainCommandHandler : ICommandHandler<PhotoSetMainCommand, ResultT<JsonResponse>>
 {
     private readonly IPhotoRepository _photoRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -17,12 +17,25 @@ public class PhotoSetMainCommandHandler : ICommandHandler<PhotoSetMainCommand, R
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(PhotoSetMainCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(PhotoSetMainCommand request, CancellationToken cancellationToken)
     {
         var result = await _photoRepository.SetMainPhoto(request.Id, cancellationToken);
-        if (result is false) return Result.Failure(DomainMessages.Photo.CanNotSetMainPhoto(request.Id));
+        if (result is false)
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.Photo.CanNotSetMainPhoto(request.Id)
+            };
+
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.Photo.PhotoSetAsMain(request.Id));
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.Photo.PhotoSetAsMain(request.Id)
+        };
+
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

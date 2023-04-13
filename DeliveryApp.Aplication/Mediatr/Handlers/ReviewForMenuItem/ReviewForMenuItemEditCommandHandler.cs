@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.ReviewForMenuItem;
 
-public class ReviewForMenuItemEditCommandHandler : ICommandHandler<ReviewForMenuItemEditCommand, Result>
+public class ReviewForMenuItemEditCommandHandler : ICommandHandler<ReviewForMenuItemEditCommand, ResultT<JsonResponse>>
 {
     private readonly IReviewForMenuItemRepository _reviewForMenuItemRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -19,16 +19,27 @@ public class ReviewForMenuItemEditCommandHandler : ICommandHandler<ReviewForMenu
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(ReviewForMenuItemEditCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(ReviewForMenuItemEditCommand request,
+        CancellationToken cancellationToken)
     {
         var result =
             await _reviewForMenuItemRepository.EditReviewForMenuItem(request.Id, request.ReviewForMenuItemDto,
                 cancellationToken);
         if (result is false)
-            return Result.Failure(
-                DomainMessages.ReviewForMenuItem.CanNotEditReview(request.Id, request.ReviewForMenuItemDto.MenuItemId));
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.ReviewForMenuItem.CanNotEditReview(request.Id,
+                    request.ReviewForMenuItemDto.MenuItemId)
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.ReviewForMenuItem.ReviewEdited(request.Id));
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.ReviewForMenuItem.ReviewEdited(request.Id)
+        };
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

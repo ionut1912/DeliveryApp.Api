@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Offer;
 
-public class OfferEditCommandHandler : ICommandHandler<OfferEditCommand, Result>
+public class OfferEditCommandHandler : ICommandHandler<OfferEditCommand, ResultT<JsonResponse>>
 {
     private readonly IOfferRepository _offerRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -18,12 +18,23 @@ public class OfferEditCommandHandler : ICommandHandler<OfferEditCommand, Result>
     }
 
 
-    public async Task<Result> Handle(OfferEditCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(OfferEditCommand request, CancellationToken cancellationToken)
     {
         var result = await _offerRepository.EditOffer(request.Id, request.OfferDto, cancellationToken);
-        if (result is false) return Result.Failure(DomainMessages.Offer.CanNotEditOffer(request.Id));
+        if (result is false)
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.Offer.CanNotEditOffer(request.Id)
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.Offer.OfferEditedSuccessfully(request.Id));
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.Offer.OfferEditedSuccessfully(request.Id)
+        };
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

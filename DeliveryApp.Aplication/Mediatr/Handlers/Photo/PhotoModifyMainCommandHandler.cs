@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Photo;
 
-public class PhotoModifyMainCommandHandler : ICommandHandler<PhotoModifyMainCommand, Result>
+public class PhotoModifyMainCommandHandler : ICommandHandler<PhotoModifyMainCommand, ResultT<JsonResponse>>
 {
     private readonly IPhotoRepository _photoRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -17,12 +17,24 @@ public class PhotoModifyMainCommandHandler : ICommandHandler<PhotoModifyMainComm
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result> Handle(PhotoModifyMainCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(PhotoModifyMainCommand request, CancellationToken cancellationToken)
     {
         var result = await _photoRepository.ModifyMainPhoto(request.File, cancellationToken);
-        if (result is false) return Result.Failure(DomainMessages.Photo.CanNotModifyMainPhoto());
+        if (result is false)
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.Photo.CanNotModifyMainPhoto()
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
+
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.Photo.MainPhotoModified()
+        };
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.Photo.MainPhotoModified());
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

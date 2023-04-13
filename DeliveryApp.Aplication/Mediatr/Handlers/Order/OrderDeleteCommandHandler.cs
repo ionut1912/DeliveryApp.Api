@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Order;
 
-public class OrderDeleteCommandHandler : ICommandHandler<DeleteCommand, Result>
+public class OrderDeleteCommandHandler : ICommandHandler<DeleteCommand, ResultT<JsonResponse>>
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -17,12 +17,24 @@ public class OrderDeleteCommandHandler : ICommandHandler<DeleteCommand, Result>
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(DeleteCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(DeleteCommand request, CancellationToken cancellationToken)
     {
         var result = await _orderRepository.DeleteOrder(request.Id, cancellationToken);
-        if (result is false) return Result.Failure(DomainMessages.Order.CanNotDeleteOrder(request.Id));
+        if (result is false)
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.Order.CanNotDeleteOrder(request.Id)
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.Order.OrderDeletedSuccessfully(request.Id));
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.Order.OrderDeletedSuccessfully(request.Id)
+        };
+
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

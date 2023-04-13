@@ -6,7 +6,8 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Photo;
 
-public class PhotoForRestaurantDeleteCommandHandler : ICommandHandler<PhotoForRestaurantDeleteCommand, Result>
+public class
+    PhotoForRestaurantDeleteCommandHandler : ICommandHandler<PhotoForRestaurantDeleteCommand, ResultT<JsonResponse>>
 {
     private readonly IPhotoForRestaurantsRepository _photoForRestaurantsRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -19,15 +20,27 @@ public class PhotoForRestaurantDeleteCommandHandler : ICommandHandler<PhotoForRe
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(PhotoForRestaurantDeleteCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(PhotoForRestaurantDeleteCommand request,
+        CancellationToken cancellationToken)
     {
         var result =
             await _photoForRestaurantsRepository.DeletePhotoForRestaurant(request.PhotoId, request.Id,
                 cancellationToken);
         if (result is false)
-            return Result.Failure(DomainMessages.PhotoForRestaurant.CanNotDeletePhoto(request.PhotoId));
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.PhotoForRestaurant.CanNotDeletePhoto(request.PhotoId)
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.PhotoForRestaurant.PhotoDeletedSuccessfully(request.PhotoId));
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.PhotoForRestaurant.PhotoDeletedSuccessfully(request.PhotoId)
+        };
+
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

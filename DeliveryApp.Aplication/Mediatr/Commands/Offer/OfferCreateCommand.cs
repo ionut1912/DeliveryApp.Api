@@ -4,7 +4,7 @@ using DeliveryApp.Domain.DTO;
 
 namespace DeliveryApp.Application.Mediatr.Commands.Offer;
 
-public class OfferCreateCommand : ICommand<Result>
+public class OfferCreateCommand : ICommand<ResultT<JsonResponse>>
 {
     public OfferDtoForCreation OfferDto { get; set; }
 }

@@ -6,7 +6,8 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.ReviewForRestaurant;
 
-public class ReviewForRestaurantCreateCommandHandler : ICommandHandler<ReviewForRestaurantCreateCommand, Result>
+public class
+    ReviewForRestaurantCreateCommandHandler : ICommandHandler<ReviewForRestaurantCreateCommand, ResultT<JsonResponse>>
 {
     private readonly IReviewForRestaurantRepository _reviewForRestaurantRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -19,11 +20,17 @@ public class ReviewForRestaurantCreateCommandHandler : ICommandHandler<ReviewFor
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(ReviewForRestaurantCreateCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(ReviewForRestaurantCreateCommand request,
+        CancellationToken cancellationToken)
     {
         await _reviewForRestaurantRepository.AddReviewForRestaurant(request.ReviewForRestaurantDto,
             cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.ReviewForRestaurant.ReviewCreated);
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.ReviewForRestaurant.ReviewCreated
+        };
+
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

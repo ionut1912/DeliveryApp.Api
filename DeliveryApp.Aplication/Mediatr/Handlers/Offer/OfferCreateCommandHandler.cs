@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Offer;
 
-public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, Result>
+public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, ResultT<JsonResponse>>
 {
     private readonly IOfferRepository _offerRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -18,12 +18,18 @@ public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, Res
     }
 
 
-    public async Task<Result> Handle(OfferCreateCommand request,
+    public async Task<ResultT<JsonResponse>> Handle(OfferCreateCommand request,
         CancellationToken cancellationToken)
 
     {
         await _offerRepository.AddOffer(request.OfferDto, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.Offer.OfferAddedSuccessfully);
+
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.Offer.OfferAddedSuccessfully
+        };
+
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

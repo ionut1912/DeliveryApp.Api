@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.UserConfig;
 
-public class UserConfigsDeleteCommandHandler : ICommandHandler<DeleteCommand, Result>
+public class UserConfigsDeleteCommandHandler : ICommandHandler<DeleteCommand, ResultT<JsonResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserConfigRepository _userConfigRepository;
@@ -17,12 +17,23 @@ public class UserConfigsDeleteCommandHandler : ICommandHandler<DeleteCommand, Re
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(DeleteCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(DeleteCommand request, CancellationToken cancellationToken)
     {
         var result = await _userConfigRepository.DeleteConfig(request.Id, cancellationToken);
-        if (result is false) return Result.Failure(DomainMessages.UserConfig.CanNotDeleteConfig(request.Id));
+        if (result is false)
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.UserConfig.CanNotDeleteConfig(request.Id)
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.UserConfig.ConfigDeletedSuccessfully(request.Id));
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.UserConfig.ConfigDeletedSuccessfully(request.Id)
+        };
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

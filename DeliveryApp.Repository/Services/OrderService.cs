@@ -12,10 +12,10 @@ namespace DeliveryApp.Repository.Services;
 
 public class OrderService : IOrderRepository
 {
+    private const string CancelStatus = "Canceled";
     private readonly DeliveryContext _context;
     private readonly IMapper _mapper;
     private readonly IUserAccessor _userAccessor;
-    private const string CancelStatus = "Canceled";
 
     public OrderService(DeliveryContext context, IMapper mapper, IUserAccessor userAccessor)
     {
@@ -145,7 +145,7 @@ public class OrderService : IOrderRepository
             .ThenInclude(x => x.UserAddress)
             .Include(x => x.MenuItems)
             .Where(x => x.User == user)
-            .Where(x => x.Status !=CancelStatus )
+            .Where(x => x.Status != CancelStatus)
             .OrderBy(x => x.ReceivedTime)
             .ToListAsync(cancellationToken);
         return orders.Select(x => new Order

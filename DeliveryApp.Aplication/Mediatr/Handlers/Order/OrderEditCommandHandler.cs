@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Order;
 
-public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, Result>
+public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, ResultT<JsonResponse>>
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -17,12 +17,24 @@ public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, Result>
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(OrderEditCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(OrderEditCommand request, CancellationToken cancellationToken)
     {
         var result = await _orderRepository.EditOrder(request.Id, request.OrderForUpdate, cancellationToken);
-        if (result is false) return Result.Failure(DomainMessages.Order.CanNotEditOrder(request.Id));
+        if (result is false)
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.Order.CanNotEditOrder(request.Id)
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
+
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.Order.OrderEditedSuccessfully(request.Id));
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.Order.OrderEditedSuccessfully(request.Id)
+        };
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

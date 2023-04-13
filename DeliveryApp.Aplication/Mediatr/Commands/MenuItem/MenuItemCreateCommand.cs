@@ -4,7 +4,7 @@ using DeliveryApp.Domain.DTO;
 
 namespace DeliveryApp.Application.Mediatr.Commands.MenuItem;
 
-public class MenuItemCreateCommand : ICommand<Result>
+public class MenuItemCreateCommand : ICommand<ResultT<JsonResponse>>
 {
     public MenuItemDto MenuItemDto { get; set; }
 }

@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.UserConfig;
 
-public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCommand, Result>
+public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCommand, ResultT<JsonResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserConfigRepository _userConfigRepository;
@@ -17,11 +17,15 @@ public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCo
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(UserConfigCreateCommand request,
+    public async Task<ResultT<JsonResponse>> Handle(UserConfigCreateCommand request,
         CancellationToken cancellationToken)
     {
         await _userConfigRepository.AddConfig(request.UserConfigs, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.UserConfig.UserConfigAddedSuccessfully);
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.UserConfig.UserConfigAddedSuccessfully
+        };
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

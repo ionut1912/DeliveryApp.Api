@@ -7,7 +7,7 @@ using DeliveryApp.Domain.Messages;
 namespace DeliveryApp.Application.Mediatr.Handlers.Photo;
 
 public class
-    PhotoForMenuItemCreateCommandHandler : ICommandHandler<PhotoForMenuItemCreateCommand, Result>
+    PhotoForMenuItemCreateCommandHandler : ICommandHandler<PhotoForMenuItemCreateCommand, ResultT<JsonResponse>>
 {
     private readonly IPhotoForMenuItemRepository _photoForMenuItemRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -20,11 +20,15 @@ public class
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(PhotoForMenuItemCreateCommand request,
+    public async Task<ResultT<JsonResponse>> Handle(PhotoForMenuItemCreateCommand request,
         CancellationToken cancellationToken)
     {
         await _photoForMenuItemRepository.AddPhotoForMenuItem(request.File, request.Id, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.PhotoForMenuItem.PhotoAddedSuccessfully);
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.PhotoForMenuItem.PhotoAddedSuccessfully
+        };
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

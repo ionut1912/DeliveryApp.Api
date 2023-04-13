@@ -40,7 +40,7 @@ public class OfferService : IOfferRepository
         var offer = await _context.Offers.FindAsync(id);
         if (offer == null) return false;
         var modifiedOffer = _mapper.Map(offerDto, offer);
-        modifiedOffer.Active=DateTime.Now <= modifiedOffer.DateActiveTo;
+        modifiedOffer.Active = DateTime.Now <= modifiedOffer.DateActiveTo;
         _context.Offers.Update(modifiedOffer);
         return true;
     }
@@ -48,7 +48,7 @@ public class OfferService : IOfferRepository
     public async Task<List<Offer>> GetOffers(CancellationToken cancellationToken)
     {
         var offers = await _context.Offers.Include(x => x.OfferMenuItems)
-            .ThenInclude(x=>x.MenuItem)
+            .ThenInclude(x => x.MenuItem)
             .Where(x => x.Active)
             .ToListAsync(cancellationToken);
         return _mapper.Map<List<Offer>>(offers);

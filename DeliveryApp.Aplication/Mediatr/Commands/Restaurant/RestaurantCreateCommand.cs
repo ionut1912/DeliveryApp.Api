@@ -4,7 +4,7 @@ using DeliveryApp.Domain.DTO;
 
 namespace DeliveryApp.Application.Mediatr.Commands.Restaurant;
 
-public class RestaurantCreateCommand : ICommand<Result>
+public class RestaurantCreateCommand : ICommand<ResultT<JsonResponse>>
 {
     public RestaurantDto RestaurantDto { get; set; }
 }

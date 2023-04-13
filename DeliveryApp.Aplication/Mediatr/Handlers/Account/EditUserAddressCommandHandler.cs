@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Account;
 
-public class EditUserAddressCommandHandler : ICommandHandler<EditUserAddressCommand, Result>
+public class EditUserAddressCommandHandler : ICommandHandler<EditUserAddressCommand, ResultT<JsonResponse>>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -17,13 +17,25 @@ public class EditUserAddressCommandHandler : ICommandHandler<EditUserAddressComm
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result> Handle(EditUserAddressCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(EditUserAddressCommand request, CancellationToken cancellationToken)
     {
         var result =
             await _accountRepository.EditCurrentUserAddress(request.UserAddressesForCreation, cancellationToken);
-        if (result is false) return Result.Failure(DomainMessages.Account.CanNotModifyAddress);
+        if (result is false)
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.Account.CanNotModifyAddress
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
+
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.Account.AddressModified
+        };
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.Account.AddressModified);
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

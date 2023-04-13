@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.UserConfig;
 
-public class UserConfigUpdateCommandHandler : ICommandHandler<UserConfigsUpdateCommand, Result>
+public class UserConfigUpdateCommandHandler : ICommandHandler<UserConfigsUpdateCommand, ResultT<JsonResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserConfigRepository _userConfigRepository;
@@ -17,12 +17,25 @@ public class UserConfigUpdateCommandHandler : ICommandHandler<UserConfigsUpdateC
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(UserConfigsUpdateCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(UserConfigsUpdateCommand request,
+        CancellationToken cancellationToken)
     {
         var result = await _userConfigRepository.EditConfig(request.Id, request.Configs, cancellationToken);
-        if (result is false) return Result.Failure(DomainMessages.UserConfig.NotFoundUserConfig(request.Id));
+        if (result is false)
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.UserConfig.NotFoundUserConfig(request.Id)
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.UserConfig.ConfigEditedSuccessfully(request.Id));
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.UserConfig.ConfigEditedSuccessfully(request.Id)
+        };
+
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

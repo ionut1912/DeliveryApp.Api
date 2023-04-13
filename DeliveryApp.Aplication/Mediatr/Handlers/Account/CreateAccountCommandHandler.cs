@@ -6,7 +6,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Account;
 
-public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand, Result>
+public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand, ResultT<JsonResponse>>
 {
     private readonly IAccountRepository _accountRepository;
 
@@ -15,11 +15,22 @@ public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand,
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
     }
 
-    public async Task<Result> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
     {
         var result = await _accountRepository.Register(request.RegisterDto, request.ModelState, cancellationToken);
-        if (result is false) return Result.Failure(DomainMessages.Account.ProblemCreatingAccount);
+        if (result is false)
+        {
+            var jsonResponseFailure = new JsonResponse
+            {
+                Message = DomainMessages.Account.ProblemCreatingAccount
+            };
+            return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
+        }
 
-        return Result.Success(DomainMessages.Account.AccountCreatedSuccessfully);
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.Account.AccountCreatedSuccessfully
+        };
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

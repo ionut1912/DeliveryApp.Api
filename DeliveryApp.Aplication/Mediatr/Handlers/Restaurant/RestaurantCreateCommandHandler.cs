@@ -7,7 +7,7 @@ using DeliveryApp.Domain.Messages;
 namespace DeliveryApp.Application.Mediatr.Handlers.Restaurant;
 
 public class RestaurantCreateCommandHandler : ICommandHandler<RestaurantCreateCommand,
-    Result>
+    ResultT<JsonResponse>>
 {
     private readonly IRestaurantRepository _restaurantRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -18,11 +18,16 @@ public class RestaurantCreateCommandHandler : ICommandHandler<RestaurantCreateCo
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Result> Handle(
+    public async Task<ResultT<JsonResponse>> Handle(
         RestaurantCreateCommand request, CancellationToken cancellationToken)
     {
         await _restaurantRepository.AddRestaurant(request.RestaurantDto, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result.Success(DomainMessages.Restaurant.RestaurantAddedSuccessfully);
+        var jsonResponseSuccess = new JsonResponse
+        {
+            Message = DomainMessages.Restaurant.RestaurantAddedSuccessfully
+        };
+
+        return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace DeliveryApp.Application.Mediatr.Commands.Photo;
 
-public class PhotoModifyMainCommand : ICommand<Result>
+public class PhotoModifyMainCommand : ICommand<ResultT<JsonResponse>>
 {
     public IFormFile File { get; set; }
 }

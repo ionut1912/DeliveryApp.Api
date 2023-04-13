@@ -4,7 +4,7 @@ using DeliveryApp.Domain.DTO;
 
 namespace DeliveryApp.Application.Mediatr.Commands.Offer;
 
-public class OfferEditCommand : ICommand<Result>
+public class OfferEditCommand : ICommand<ResultT<JsonResponse>>
 {
     public Guid Id { get; set; }
     public OfferDtoForEdit OfferDto { get; set; }

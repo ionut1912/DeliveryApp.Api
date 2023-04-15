@@ -1,8 +1,7 @@
 ﻿using DeliveryApp.Commons.Commands;
 
-namespace DeliveryApp.Application.Mediatr.Commands.Restaurant
+namespace DeliveryApp.Application.Mediatr.Commands.Restaurant;
+
+public class RestaurantDeleteCommand : DeleteCommand
 {
-    public class RestaurantDeleteCommand:DeleteCommand
-    {
-    }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using DeliveryApp.Application.Mediatr.Commands.Restaurant;
 using DeliveryApp.Application.Mediatr.Query.Restaurant;
-using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.DTO;

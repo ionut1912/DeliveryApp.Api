@@ -83,7 +83,7 @@ public class RestaurantsController : BaseApiController
     public async Task<ActionResult<Restaurants>>
         DeleteRestaurant(Guid id)
     {
-        var command = new DeleteCommand
+        var command = new RestaurantDeleteCommand
         {
             Id = id
         };

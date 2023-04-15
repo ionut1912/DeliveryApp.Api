@@ -1,4 +1,5 @@
-﻿using DeliveryApp.Application.Repositories;
+﻿using DeliveryApp.Application.Mediatr.Commands.Restaurant;
+using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
@@ -6,7 +7,7 @@ using DeliveryApp.Domain.Messages;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Restaurant;
 
-public class RestaurantDeleteCommandHandler : ICommandHandler<DeleteCommand, ResultT<JsonResponse>>
+public class RestaurantDeleteCommandHandler : ICommandHandler<RestaurantDeleteCommand, ResultT<JsonResponse>>
 {
     private readonly IRestaurantRepository _restaurantRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -17,7 +18,7 @@ public class RestaurantDeleteCommandHandler : ICommandHandler<DeleteCommand, Res
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<ResultT<JsonResponse>> Handle(DeleteCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<JsonResponse>> Handle(RestaurantDeleteCommand request, CancellationToken cancellationToken)
     {
         var result = await _restaurantRepository.DeleteRestaurant(request.Id, cancellationToken);
         if (result is false)

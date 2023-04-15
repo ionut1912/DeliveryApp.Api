@@ -71,7 +71,7 @@ public class PhotoForRestaurantService : IPhotoForRestaurantsRepository
             .Select(x =>
                 x.Id == photo.Id
                     ? new PhotoForRestaurant
-                        { Id = photo.Id, IsMain = true, Url = photo.Url, RestaurantId = restaurant.Id }
+                        { Id = photo.Id, IsMain = true, Url = photo.Url, RestaurantsId = restaurant.Id }
                     : x)
             .ToList();
         restaurant.RestaurantPhotos = modifiedPhoto;

@@ -4,6 +4,7 @@ using DeliveryApp.Repository.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeliveryApp.Repository.Migrations
 {
     [DbContext(typeof(DeliveryContext))]
-    partial class DeliveryContextModelSnapshot : ModelSnapshot
+    [Migration("20230415083955_MenuItem")]
+    partial class MenuItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,7 +135,10 @@ namespace DeliveryApp.Repository.Migrations
                     b.Property<bool>("IsMain")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("RestaurantsId")
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RestaurantsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Url")
@@ -176,21 +181,6 @@ namespace DeliveryApp.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MenuItems");
-                });
-
-            modelBuilder.Entity("DeliveryApp.Repository.Entities.MenuItemsRestaurants", b =>
-                {
-                    b.Property<Guid>("MenuItemsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RestaurantsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("MenuItemsId", "RestaurantsId");
-
-                    b.HasIndex("RestaurantsId");
-
-                    b.ToTable("MenuItemsRestaurants");
                 });
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.OfferMenuItems", b =>
@@ -363,14 +353,14 @@ namespace DeliveryApp.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "72ef480c-ff43-4e4c-a050-fd0473745e2a",
+                            ConcurrencyStamp = "619b54a5-a77f-439a-adcb-36fd9de5b87f",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "08d0f139-e7fa-44a3-a73b-29209ef95982",
+                            ConcurrencyStamp = "abfe94a2-6629-4987-81e5-639014e35fda",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -495,6 +485,21 @@ namespace DeliveryApp.Repository.Migrations
                     b.HasIndex("OrdersId");
 
                     b.ToTable("MenuItemsOrders");
+                });
+
+            modelBuilder.Entity("MenuItemsRestaurants", b =>
+                {
+                    b.Property<Guid>("MenuItemsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RestaurantsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MenuItemsId", "RestaurantsId");
+
+                    b.HasIndex("RestaurantsId");
+
+                    b.ToTable("MenuItemsRestaurants");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -651,28 +656,7 @@ namespace DeliveryApp.Repository.Migrations
                 {
                     b.HasOne("DeliveryApp.Repository.Entities.Restaurants", null)
                         .WithMany("RestaurantPhotos")
-                        .HasForeignKey("RestaurantsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DeliveryApp.Repository.Entities.MenuItemsRestaurants", b =>
-                {
-                    b.HasOne("DeliveryApp.Repository.Entities.MenuItems", "MenuItems")
-                        .WithMany("MenuItemsRestaurants")
-                        .HasForeignKey("MenuItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DeliveryApp.Repository.Entities.Restaurants", "Restaurants")
-                        .WithMany("MenuItemsRestaurants")
-                        .HasForeignKey("RestaurantsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MenuItems");
-
-                    b.Navigation("Restaurants");
+                        .HasForeignKey("RestaurantsId");
                 });
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.OfferMenuItems", b =>
@@ -757,6 +741,21 @@ namespace DeliveryApp.Repository.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MenuItemsRestaurants", b =>
+                {
+                    b.HasOne("DeliveryApp.Repository.Entities.MenuItems", null)
+                        .WithMany()
+                        .HasForeignKey("MenuItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DeliveryApp.Repository.Entities.Restaurants", null)
+                        .WithMany()
+                        .HasForeignKey("RestaurantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("DeliveryApp.Repository.Entities.Roles", null)
@@ -825,8 +824,6 @@ namespace DeliveryApp.Repository.Migrations
 
             modelBuilder.Entity("DeliveryApp.Repository.Entities.MenuItems", b =>
                 {
-                    b.Navigation("MenuItemsRestaurants");
-
                     b.Navigation("OfferMenuItems");
 
                     b.Navigation("Photos");
@@ -842,8 +839,6 @@ namespace DeliveryApp.Repository.Migrations
             modelBuilder.Entity("DeliveryApp.Repository.Entities.Restaurants", b =>
                 {
                     b.Navigation("Address");
-
-                    b.Navigation("MenuItemsRestaurants");
 
                     b.Navigation("RestaurantPhotos");
 

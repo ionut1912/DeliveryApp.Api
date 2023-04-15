@@ -18,4 +18,5 @@ public class MenuItem
 
     public ICollection<OfferMenuItem> OfferMenuItems { get; set; } = new List<OfferMenuItem>();
     public ICollection<ReviewForMenuItem> Reviews { get; set; } = new List<ReviewForMenuItem>();
+    public List<Restaurant> Restaurants { get; set; } = new();
 }

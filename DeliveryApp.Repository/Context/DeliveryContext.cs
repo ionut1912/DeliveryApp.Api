@@ -32,6 +32,7 @@ public class DeliveryContext : IdentityDbContext<Users, Roles, int>
     public DbSet<PhotoForRestaurant> PhotosForRestaurant { get; set; }
     public DbSet<ReviewForMenuItems> ReviewForMenuItems { get; set; }
     public DbSet<ReviewForRestaurants> ReviewForRestaurants { get; set; }
+    public  DbSet<MenuItemsRestaurants> MenuItemsRestaurants { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -55,6 +56,11 @@ public class DeliveryContext : IdentityDbContext<Users, Roles, int>
             .HasForeignKey<RestaurantAddresses>(x => x.RestaurantId)
             .OnDelete(DeleteBehavior.Cascade);
         builder.Entity<UserAddresses>().HasKey(x => x.AddressId);
+        builder.Entity<MenuItemsRestaurants>().HasKey(x => new { x.MenuItemsId, x.RestaurantsId });
+        builder.Entity<MenuItemsRestaurants>().HasOne(x=>x.MenuItems).WithMany(x=>x.MenuItemsRestaurants)
+            .HasForeignKey(x=>x.MenuItemsId);
+        builder.Entity<MenuItemsRestaurants>().HasOne(x => x.Restaurants).WithMany(x => x.MenuItemsRestaurants)
+            .HasForeignKey(x => x.RestaurantsId);
         builder.Entity<Users>()
             .HasOne(a => a.UserAddress)
             .WithOne()

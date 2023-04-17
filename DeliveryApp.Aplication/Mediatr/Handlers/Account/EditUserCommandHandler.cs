@@ -22,6 +22,8 @@ public class EditUserCommandHandler : ICommandHandler<EditUserCommand, ResultT<E
     {
         var result =
             await _accountRepository.EditCurrentUser(request.UserToBeEdited, request.ModelState, cancellationToken);
-        return result is null ? ResultT<EditCurrentUserResponse>.Failure(DomainMessages.Account.ProblemModifyingAccount) : ResultT<EditCurrentUserResponse>.Success(result);
+        return result is null
+            ? ResultT<EditCurrentUserResponse>.Failure(DomainMessages.Account.ProblemModifyingAccount)
+            : ResultT<EditCurrentUserResponse>.Success(result);
     }
 }

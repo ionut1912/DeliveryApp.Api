@@ -54,10 +54,11 @@ public class OrderService : IOrderRepository
             var orders = await GetOrders(cancellationToken);
             if (orders.Any())
             {
-                var lastOrderDateTime = DateTime.Parse(orders.Last().ReceivedTime);
+                var lastOrder= orders.Last();
+                var lastOrderDateTime = DateTime.Parse(lastOrder.ReceivedTime);
 
                 var difference = DateTime.Now - lastOrderDateTime;
-                if (difference.Days < 1) orderCalories = user.UserConfigs.NumberOfCaloriesConsumed;
+                if (difference.Days < 1&&lastOrder.User.Username==user.UserName) orderCalories = user.UserConfigs.NumberOfCaloriesConsumed;
             }
 
 

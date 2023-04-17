@@ -4,7 +4,6 @@ using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Application.Mediatr.Query.Account;
 
-public class GetCurrentUserQuery : IQuery<ResultT<User>>
+public class GetAllUsersQuery : IQuery<ResultT<List<User>>>
 {
-    public string Username { get; set; }
 }

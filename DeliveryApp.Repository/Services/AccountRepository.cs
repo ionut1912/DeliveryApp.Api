@@ -15,12 +15,12 @@ namespace DeliveryApp.Repository.Services;
 
 public class AccountRepository : IAccountRepository
 {
-    private readonly DeliveryContext _deliveryContext;
     private readonly IMailService _mailService;
     private readonly IMapper _mapper;
     private readonly TokenService _tokenService;
     private readonly IUserAccessor _userAccessor;
     private readonly UserManager<Users> _userManager;
+   private readonly  DeliveryContext _deliveryContext;
 
     public AccountRepository(IMailService mailService, IMapper mapper, TokenService tokenService,
         UserManager<Users> userManager, IUserAccessor userAccessor, DeliveryContext deliveryContext)
@@ -31,6 +31,7 @@ public class AccountRepository : IAccountRepository
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
         _deliveryContext = deliveryContext ?? throw new ArgumentNullException(nameof(deliveryContext));
+
     }
 
 
@@ -50,8 +51,7 @@ public class AccountRepository : IAccountRepository
         var result = await _userManager.CreateAsync(user, registerDto.Password);
         if (!result.Succeeded)
         {
-            foreach (var error in result.Errors) modelState.AddModelError(error.Code, error.Description);
-
+            AddErrorToModelState(result,modelState);
             return false;
         }
 
@@ -59,10 +59,36 @@ public class AccountRepository : IAccountRepository
         return true;
     }
 
+    public async Task<List<User>> GetAllUsers(CancellationToken cancellationToken)
+    {
+        var response=new List<User>();
+        var users = await _userManager.Users.Include(x => x.UserAddress).Include(x => x.UserConfigs)
+            .Include(x => x.Photos).AsNoTracking().ToListAsync(cancellationToken);
+        foreach (var user  in users)
+        {
+
+            var responseUser = new User
+            {
+                Id = user.Id,
+                Username = user.UserName,
+                Email = user.Email,
+                Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress),
+                UserConfig = _mapper.Map<UserConfig>(user.UserConfigs),
+                PhoneNumber = user.PhoneNumber,
+                Photos = user.Photos.Select(x => x.Url).ToList(),
+                Role = await GetUserRole(user,cancellationToken)
+            };
+            response.Add(responseUser);
+
+        }
+
+        return response;
+    }
+
     public async Task<UserDto> Login(LoginDto loginDto, CancellationToken cancellationToken)
     {
-        var user = await _userManager.Users.AsNoTracking().Include(x => x.UserAddress).Include(x => x.Photos)
-            .FirstOrDefaultAsync(x => x.UserName == loginDto.Username, cancellationToken);
+        var user = await _userManager.Users.Include(x => x.UserAddress).Include(x => x.Photos)
+            .AsNoTracking().FirstOrDefaultAsync(x => x.UserName == loginDto.Username, cancellationToken);
 
         if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
             throw new Exception("User not found or incorrect password");
@@ -85,25 +111,26 @@ public class AccountRepository : IAccountRepository
         };
     }
 
-    public async Task<UserDto> GetCurrentUser(string username, CancellationToken cancellationToken)
+    public async Task<User> GetCurrentUser(string username, CancellationToken cancellationToken)
     {
         var user = await _userManager.Users
-            .AsNoTracking()
             .Include(x => x.Photos)
             .Include(x => x.UserAddress)
             .Include(x => x.UserConfigs)
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserName == username, cancellationToken);
-
-        return new UserDto
+     
+        return new User
 
         {
+            Id = user.Id,
             PhoneNumber = user.PhoneNumber,
-            Token = await _tokenService.GenerateToken(user),
-            Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+           Photos = user.Photos.Select(x=>x.Url).ToList(),
             Username = user.UserName,
             Email = user.Email,
             Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress),
-            UserConfig = _mapper.Map<UserConfig>(user.UserConfigs)
+            UserConfig = _mapper.Map<UserConfig>(user.UserConfigs),
+            Role = await  GetUserRole(user,cancellationToken)
         };
     }
 
@@ -111,9 +138,9 @@ public class AccountRepository : IAccountRepository
         CancellationToken cancellationToken)
     {
         var user = await _userManager.Users
-            .AsNoTracking()
             .Include(x => x.Photos)
             .Include(x => x.UserAddress)
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
         user.SecurityStamp = Guid.NewGuid().ToString();
         user.PhoneNumber = userToBeEdited.PhoneNumber ?? user.PhoneNumber;
@@ -124,9 +151,8 @@ public class AccountRepository : IAccountRepository
         var result = await _userManager.UpdateAsync(user);
         if (!result.Succeeded)
         {
-            foreach (var error in result.Errors) modelState.AddModelError(error.Code, error.Description);
-
-            throw new Exception("Issues creating your account");
+            AddErrorToModelState(result,modelState);
+          return new EditCurrentUserResponse();
         }
 
         var response = new EditCurrentUserResponse
@@ -140,7 +166,7 @@ public class AccountRepository : IAccountRepository
     public async Task<bool> EditCurrentUserAddress(UserAddressesForCreation userAddressesForCreation,
         CancellationToken cancellationToken)
     {
-        var user = await _deliveryContext.Users
+        var user = await _userManager.Users
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
         if (user == null) return false;
@@ -152,5 +178,21 @@ public class AccountRepository : IAccountRepository
         var addressToBeModified = _mapper.Map(userAddressesForCreation, address);
         _deliveryContext.UserAddresses.Update(addressToBeModified);
         return true;
+    }
+
+
+    private async Task<string> GetUserRole(Users user, CancellationToken cancellationToken)
+    {
+        var roleId = await _deliveryContext.UserRoles.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.UserId == user.Id, cancellationToken);
+        var role = await _deliveryContext.Roles.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == roleId.RoleId, cancellationToken);
+        return role.Name;
+    }
+
+    private static void AddErrorToModelState(IdentityResult identityResult, ModelStateDictionary modelState)
+    {
+        foreach (var error in identityResult.Errors) modelState.AddModelError(error.Code, error.Description);
+
     }
 }

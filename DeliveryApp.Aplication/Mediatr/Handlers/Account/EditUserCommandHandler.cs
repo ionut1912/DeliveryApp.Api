@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
+using DeliveryApp.Domain.Messages;
 using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Account;
@@ -21,7 +22,6 @@ public class EditUserCommandHandler : ICommandHandler<EditUserCommand, ResultT<E
     {
         var result =
             await _accountRepository.EditCurrentUser(request.UserToBeEdited, request.ModelState, cancellationToken);
-
-        return ResultT<EditCurrentUserResponse>.Success(result);
+        return result is null ? ResultT<EditCurrentUserResponse>.Failure(DomainMessages.Account.ProblemModifyingAccount) : ResultT<EditCurrentUserResponse>.Success(result);
     }
 }

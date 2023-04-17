@@ -3,10 +3,11 @@ using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
 using DeliveryApp.Domain.DTO;
+using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Account;
 
-public class GetCurrentUserQueryHandler : IQueryHandler<GetCurrentUserQuery, ResultT<UserDto>>
+public class GetCurrentUserQueryHandler : IQueryHandler<GetCurrentUserQuery, ResultT<User>>
 {
     private readonly IAccountRepository _accountRepository;
 
@@ -15,9 +16,9 @@ public class GetCurrentUserQueryHandler : IQueryHandler<GetCurrentUserQuery, Res
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
     }
 
-    public async Task<ResultT<UserDto>> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
+    public async Task<ResultT<User>> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
     {
         var result = await _accountRepository.GetCurrentUser(request.Username, cancellationToken);
-        return ResultT<UserDto>.Success(result);
+        return ResultT<User>.Success(result);
     }
 }

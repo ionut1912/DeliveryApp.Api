@@ -2,7 +2,6 @@
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
-using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Application.Mediatr.Handlers.Account;

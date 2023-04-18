@@ -15,12 +15,12 @@ namespace DeliveryApp.Repository.Services;
 
 public class AccountRepository : IAccountRepository
 {
+    private readonly DeliveryContext _deliveryContext;
     private readonly IMailService _mailService;
     private readonly IMapper _mapper;
     private readonly TokenService _tokenService;
     private readonly IUserAccessor _userAccessor;
     private readonly UserManager<Users> _userManager;
-   private readonly  DeliveryContext _deliveryContext;
 
     public AccountRepository(IMailService mailService, IMapper mapper, TokenService tokenService,
         UserManager<Users> userManager, IUserAccessor userAccessor, DeliveryContext deliveryContext)
@@ -31,7 +31,6 @@ public class AccountRepository : IAccountRepository
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
         _deliveryContext = deliveryContext ?? throw new ArgumentNullException(nameof(deliveryContext));
-
     }
 
 
@@ -51,7 +50,7 @@ public class AccountRepository : IAccountRepository
         var result = await _userManager.CreateAsync(user, registerDto.Password);
         if (!result.Succeeded)
         {
-            AddErrorToModelState(result,modelState);
+            AddErrorToModelState(result, modelState);
             return false;
         }
 
@@ -61,12 +60,11 @@ public class AccountRepository : IAccountRepository
 
     public async Task<List<User>> GetAllUsers(CancellationToken cancellationToken)
     {
-        var response=new List<User>();
+        var response = new List<User>();
         var users = await _userManager.Users.Include(x => x.UserAddress).Include(x => x.UserConfigs)
             .Include(x => x.Photos).AsNoTracking().ToListAsync(cancellationToken);
-        foreach (var user  in users)
+        foreach (var user in users)
         {
-
             var responseUser = new User
             {
                 Id = user.Id,
@@ -76,10 +74,9 @@ public class AccountRepository : IAccountRepository
                 UserConfig = _mapper.Map<UserConfig>(user.UserConfigs),
                 PhoneNumber = user.PhoneNumber,
                 Photos = user.Photos.Select(x => x.Url).ToList(),
-                Role = await GetUserRole(user,cancellationToken)
+                Role = await GetUserRole(user, cancellationToken)
             };
             response.Add(responseUser);
-
         }
 
         return response;
@@ -119,18 +116,18 @@ public class AccountRepository : IAccountRepository
             .Include(x => x.UserConfigs)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserName == username, cancellationToken);
-     
+
         return new User
 
         {
             Id = user.Id,
             PhoneNumber = user.PhoneNumber,
-           Photos = user.Photos.Select(x=>x.Url).ToList(),
+            Photos = user.Photos.Select(x => x.Url).ToList(),
             Username = user.UserName,
             Email = user.Email,
             Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress),
             UserConfig = _mapper.Map<UserConfig>(user.UserConfigs),
-            Role = await  GetUserRole(user,cancellationToken)
+            Role = await GetUserRole(user, cancellationToken)
         };
     }
 
@@ -151,8 +148,8 @@ public class AccountRepository : IAccountRepository
         var result = await _userManager.UpdateAsync(user);
         if (!result.Succeeded)
         {
-            AddErrorToModelState(result,modelState);
-          return new EditCurrentUserResponse();
+            AddErrorToModelState(result, modelState);
+            return new EditCurrentUserResponse();
         }
 
         var response = new EditCurrentUserResponse
@@ -193,6 +190,5 @@ public class AccountRepository : IAccountRepository
     private static void AddErrorToModelState(IdentityResult identityResult, ModelStateDictionary modelState)
     {
         foreach (var error in identityResult.Errors) modelState.AddModelError(error.Code, error.Description);
-
     }
 }

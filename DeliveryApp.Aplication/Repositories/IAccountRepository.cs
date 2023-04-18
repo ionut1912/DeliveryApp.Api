@@ -9,7 +9,8 @@ public interface IAccountRepository
 {
     public Task<bool> Register(RegisterDto registerDto, ModelStateDictionary modelState,
         CancellationToken cancellationToken);
-    public  Task<List<User>> GetAllUsers(CancellationToken cancellationToken);
+
+    public Task<List<User>> GetAllUsers(CancellationToken cancellationToken);
     public Task<UserDto> Login(LoginDto loginDto, CancellationToken cancellationToken);
     public Task<User> GetCurrentUser(string username, CancellationToken cancellationToken);
 
@@ -18,6 +19,4 @@ public interface IAccountRepository
 
     public Task<bool> EditCurrentUserAddress(UserAddressesForCreation userAddressesForCreation,
         CancellationToken cancellationToken);
-
-  
 }

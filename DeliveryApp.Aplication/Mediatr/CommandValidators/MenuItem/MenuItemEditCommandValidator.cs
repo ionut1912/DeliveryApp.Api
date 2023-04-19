@@ -12,6 +12,5 @@ public class MenuItemEditCommandValidator : AbstractValidator<MenuItemEditComman
         RuleFor(x => x.MenuItemDto.Ingredients).NotEmpty().WithMessage("ingredients should not be empty");
         RuleFor(x => x.MenuItemDto.Price).NotEmpty().WithMessage("price should not be empty").GreaterThan(0)
             .WithMessage("price should be greater than 0");
-        RuleFor(x => x.MenuItemDto.Quantity).NotEmpty().WithMessage("quantity should not be empty");
     }
 }

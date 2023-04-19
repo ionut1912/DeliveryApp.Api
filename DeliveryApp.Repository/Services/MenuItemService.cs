@@ -35,6 +35,7 @@ public class MenuItemService : IMenuItemRepository
             .Include(x => x.Reviews)
             .ThenInclude(x => x.User)
             .ThenInclude(x => x.Photos)
+            .Where(x => x.Active)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
 
@@ -50,6 +51,7 @@ public class MenuItemService : IMenuItemRepository
             .ThenInclude(x => x.User)
             .ThenInclude(x => x.Photos)
             .AsNoTracking()
+            .Where(x => x.Active)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         return _mapper.Map<MenuItem>(menuItem);
@@ -65,4 +67,5 @@ public class MenuItemService : IMenuItemRepository
         _context.MenuItems.Update(modifiedMenuItem);
         return true;
     }
+
 }

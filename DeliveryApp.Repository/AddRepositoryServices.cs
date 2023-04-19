@@ -33,7 +33,7 @@ public static class AddRepositoryServices
         services.AddScoped<IPhotoForRestaurantsRepository, PhotoForRestaurantService>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IReviewForMenuItemRepository, ReviewForMenuItemService>();
-        services.AddScoped<IStatisticsRepository,StatisticsRepository>();
+        services.AddScoped<IStatisticsRepository, StatisticsRepository>();
         services.AddScoped<IReviewForRestaurantRepository, ReviewForRestaurantRepository>();
         services.AddTransient<ExceptionHandlingMiddleware>();
 

@@ -1,8 +1,7 @@
-﻿namespace DeliveryApp.Domain.Models
+﻿namespace DeliveryApp.Domain.Models;
+
+public class MenuItemCountModel
 {
-   public class MenuItemCountModel
-    {
-        public  string MenuItemName { get; set; }
-        public int MenuItemCount { get; set; }
-    }
+    public string MenuItemName { get; set; }
+    public int MenuItemCount { get; set; }
 }

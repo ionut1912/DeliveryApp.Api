@@ -1,9 +1,8 @@
 ﻿using DeliveryApp.Domain.Models;
 
-namespace DeliveryApp.Application.Repositories
+namespace DeliveryApp.Application.Repositories;
+
+public interface IStatisticsRepository
 {
-    public interface IStatisticsRepository
-    {
-        Task<List<MenuItemCountModel>> GetMenuItemCount(CancellationToken cancellationToken);
-    }
+    Task<List<MenuItemCountModel>> GetMenuItemCount(CancellationToken cancellationToken);
 }

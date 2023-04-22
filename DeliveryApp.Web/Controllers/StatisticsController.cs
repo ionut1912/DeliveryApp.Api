@@ -21,4 +21,23 @@ public class StatisticsController : BaseApiController
         var query = new MenuItemsCountQuery();
         return HandleResult(await Mediator.Send(query));
     }
+
+    [HttpGet("orders-count")]
+    [ProducesResponseType(typeof(ActionResult<List<MenuItemInOrderCountModel>>), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<List<MenuItemInOrderCountModel>>> GetOrderMenuItemCount()
+    {
+        var query = new MenuItemInOrdersCountQuery();
+        return HandleResult(await Mediator.Send(query));
+    }
+
+    [HttpGet("orders-count/{numberOfDays}")]
+    [ProducesResponseType(typeof(ActionResult<OrderDetailStatistic>), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<OrderDetailStatistic>> GetOrderStatistic(int numberOfDays)
+    {
+        var query = new GetOrdersFromLastDaysQuery
+        {
+            NumberOfDays = numberOfDays
+        };
+        return HandleResult(await Mediator.Send(query));
+    }
 }

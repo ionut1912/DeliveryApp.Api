@@ -61,7 +61,8 @@ public class AccountRepository : IAccountRepository
     public async Task<List<User>> GetAllUsers(CancellationToken cancellationToken)
     {
         var response = new List<User>();
-        var users = await _userManager.Users.Include(x => x.UserAddress).Include(x=>x.Orders).Include(x => x.UserConfigs)
+        var users = await _userManager.Users.Include(x => x.UserAddress).Include(x => x.Orders)
+            .Include(x => x.UserConfigs)
             .Include(x => x.Photos).AsNoTracking().ToListAsync(cancellationToken);
         foreach (var user in users)
         {

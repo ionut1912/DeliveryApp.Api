@@ -61,7 +61,7 @@ public class AccountRepository : IAccountRepository
     public async Task<List<User>> GetAllUsers(CancellationToken cancellationToken)
     {
         var response = new List<User>();
-        var users = await _userManager.Users.Include(x => x.UserAddress).Include(x => x.UserConfigs)
+        var users = await _userManager.Users.Include(x => x.UserAddress).Include(x=>x.Orders).Include(x => x.UserConfigs)
             .Include(x => x.Photos).AsNoTracking().ToListAsync(cancellationToken);
         foreach (var user in users)
         {
@@ -74,7 +74,8 @@ public class AccountRepository : IAccountRepository
                 UserConfig = _mapper.Map<UserConfig>(user.UserConfigs),
                 PhoneNumber = user.PhoneNumber,
                 Photos = user.Photos.Select(x => x.Url).ToList(),
-                Role = await GetUserRole(user, cancellationToken)
+                Role = await GetUserRole(user, cancellationToken),
+                OrdersCount = user.Orders.Count()
             };
             response.Add(responseUser);
         }

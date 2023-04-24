@@ -12,4 +12,5 @@ public class User
     public UserConfig UserConfig { get; set; }
     public string PhoneNumber { get; set; }
     public string Role { get; set; }
+    public int OrdersCount { get; set; }
 }

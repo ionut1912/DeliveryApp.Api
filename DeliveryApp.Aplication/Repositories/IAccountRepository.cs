@@ -14,9 +14,6 @@ public interface IAccountRepository
     public Task<UserDto> Login(LoginDto loginDto, CancellationToken cancellationToken);
     public Task<User> GetCurrentUser(string username, CancellationToken cancellationToken);
 
-    public Task<EditCurrentUserResponse> EditCurrentUser(UserDto userToBeEdited, ModelStateDictionary modelState,
-        CancellationToken cancellationToken);
-
     public Task<bool> EditCurrentUserAddress(UserAddressesForCreation userAddressesForCreation,
         CancellationToken cancellationToken);
 }

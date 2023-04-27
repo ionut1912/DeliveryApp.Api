@@ -66,21 +66,6 @@ public class AccountsController : BaseApiController
     [Authorize]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
-    [SwaggerOperation(Summary = "Modify current user details")]
-    [HttpPut("current")]
-    public async Task<ActionResult> EditCurrentUser(UserDto userToBeEdited)
-    {
-        var command = new EditUserCommand
-        {
-            UserToBeEdited = userToBeEdited,
-            ModelState = ModelState
-        };
-        return HandleResult(await Mediator.Send(command));
-    }
-
-    [Authorize]
-    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
     [SwaggerOperation(Summary = "Modify current user address")]
     [HttpPut("current/address")]
     public async Task<ActionResult> EditUserAddress(UserAddressesForCreation userAddressesForCreation)

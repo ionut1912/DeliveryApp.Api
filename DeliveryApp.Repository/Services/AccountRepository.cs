@@ -131,34 +131,7 @@ public class AccountRepository : IAccountRepository
         };
     }
 
-    public async Task<EditCurrentUserResponse> EditCurrentUser(UserDto userToBeEdited, ModelStateDictionary modelState,
-        CancellationToken cancellationToken)
-    {
-        var user = await _userManager.Users
-            .Include(x => x.Photos)
-            .Include(x => x.UserAddress)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
-        user.SecurityStamp = Guid.NewGuid().ToString();
-        user.PhoneNumber = userToBeEdited.PhoneNumber ?? user.PhoneNumber;
-        user.UserName = userToBeEdited.Username ?? user.UserName;
-
-        user.Email = userToBeEdited.Email ?? user.Email;
-
-        var result = await _userManager.UpdateAsync(user);
-        if (!result.Succeeded)
-        {
-            AddErrorToModelState(result, modelState);
-            return new EditCurrentUserResponse();
-        }
-
-        var response = new EditCurrentUserResponse
-        {
-            Email = user.Email,
-            Token = await _tokenService.GenerateToken(user)
-        };
-        return response;
-    }
+   
 
     public async Task<bool> EditCurrentUserAddress(UserAddressesForCreation userAddressesForCreation,
         CancellationToken cancellationToken)

@@ -65,6 +65,7 @@ public class AccountRepository : IAccountRepository
             .Include(u => u.Orders)
             .Include(u => u.UserConfigs)
             .Include(u => u.Photos)
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
 
         return users.Select(user => new User

@@ -131,8 +131,6 @@ public class AccountRepository : IAccountRepository
         };
     }
 
-   
-
     public async Task<bool> EditCurrentUserAddress(UserAddressesForCreation userAddressesForCreation,
         CancellationToken cancellationToken)
     {

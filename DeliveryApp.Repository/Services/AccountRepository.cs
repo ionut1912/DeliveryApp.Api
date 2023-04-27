@@ -60,28 +60,25 @@ public class AccountRepository : IAccountRepository
 
     public async Task<List<User>> GetAllUsers(CancellationToken cancellationToken)
     {
-        var response = new List<User>();
-        var users = await _userManager.Users.Include(x => x.UserAddress).Include(x => x.Orders)
-            .Include(x => x.UserConfigs)
-            .Include(x => x.Photos).AsNoTracking().ToListAsync(cancellationToken);
-        foreach (var user in users)
-        {
-            var responseUser = new User
-            {
-                Id = user.Id,
-                Username = user.UserName,
-                Email = user.Email,
-                Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress),
-                UserConfig = _mapper.Map<UserConfig>(user.UserConfigs),
-                PhoneNumber = user.PhoneNumber,
-                Photos = user.Photos.Select(x => x.Url).ToList(),
-                Role = await GetUserRole(user, cancellationToken),
-                OrdersCount = user.Orders.Count()
-            };
-            response.Add(responseUser);
-        }
+        var users = await _userManager.Users
+            .Include(u => u.UserAddress)
+            .Include(u => u.Orders)
+            .Include(u => u.UserConfigs)
+            .Include(u => u.Photos)
+            .ToListAsync(cancellationToken);
 
-        return response;
+        return users.Select(user => new User
+        {
+            Id = user.Id,
+            Username = user.UserName,
+            Email = user.Email,
+            Address = _mapper.Map<UserAddressesForCreation>(user.UserAddress),
+            UserConfig = _mapper.Map<UserConfig>(user.UserConfigs),
+            PhoneNumber = user.PhoneNumber,
+            Photos = user.Photos.Select(photo => photo.Url).ToList(),
+            Role = GetUserRole(user, cancellationToken).GetAwaiter().GetResult(),
+            OrdersCount = user.Orders.Count()
+        }).ToList();
     }
 
     public async Task<UserDto> Login(LoginDto loginDto, CancellationToken cancellationToken)

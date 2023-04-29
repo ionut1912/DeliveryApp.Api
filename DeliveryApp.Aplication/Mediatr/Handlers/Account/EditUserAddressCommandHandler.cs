@@ -20,7 +20,8 @@ public class EditUserAddressCommandHandler : ICommandHandler<EditUserAddressComm
     public async Task<ResultT<JsonResponse>> Handle(EditUserAddressCommand request, CancellationToken cancellationToken)
     {
         var result =
-            await _accountRepository.EditCurrentUserAddress(request.Request.UserAddressesForCreation, cancellationToken);
+            await _accountRepository.EditCurrentUserAddress(request.Request.UserAddressesForCreation,
+                cancellationToken);
         if (result is false)
         {
             var jsonResponseFailure = new JsonResponse

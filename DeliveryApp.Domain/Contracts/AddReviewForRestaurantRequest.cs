@@ -1,10 +1,9 @@
 ﻿using DeliveryApp.Domain.DTO;
 
-namespace DeliveryApp.Domain.Contracts
+namespace DeliveryApp.Domain.Contracts;
+
+public class AddReviewForRestaurantRequest
 {
-    public class AddReviewForRestaurantRequest
-    {
-        public string Language { get; set; }
-        public ReviewForRestaurantDto ReviewForRestaurantDto { get; set; }
-    }
+    public string Language { get; set; }
+    public ReviewForRestaurantDto ReviewForRestaurantDto { get; set; }
 }

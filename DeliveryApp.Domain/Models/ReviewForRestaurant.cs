@@ -1,6 +1,4 @@
-﻿using DeliveryApp.Domain.DTO;
-
-namespace DeliveryApp.Domain.Models;
+﻿namespace DeliveryApp.Domain.Models;
 
 public class ReviewForRestaurant
 {

@@ -73,7 +73,6 @@ public class UserConfigsController : BaseApiController
         {
             Id = id,
             Request = request
-          
         };
         return HandleResult(await Mediator.Send(command));
     }
@@ -87,7 +86,7 @@ public class UserConfigsController : BaseApiController
     {
         var command = new UserConfigCreateCommand
         {
-           Request = request
+            Request = request
         };
         return HandleResult(await Mediator.Send(command));
     }

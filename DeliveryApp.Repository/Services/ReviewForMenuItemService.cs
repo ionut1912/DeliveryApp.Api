@@ -1,6 +1,4 @@
-﻿using System.Collections.Immutable;
-using AutoMapper;
-using DeliveryApp.Application.Mediatr.Query.Account;
+﻿using AutoMapper;
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Domain.Contracts;
 using DeliveryApp.Domain.DTO;
@@ -95,19 +93,28 @@ public class ReviewForMenuItemService : IReviewForMenuItemRepository
 
     public async Task<List<CurrentUserReviewForMenuItem>> GetReviewsForCurrentUser(CancellationToken cancellationToken)
     {
-        var reviews = await _deliveryContext.ReviewForMenuItems.Include(x=>x.User).Where(x => x.User.UserName == _userAccessor.GetUsername())
+        var reviews = await _deliveryContext.ReviewForMenuItems.Include(x => x.User)
+            .Where(x => x.User.UserName == _userAccessor.GetUsername())
             .AsNoTracking().ToListAsync(cancellationToken);
 
-
-        return reviews.Select(t => new CurrentUserReviewForMenuItem
+        var result = new List<CurrentUserReviewForMenuItem>();
+        for (var i = 0; i < reviews.Count(); i++)
+        {
+            var resultItem = new CurrentUserReviewForMenuItem
             {
-                Id = t.Id,
-                ReviewTitle = t.ReviewTitle,
-                ReviewDescription = t.ReviewDescription,
-                NumberOfStars = t.NumberOfStars,
-                Username = t.User.UserName,
-                ItemName = _deliveryContext.MenuItems.FirstOrDefaultAsync(x => x.Id == reviews[0].MenuItemsId, cancellationToken).Result.ItemName
-            })
-            .ToList();
+                Id = reviews[i].Id,
+                ReviewTitle = reviews[i].ReviewTitle,
+                ReviewDescription = reviews[i].ReviewDescription,
+                NumberOfStars = reviews[i].NumberOfStars,
+                Username = reviews[i].User.UserName,
+                MenuItemId = _deliveryContext.Restaurants
+                    .FirstOrDefaultAsync(x => x.Id == reviews[i].MenuItemsId, cancellationToken).Result.Id,
+                ItemName = _deliveryContext.Restaurants
+                    .FirstOrDefaultAsync(x => x.Id == reviews[i].MenuItemsId, cancellationToken).Result.Name
+            };
+            result.Add(resultItem);
+        }
+
+        return result;
     }
 }

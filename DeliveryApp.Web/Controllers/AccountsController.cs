@@ -2,7 +2,6 @@
 using DeliveryApp.Application.Mediatr.Commands.Account;
 using DeliveryApp.Application.Mediatr.Query.Account;
 using DeliveryApp.Commons.Controllers;
-using DeliveryApp.Commons.Models;
 using DeliveryApp.Domain.Contracts;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
@@ -75,7 +74,7 @@ public class AccountsController : BaseApiController
         {
             Request = request
         };
-        
+
         return HandleResult(await Mediator.Send(command));
     }
 

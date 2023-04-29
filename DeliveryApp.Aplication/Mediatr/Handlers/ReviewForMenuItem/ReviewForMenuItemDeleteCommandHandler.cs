@@ -30,7 +30,7 @@ public class
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = request.Request.Language == "EN"
+                Message = request.Language == "EN"
                     ? DomainMessagesEn.ReviewForMenuItem.CanNoDeleteReview(request.Id)
                     : DomainMessagesRo.ReviewForMenuItem.CanNoDeleteReview(request.Id)
             };
@@ -40,7 +40,7 @@ public class
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = request.Request.Language == "EN"
+            Message = request.Language == "EN"
                 ? DomainMessagesEn.ReviewForMenuItem.ReviewDeleted(request.Id)
                 : DomainMessagesRo.ReviewForMenuItem.ReviewDeleted(request.Id)
         };

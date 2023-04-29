@@ -5,6 +5,7 @@ public static class DomainMessagesRo
     public static class Order
     {
         public static string OrderAddedSuccessfully => "Comanda a fost creata cu success";
+
         public static string CanNotEditOrder(Guid id)
         {
             return $"Comanda cu  id-ul {id} nu poate fi modificata";

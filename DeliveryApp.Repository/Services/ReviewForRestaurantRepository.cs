@@ -65,23 +65,31 @@ public class ReviewForRestaurantRepository : IReviewForRestaurantRepository
         return _mapper.Map<ReviewForRestaurant>(reviewForRestaurantEntity);
     }
 
-    public async Task<List<CurrentUserReviewForRestaurant>> GetReviewsForRestaurantForCurrentUser(CancellationToken cancellationToken)
+    public async Task<List<CurrentUserReviewForRestaurant>> GetReviewsForRestaurantForCurrentUser(
+        CancellationToken cancellationToken)
     {
-        var reviews = await _deliveryContext.ReviewForRestaurants.Include(x => x.User).Where(x => x.User.UserName == _userAccessor.GetUsername())
+        var reviews = await _deliveryContext.ReviewForRestaurants.Include(x => x.User)
+            .Where(x => x.User.UserName == _userAccessor.GetUsername())
             .AsNoTracking().ToListAsync(cancellationToken);
-
-
-        return reviews.Select(t => new CurrentUserReviewForRestaurant()
+        var result = new List<CurrentUserReviewForRestaurant>();
+        for (var i = 0; i < reviews.Count(); i++)
+        {
+            var resultItem = new CurrentUserReviewForRestaurant
             {
-                Id = t.Id,
-                ReviewTitle = t.ReviewTitle,
-                ReviewDescription = t.ReviewDescription,
-                NumberOfStars = t.NumberOfStars,
-                Username = t.User.UserName,
+                Id = reviews[i].Id,
+                ReviewTitle = reviews[i].ReviewTitle,
+                ReviewDescription = reviews[i].ReviewDescription,
+                NumberOfStars = reviews[i].NumberOfStars,
+                Username = reviews[i].User.UserName,
+                RestaurantId = _deliveryContext.Restaurants
+                    .FirstOrDefaultAsync(x => x.Id == reviews[i].RestaurantsId, cancellationToken).Result.Id,
                 RestaurantName = _deliveryContext.Restaurants
-                    .FirstOrDefaultAsync(x => x.Id == reviews[0].RestaurantsId, cancellationToken).Result.Name
-            })
-            .ToList();
+                    .FirstOrDefaultAsync(x => x.Id == reviews[i].RestaurantsId, cancellationToken).Result.Name
+            };
+            result.Add(resultItem);
+        }
+
+        return result;
     }
 
     public async Task<bool> EditReviewForRestaurant(Guid id, ReviewForRestaurantDto reviewForRestaurantDto,

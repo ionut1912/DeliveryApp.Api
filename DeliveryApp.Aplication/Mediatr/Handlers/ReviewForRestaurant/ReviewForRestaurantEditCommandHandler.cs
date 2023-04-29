@@ -24,7 +24,8 @@ public class
         CancellationToken cancellationToken)
     {
         var result =
-            await _reviewForRestaurantRepository.EditReviewForRestaurant(request.Id, request.Request.ReviewForRestaurantDto,
+            await _reviewForRestaurantRepository.EditReviewForRestaurant(request.Id,
+                request.Request.ReviewForRestaurantDto,
                 cancellationToken);
         if (result is false)
         {

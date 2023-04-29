@@ -1,10 +1,8 @@
 ﻿using System.Net;
 using DeliveryApp.Application.Mediatr.Commands.ReviewForRestaurant;
-using DeliveryApp.Application.Mediatr.Query.ReviewForMenuItem;
 using DeliveryApp.Application.Mediatr.Query.ReviewForRestaurant;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Domain.Contracts;
-using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -61,16 +59,16 @@ public class ReviewForRestaurantsController : BaseApiController
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Edit review for restaurant")]
-    public async Task<IActionResult> EditReviewForRestaurant(Guid id,EditReviewForRestaurantRequest request)
+    public async Task<IActionResult> EditReviewForRestaurant(Guid id, EditReviewForRestaurantRequest request)
     {
         var command = new ReviewForRestaurantEditCommand
         {
-        Request = request,
-            Id = id,
-            
+            Request = request,
+            Id = id
         };
         return HandleResult(await Mediator.Send(command));
     }
+
     [Authorize]
     [HttpGet]
     [ProducesResponseType(typeof(UnauthorizedObjectResult), (int)HttpStatusCode.Unauthorized)]
@@ -81,14 +79,16 @@ public class ReviewForRestaurantsController : BaseApiController
         var query = new ReviewForRestaurantGetCurrentUserQuery();
         return HandleResult(await Mediator.Send(query));
     }
-    [HttpDelete("{id}")]
+
+    [HttpDelete("{id}/{language}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Delete review for restaurant")]
-    public async Task<IActionResult> DeleteReviewForMenuItem(Guid id, DeleteReviewForRestaurantRequest request)
+    public async Task<IActionResult> DeleteReviewForMenuItem(Guid id, string language)
     {
         var command = new ReviewForRestaurantDeleteCommand
         {
-            Request = request,
+            Language = language,
+
             Id = id
         };
         return HandleResult(await Mediator.Send(command));

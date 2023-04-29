@@ -28,7 +28,7 @@ public class
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = request.Request.Language == "EN"
+                Message = request.Language == "EN"
                     ? DomainMessagesEn.ReviewForRestaurant.CanNoDeleteReview(request.Id)
                     : DomainMessagesRo.ReviewForRestaurant.CanNoDeleteReview(request.Id)
             };
@@ -38,7 +38,7 @@ public class
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = request.Request.Language == "EN"
+            Message = request.Language == "EN"
                 ? DomainMessagesEn.ReviewForRestaurant.ReviewDeleted(request.Id)
                 : DomainMessagesRo.ReviewForRestaurant.ReviewDeleted(request.Id)
         };

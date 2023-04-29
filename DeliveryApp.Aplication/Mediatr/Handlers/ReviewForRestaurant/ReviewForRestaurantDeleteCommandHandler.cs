@@ -1,4 +1,4 @@
-﻿using DeliveryApp.Application.Mediatr.CommandValidators.ReviewForRestaurant;
+﻿using DeliveryApp.Application.Mediatr.Commands.ReviewForRestaurant;
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
@@ -28,7 +28,9 @@ public class
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.ReviewForRestaurant.CanNoDeleteReview(request.Id)
+                Message = request.Request.Language == "EN"
+                    ? DomainMessagesEn.ReviewForRestaurant.CanNoDeleteReview(request.Id)
+                    : DomainMessagesRo.ReviewForRestaurant.CanNoDeleteReview(request.Id)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -36,7 +38,9 @@ public class
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.ReviewForRestaurant.ReviewDeleted(request.Id)
+            Message = request.Request.Language == "EN"
+                ? DomainMessagesEn.ReviewForRestaurant.ReviewDeleted(request.Id)
+                : DomainMessagesRo.ReviewForRestaurant.ReviewDeleted(request.Id)
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

@@ -24,7 +24,7 @@ public class OrderDeleteCommandHandler : ICommandHandler<DeleteCommand, ResultT<
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.Order.CanNotDeleteOrder(request.Id)
+                Message = DomainMessagesEn.Order.CanNotDeleteOrder(request.Id)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -32,7 +32,7 @@ public class OrderDeleteCommandHandler : ICommandHandler<DeleteCommand, ResultT<
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Order.OrderDeletedSuccessfully(request.Id)
+            Message = DomainMessagesEn.Order.OrderDeletedSuccessfully(request.Id)
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

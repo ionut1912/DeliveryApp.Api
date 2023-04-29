@@ -21,7 +21,8 @@ public class
     {
         var result = await _userConfigRepository.GetConfig(request.Id, cancellationToken);
         if (result == null)
-            return ResultT<Domain.Models.UserConfig>.Failure(DomainMessages.UserConfig.NotFoundUserConfig(request.Id));
+            return ResultT<Domain.Models.UserConfig>.Failure(
+                DomainMessagesEn.UserConfig.NotFoundUserConfig(request.Id));
         return ResultT<Domain.Models.UserConfig>.Success(result);
     }
 }

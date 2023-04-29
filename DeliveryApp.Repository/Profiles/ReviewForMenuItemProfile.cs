@@ -10,5 +10,6 @@ public class ReviewForMenuItemProfile : BaseProfile
     {
         CreateMap<ReviewForMenuItem, ReviewForMenuItems>().ReverseMap();
         CreateMap<ReviewForMenuItems, ReviewForMenuItemDto>().ReverseMap();
+
     }
 }

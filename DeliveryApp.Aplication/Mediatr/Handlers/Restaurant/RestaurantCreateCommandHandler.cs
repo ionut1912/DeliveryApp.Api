@@ -25,7 +25,7 @@ public class RestaurantCreateCommandHandler : ICommandHandler<RestaurantCreateCo
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Restaurant.RestaurantAddedSuccessfully
+            Message = DomainMessagesEn.Restaurant.RestaurantAddedSuccessfully
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

@@ -26,7 +26,7 @@ public class
                 cancellationToken);
         return result == null
             ? ResultT<Domain.Models.ReviewForRestaurant>.Failure(
-                DomainMessages.ReviewForRestaurant.NotFound(request.Id))
+                DomainMessagesEn.ReviewForRestaurant.NotFound(request.Id))
             : ResultT<Domain.Models.ReviewForRestaurant>.Success(result);
     }
 }

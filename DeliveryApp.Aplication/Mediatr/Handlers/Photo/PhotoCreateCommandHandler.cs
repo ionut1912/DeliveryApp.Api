@@ -25,7 +25,7 @@ public class PhotoCreateCommandHandler : ICommandHandler<PhotoCreateCommand, Res
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Photo.PhotoAddedSuccessfully
+            Message = DomainMessagesEn.Photo.PhotoAddedSuccessfully
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

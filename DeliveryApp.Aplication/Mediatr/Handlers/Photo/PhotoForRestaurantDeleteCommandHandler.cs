@@ -30,7 +30,7 @@ public class
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.PhotoForRestaurant.CanNotDeletePhoto(request.PhotoId)
+                Message = DomainMessagesEn.PhotoForRestaurant.CanNotDeletePhoto(request.PhotoId)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -38,7 +38,7 @@ public class
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.PhotoForRestaurant.PhotoDeletedSuccessfully(request.PhotoId)
+            Message = DomainMessagesEn.PhotoForRestaurant.PhotoDeletedSuccessfully(request.PhotoId)
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

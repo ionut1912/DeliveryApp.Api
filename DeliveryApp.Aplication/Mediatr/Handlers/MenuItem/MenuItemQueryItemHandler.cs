@@ -21,7 +21,7 @@ public class
     {
         var result = await _repository.GetMenuItem(request.Id, cancellationToken);
         if (result == null)
-            return ResultT<Domain.Models.MenuItem>.Failure(DomainMessages.MenuItem.NotFoundMenuItem(request.Id));
+            return ResultT<Domain.Models.MenuItem>.Failure(DomainMessagesEn.MenuItem.NotFoundMenuItem(request.Id));
         return ResultT<Domain.Models.MenuItem>.Success(result);
     }
 }

@@ -25,7 +25,7 @@ public class
             await _reviewForMenuItemRepository.GetReviewForMenuItem(request.Id, request.MenuItemId,
                 cancellationToken);
         return result == null
-            ? ResultT<Domain.Models.ReviewForMenuItem>.Failure(DomainMessages.ReviewForMenuItem.NotFound(request.Id))
+            ? ResultT<Domain.Models.ReviewForMenuItem>.Failure(DomainMessagesEn.ReviewForMenuItem.NotFound(request.Id))
             : ResultT<Domain.Models.ReviewForMenuItem>.Success(result);
     }
 }

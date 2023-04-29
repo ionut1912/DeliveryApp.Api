@@ -25,7 +25,7 @@ public class OfferEditCommandHandler : ICommandHandler<OfferEditCommand, ResultT
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.Offer.CanNotEditOffer(request.Id)
+                Message = DomainMessagesEn.Offer.CanNotEditOffer(request.Id)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -33,7 +33,7 @@ public class OfferEditCommandHandler : ICommandHandler<OfferEditCommand, ResultT
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Offer.OfferEditedSuccessfully(request.Id)
+            Message = DomainMessagesEn.Offer.OfferEditedSuccessfully(request.Id)
         };
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }

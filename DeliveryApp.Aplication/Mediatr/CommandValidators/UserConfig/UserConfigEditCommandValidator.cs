@@ -7,9 +7,9 @@ public class UserConfigEditCommandValidator : AbstractValidator<UserConfigsUpdat
 {
     public UserConfigEditCommandValidator()
     {
-        RuleFor(x => x.Configs.Weight).NotEmpty().GreaterThan(0);
-        RuleFor(x => x.Configs.Height).GreaterThan(0);
-        RuleFor(x => x.Configs.Age).NotEmpty();
-        RuleFor(x => x.Configs.Sex).NotEmpty();
+        RuleFor(x => x.Request.Configs.Weight).NotEmpty().GreaterThan(0);
+        RuleFor(x => x.Request.Configs.Height).GreaterThan(0);
+        RuleFor(x => x.Request.Configs.Age).NotEmpty();
+        RuleFor(x => x.Request.Configs.Sex).NotEmpty();
     }
 }

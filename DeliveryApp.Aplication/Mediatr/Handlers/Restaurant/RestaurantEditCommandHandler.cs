@@ -24,7 +24,7 @@ public class RestaurantEditCommandHandler : ICommandHandler<RestaurantEditComman
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.Restaurant.CanNotEditRestaurant(request.Id)
+                Message = DomainMessagesEn.Restaurant.CanNotEditRestaurant(request.Id)
             };
 
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
@@ -33,7 +33,7 @@ public class RestaurantEditCommandHandler : ICommandHandler<RestaurantEditComman
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Restaurant.RestaurantEditedSuccessfully(request.Id)
+            Message = DomainMessagesEn.Restaurant.RestaurantEditedSuccessfully(request.Id)
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

@@ -1,4 +1,4 @@
-﻿using DeliveryApp.Application.Mediatr.CommandValidators.ReviewForMenuItem;
+﻿using DeliveryApp.Application.Mediatr.Commands.ReviewForMenuItem;
 using DeliveryApp.Application.Repositories;
 using DeliveryApp.Commons.Core;
 using DeliveryApp.Commons.Interfaces;
@@ -9,14 +9,14 @@ namespace DeliveryApp.Application.Mediatr.Handlers.ReviewForMenuItem;
 public class
     ReviewForMenuItemDeleteCommandHandler : ICommandHandler<ReviewForMenuItemDeleteCommand, ResultT<JsonResponse>>
 {
-    private readonly IReviewForMenuItemRepository _rebvForMenuItemRepository;
+    private readonly IReviewForMenuItemRepository _reviewForMenuItemRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public ReviewForMenuItemDeleteCommandHandler(IReviewForMenuItemRepository rebvForMenuItemRepository,
+    public ReviewForMenuItemDeleteCommandHandler(IReviewForMenuItemRepository reviewForMenuItemRepository,
         IUnitOfWork unitOfWork)
     {
-        _rebvForMenuItemRepository = rebvForMenuItemRepository ??
-                                     throw new ArgumentNullException(nameof(rebvForMenuItemRepository));
+        _reviewForMenuItemRepository = reviewForMenuItemRepository ??
+                                       throw new ArgumentNullException(nameof(reviewForMenuItemRepository));
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
@@ -24,13 +24,15 @@ public class
         CancellationToken cancellationToken)
     {
         var result =
-            await _rebvForMenuItemRepository.DeleteReviewForMenuItem(request.Id,
+            await _reviewForMenuItemRepository.DeleteReviewForMenuItem(request.Id,
                 cancellationToken);
         if (result is false)
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.ReviewForMenuItem.CanNoDeleteReview(request.Id)
+                Message = request.Request.Language == "EN"
+                    ? DomainMessagesEn.ReviewForMenuItem.CanNoDeleteReview(request.Id)
+                    : DomainMessagesRo.ReviewForMenuItem.CanNoDeleteReview(request.Id)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -38,7 +40,9 @@ public class
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.ReviewForMenuItem.ReviewDeleted(request.Id)
+            Message = request.Request.Language == "EN"
+                ? DomainMessagesEn.ReviewForMenuItem.ReviewDeleted(request.Id)
+                : DomainMessagesRo.ReviewForMenuItem.ReviewDeleted(request.Id)
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

@@ -7,8 +7,8 @@ public class ReviewForMenuItemCreateCommandValidator : AbstractValidator<ReviewF
 {
     public ReviewForMenuItemCreateCommandValidator()
     {
-        RuleFor(x => x.ReviewForMenuItemDto.ReviewTitle).NotEmpty();
-        RuleFor(x => x.ReviewForMenuItemDto.ReviewDescription).NotEmpty();
-        RuleFor(x => x.ReviewForMenuItemDto.MenuItemId).NotEmpty();
+        RuleFor(x => x.Request.ReviewForMenuItemDto.ReviewTitle).NotEmpty();
+        RuleFor(x => x.Request.ReviewForMenuItemDto.ReviewDescription).NotEmpty();
+        RuleFor(x => x.Request.ReviewForMenuItemDto.MenuItemId).NotEmpty();
     }
 }

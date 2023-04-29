@@ -14,4 +14,5 @@ public class RegisterDto
     [Required] public string PhoneNumber { get; set; }
 
     [Required] public UserAddressesForCreation AddressForCreation { get; set; }
+    public string Language { get; set; }
 }

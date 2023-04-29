@@ -1,12 +1,11 @@
 ﻿using System.Net;
 using DeliveryApp.Application.Mediatr.Commands.UserConfigs;
 using DeliveryApp.Application.Mediatr.Query.UserConfig;
-using DeliveryApp.Commons.Commands;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
+using DeliveryApp.Domain.Contracts;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
-using DeliveryApp.Repository.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -68,12 +67,13 @@ public class UserConfigsController : BaseApiController
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
     [SwaggerOperation(Summary = "Update user config")]
     public async Task<ActionResult> UpdateUserConfig(
-        Guid id, UserConfigDto configs)
+        Guid id, EditUserConfigRequest request)
     {
         var command = new UserConfigsUpdateCommand
         {
             Id = id,
-            Configs = configs
+            Request = request
+          
         };
         return HandleResult(await Mediator.Send(command));
     }
@@ -83,25 +83,11 @@ public class UserConfigsController : BaseApiController
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
     [SwaggerOperation(Summary = "Create user config")]
-    public async Task<ActionResult> AddUserConfigs(UserConfigDto userConfig)
+    public async Task<ActionResult> AddUserConfigs(AddUserConfigRequest request)
     {
         var command = new UserConfigCreateCommand
         {
-            UserConfigs = userConfig
-        };
-        return HandleResult(await Mediator.Send(command));
-    }
-
-    [HttpDelete("{id}")]
-    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
-    [SwaggerOperation(Summary = "Delete user config")]
-    public async Task<ActionResult<UserConfigs>>
-        DeleteRestaurant(Guid id)
-    {
-        var command = new DeleteCommand
-        {
-            Id = id
+           Request = request
         };
         return HandleResult(await Mediator.Send(command));
     }

@@ -30,7 +30,7 @@ public class
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.PhotoForRestaurant.CanNotSetAsMainPhoto(request.PhotoId)
+                Message = DomainMessagesEn.PhotoForRestaurant.CanNotSetAsMainPhoto(request.PhotoId)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -38,7 +38,7 @@ public class
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.PhotoForRestaurant.PhotoSetAsMain(request.PhotoId)
+            Message = DomainMessagesEn.PhotoForRestaurant.PhotoSetAsMain(request.PhotoId)
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

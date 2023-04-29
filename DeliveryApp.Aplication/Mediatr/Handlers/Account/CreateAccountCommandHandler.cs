@@ -22,14 +22,18 @@ public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand,
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.Account.ProblemCreatingAccount
+                Message = request.RegisterDto.Language == "EN"
+                    ? DomainMessagesEn.Account.ProblemCreatingAccount
+                    : DomainMessagesRo.Account.ProblemCreatingAccount
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
 
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Account.AccountCreatedSuccessfully
+            Message = request.RegisterDto.Language == "EN"
+                ? DomainMessagesEn.Account.AccountCreatedSuccessfully
+                : DomainMessagesRo.Account.AccountCreatedSuccessfully
         };
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }

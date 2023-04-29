@@ -1,5 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Collections.Immutable;
+using AutoMapper;
+using DeliveryApp.Application.Mediatr.Query.Account;
 using DeliveryApp.Application.Repositories;
+using DeliveryApp.Domain.Contracts;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
@@ -88,5 +91,23 @@ public class ReviewForMenuItemService : IReviewForMenuItemRepository
 
         _deliveryContext.ReviewForMenuItems.Remove(reviewEntity);
         return true;
+    }
+
+    public async Task<List<CurrentUserReviewForMenuItem>> GetReviewsForCurrentUser(CancellationToken cancellationToken)
+    {
+        var reviews = await _deliveryContext.ReviewForMenuItems.Include(x=>x.User).Where(x => x.User.UserName == _userAccessor.GetUsername())
+            .AsNoTracking().ToListAsync(cancellationToken);
+
+
+        return reviews.Select(t => new CurrentUserReviewForMenuItem
+            {
+                Id = t.Id,
+                ReviewTitle = t.ReviewTitle,
+                ReviewDescription = t.ReviewDescription,
+                NumberOfStars = t.NumberOfStars,
+                Username = t.User.UserName,
+                ItemName = _deliveryContext.MenuItems.FirstOrDefaultAsync(x => x.Id == reviews[0].MenuItemsId, cancellationToken).Result.ItemName
+            })
+            .ToList();
     }
 }

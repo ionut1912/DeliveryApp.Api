@@ -20,12 +20,14 @@ public class UserConfigUpdateCommandHandler : ICommandHandler<UserConfigsUpdateC
     public async Task<ResultT<JsonResponse>> Handle(UserConfigsUpdateCommand request,
         CancellationToken cancellationToken)
     {
-        var result = await _userConfigRepository.EditConfig(request.Id, request.Configs, cancellationToken);
+        var result = await _userConfigRepository.EditConfig(request.Id, request.Request.Configs, cancellationToken);
         if (result is false)
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.UserConfig.NotFoundUserConfig(request.Id)
+                Message = request.Request.Language == "EN"
+                    ? DomainMessagesEn.UserConfig.NotFoundUserConfig(request.Id)
+                    : DomainMessagesRo.UserConfig.NotFoundUserConfig(request.Id)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -33,7 +35,9 @@ public class UserConfigUpdateCommandHandler : ICommandHandler<UserConfigsUpdateC
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.UserConfig.ConfigEditedSuccessfully(request.Id)
+            Message = request.Request.Language == "EN"
+                ? DomainMessagesEn.UserConfig.ConfigEditedSuccessfully(request.Id)
+                : DomainMessagesRo.UserConfig.ConfigEditedSuccessfully(request.Id)
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

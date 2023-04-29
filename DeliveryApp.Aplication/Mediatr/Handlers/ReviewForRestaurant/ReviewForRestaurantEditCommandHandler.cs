@@ -24,14 +24,17 @@ public class
         CancellationToken cancellationToken)
     {
         var result =
-            await _reviewForRestaurantRepository.EditReviewForRestaurant(request.Id, request.ReviewForRestaurant,
+            await _reviewForRestaurantRepository.EditReviewForRestaurant(request.Id, request.Request.ReviewForRestaurantDto,
                 cancellationToken);
         if (result is false)
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.ReviewForRestaurant.CanNotEditReview(request.Id,
-                    request.ReviewForRestaurant.RestaurantId)
+                Message = request.Request.Language == "EN"
+                    ? DomainMessagesEn.ReviewForRestaurant.CanNotEditReview(request.Id,
+                        request.Request.ReviewForRestaurantDto.RestaurantId)
+                    : DomainMessagesRo.ReviewForRestaurant.CanNotEditReview(request.Id,
+                        request.Request.ReviewForRestaurantDto.RestaurantId)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -40,7 +43,9 @@ public class
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.ReviewForRestaurant.ReviewEdited(request.Id)
+            Message = request.Request.Language == "EN"
+                ? DomainMessagesEn.ReviewForRestaurant.ReviewEdited(request.Id)
+                : DomainMessagesRo.ReviewForRestaurant.ReviewEdited(request.Id)
         };
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }

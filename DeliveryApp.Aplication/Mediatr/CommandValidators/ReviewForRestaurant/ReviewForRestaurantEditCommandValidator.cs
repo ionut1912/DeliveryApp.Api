@@ -7,8 +7,8 @@ public class ReviewForRestaurantEditCommandValidator : AbstractValidator<ReviewF
 {
     public ReviewForRestaurantEditCommandValidator()
     {
-        RuleFor(x => x.ReviewForRestaurant.ReviewTitle).NotEmpty();
-        RuleFor(x => x.ReviewForRestaurant.ReviewDescription).NotEmpty();
-        RuleFor(x => x.ReviewForRestaurant.RestaurantId).NotEmpty();
+        RuleFor(x => x.Request.ReviewForRestaurantDto.ReviewTitle).NotEmpty();
+        RuleFor(x => x.Request.ReviewForRestaurantDto.ReviewDescription).NotEmpty();
+        RuleFor(x => x.Request.ReviewForRestaurantDto.RestaurantId).NotEmpty();
     }
 }

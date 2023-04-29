@@ -20,11 +20,13 @@ public class UserConfigCreateCommandHandler : ICommandHandler<UserConfigCreateCo
     public async Task<ResultT<JsonResponse>> Handle(UserConfigCreateCommand request,
         CancellationToken cancellationToken)
     {
-        await _userConfigRepository.AddConfig(request.UserConfigs, cancellationToken);
+        await _userConfigRepository.AddConfig(request.Request.UserConfig, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.UserConfig.UserConfigAddedSuccessfully
+            Message = request.Request.Language == "EN"
+                ? DomainMessagesEn.UserConfig.UserConfigAddedSuccessfully
+                : DomainMessagesRo.UserConfig.UserConfigAddedSuccessfully
         };
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }

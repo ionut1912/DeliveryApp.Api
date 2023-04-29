@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DeliveryApp.Application.Repositories;
+using DeliveryApp.Domain.Contracts;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using DeliveryApp.ExternalServices.Cloudinary.Photo;
@@ -62,6 +63,25 @@ public class ReviewForRestaurantRepository : IReviewForRestaurantRepository
             .OrderByDescending(x => x.NumberOfStars)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return _mapper.Map<ReviewForRestaurant>(reviewForRestaurantEntity);
+    }
+
+    public async Task<List<CurrentUserReviewForRestaurant>> GetReviewsForRestaurantForCurrentUser(CancellationToken cancellationToken)
+    {
+        var reviews = await _deliveryContext.ReviewForRestaurants.Include(x => x.User).Where(x => x.User.UserName == _userAccessor.GetUsername())
+            .AsNoTracking().ToListAsync(cancellationToken);
+
+
+        return reviews.Select(t => new CurrentUserReviewForRestaurant()
+            {
+                Id = t.Id,
+                ReviewTitle = t.ReviewTitle,
+                ReviewDescription = t.ReviewDescription,
+                NumberOfStars = t.NumberOfStars,
+                Username = t.User.UserName,
+                RestaurantName = _deliveryContext.Restaurants
+                    .FirstOrDefaultAsync(x => x.Id == reviews[0].RestaurantsId, cancellationToken).Result.Name
+            })
+            .ToList();
     }
 
     public async Task<bool> EditReviewForRestaurant(Guid id, ReviewForRestaurantDto reviewForRestaurantDto,

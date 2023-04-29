@@ -24,7 +24,7 @@ public class PhotoDeleteCommandHandler : ICommandHandler<PhotoDeleteCommand, Res
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.Photo.CanNotDeletePhoto(request.Id)
+                Message = DomainMessagesEn.Photo.CanNotDeletePhoto(request.Id)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -32,7 +32,7 @@ public class PhotoDeleteCommandHandler : ICommandHandler<PhotoDeleteCommand, Res
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Photo.PhotoDeletedSuccessfully(request.Id)
+            Message = DomainMessagesEn.Photo.PhotoDeletedSuccessfully(request.Id)
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

@@ -3,6 +3,7 @@ using DeliveryApp.Application.Mediatr.Commands.Order;
 using DeliveryApp.Application.Mediatr.Query.Orders;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
+using DeliveryApp.Domain.Contracts;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using MediatR;
@@ -25,11 +26,11 @@ public class OrdersController : BaseApiController
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(BadRequestResult), (int)HttpStatusCode.BadRequest)]
     [SwaggerOperation(Summary = "Add order")]
-    public async Task<ActionResult> AddOrder(OrderForCreationDto orderForCreation)
+    public async Task<ActionResult> AddOrder(CreateOrderRequest request)
     {
         var command = new OrderCreateCommand
         {
-            Order = orderForCreation
+            Request = request
         };
         return HandleResult(await Mediator.Send(command));
     }
@@ -70,12 +71,12 @@ public class OrdersController : BaseApiController
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Edit order")]
-    public async Task<ActionResult> UpdateOrder(Guid id, OrderForUpdateDto orderForUpdate)
+    public async Task<ActionResult> UpdateOrder(Guid id, EditOrderRequest request)
     {
         var command = new OrderEditCommand
         {
             Id = id,
-            OrderForUpdate = orderForUpdate
+           Request = request
         };
         return HandleResult(await Mediator.Send(
             command));

@@ -3,6 +3,7 @@ using DeliveryApp.Application.Mediatr.Commands.Account;
 using DeliveryApp.Application.Mediatr.Query.Account;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Models;
+using DeliveryApp.Domain.Contracts;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using MediatR;
@@ -68,12 +69,13 @@ public class AccountsController : BaseApiController
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]
     [SwaggerOperation(Summary = "Modify current user address")]
     [HttpPut("current/address")]
-    public async Task<ActionResult> EditUserAddress(UserAddressesForCreation userAddressesForCreation)
+    public async Task<ActionResult> EditUserAddress(EditUserAddressRequest request)
     {
         var command = new EditUserAddressCommand
         {
-            UserAddressesForCreation = userAddressesForCreation
+            Request = request
         };
+        
         return HandleResult(await Mediator.Send(command));
     }
 

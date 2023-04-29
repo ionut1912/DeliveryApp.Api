@@ -7,8 +7,8 @@ public class OrderCreateCommandValidator : AbstractValidator<OrderCreateCommand>
 {
     public OrderCreateCommandValidator()
     {
-        RuleFor(x => x.Order.RestaurantNames).NotEmpty();
+        RuleFor(x => x.Request.Order.RestaurantNames).NotEmpty();
 
-        RuleFor(x => x.Order.MenuItems).NotEmpty();
+        RuleFor(x => x.Request.Order.MenuItems).NotEmpty();
     }
 }

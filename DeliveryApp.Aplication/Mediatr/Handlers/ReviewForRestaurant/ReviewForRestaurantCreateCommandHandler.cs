@@ -23,12 +23,14 @@ public class
     public async Task<ResultT<JsonResponse>> Handle(ReviewForRestaurantCreateCommand request,
         CancellationToken cancellationToken)
     {
-        await _reviewForRestaurantRepository.AddReviewForRestaurant(request.ReviewForRestaurantDto,
+        await _reviewForRestaurantRepository.AddReviewForRestaurant(request.Request.ReviewForRestaurantDto,
             cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.ReviewForRestaurant.ReviewCreated
+            Message = request.Request.Language == "EN"
+                ? DomainMessagesEn.ReviewForRestaurant.ReviewCreated
+                : DomainMessagesRo.ReviewForRestaurant.ReviewCreated
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

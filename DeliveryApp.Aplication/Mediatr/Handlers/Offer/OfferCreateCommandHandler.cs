@@ -27,7 +27,7 @@ public class OfferCreateCommandHandler : ICommandHandler<OfferCreateCommand, Res
 
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Offer.OfferAddedSuccessfully
+            Message = DomainMessagesEn.Offer.OfferAddedSuccessfully
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

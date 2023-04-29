@@ -24,14 +24,14 @@ public class PhotoModifyMainCommandHandler : ICommandHandler<PhotoModifyMainComm
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.Photo.CanNotModifyMainPhoto()
+                Message = DomainMessagesEn.Photo.CanNotModifyMainPhoto()
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
 
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Photo.MainPhotoModified()
+            Message = DomainMessagesEn.Photo.MainPhotoModified()
         };
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);

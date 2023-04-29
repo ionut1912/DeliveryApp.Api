@@ -23,7 +23,8 @@ public class RestaurantQueryItemHandler : IQueryHandler<
     {
         var result = await _restaurantRepository.GetRestaurant(request.Id, cancellationToken);
         if (result == null)
-            return ResultT<Domain.Models.Restaurant>.Failure(DomainMessages.Restaurant.NotFoundRestaurant(request.Id));
+            return ResultT<Domain.Models.Restaurant>.Failure(
+                DomainMessagesEn.Restaurant.NotFoundRestaurant(request.Id));
         return ResultT<Domain.Models.Restaurant>.Success(result);
     }
 }

@@ -1,4 +1,5 @@
-﻿using DeliveryApp.Domain.DTO;
+﻿using DeliveryApp.Domain.Contracts;
+using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 
 namespace DeliveryApp.Application.Repositories;
@@ -13,4 +14,5 @@ public interface IReviewForMenuItemRepository
         CancellationToken cancellationToken);
 
     Task<bool> DeleteReviewForMenuItem(Guid id, CancellationToken cancellationToken);
+    Task<List<CurrentUserReviewForMenuItem>> GetReviewsForCurrentUser(CancellationToken cancellationToken);
 }

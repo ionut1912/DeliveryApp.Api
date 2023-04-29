@@ -7,8 +7,8 @@ public class ReviewForRestaurantCreateCommandValidator : AbstractValidator<Revie
 {
     public ReviewForRestaurantCreateCommandValidator()
     {
-        RuleFor(x => x.ReviewForRestaurantDto.ReviewTitle).NotEmpty();
-        RuleFor(x => x.ReviewForRestaurantDto.ReviewDescription).NotEmpty();
-        RuleFor(x => x.ReviewForRestaurantDto.RestaurantId).NotEmpty();
+        RuleFor(x => x.Request.ReviewForRestaurantDto.ReviewTitle).NotEmpty();
+        RuleFor(x => x.Request.ReviewForRestaurantDto.ReviewDescription).NotEmpty();
+        RuleFor(x => x.Request.ReviewForRestaurantDto.RestaurantId).NotEmpty();
     }
 }

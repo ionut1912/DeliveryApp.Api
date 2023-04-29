@@ -19,12 +19,12 @@ public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, ResultT
 
     public async Task<ResultT<JsonResponse>> Handle(OrderEditCommand request, CancellationToken cancellationToken)
     {
-        var result = await _orderRepository.EditOrder(request.Id, request.OrderForUpdate, cancellationToken);
+        var result = await _orderRepository.EditOrder(request.Id, request.Request.OrderForUpdate, cancellationToken);
         if (result is false)
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.Order.CanNotEditOrder(request.Id)
+                Message = request.Request.Language=="EN"? DomainMessagesEn.Order.CanNotEditOrder(request.Id):DomainMessagesRo.Order.CanNotEditOrder(request.Id)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -33,7 +33,7 @@ public class OrderEditCommandHandler : ICommandHandler<OrderEditCommand, ResultT
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Order.OrderEditedSuccessfully(request.Id)
+            Message = request.Request.Language=="EN"? DomainMessagesEn.Order.OrderEditedSuccessfully(request.Id):DomainMessagesRo.Order.OrderEditedSuccessfully(request.Id)
         };
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }

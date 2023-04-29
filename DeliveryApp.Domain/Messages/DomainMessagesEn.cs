@@ -1,6 +1,6 @@
 ﻿namespace DeliveryApp.Domain.Messages;
 
-public static class DomainMessages
+public static class DomainMessagesEn
 {
     public static class MenuItem
     {
@@ -216,8 +216,6 @@ public static class DomainMessages
     public static class Account
     {
         public static string ProblemCreatingAccount => "There are issues creating your account";
-        public static string ProblemModifyingAccount => "There are issues modifying your account";
-        public static string AccountModifiedSuccessfully => "Account was modified successfully";
         public static string AccountCreatedSuccessfully => "Account was created successfully";
         public static string CanNotModifyAddress => "User address can not be modified";
         public static string AddressModified => "User address successfully modified";
@@ -269,7 +267,7 @@ public static class DomainMessages
 
         public static string CanNoDeleteReview(Guid id)
         {
-            return $"Can not delete review {id}";
+            return $"Can not delete review with id {id}";
         }
 
         public static string NotFound(Guid id)

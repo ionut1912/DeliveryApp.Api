@@ -7,10 +7,10 @@ public class UserConfigCreateCommandValidator : AbstractValidator<UserConfigCrea
 {
     public UserConfigCreateCommandValidator()
     {
-        RuleFor(x => x.UserConfigs.Weight).NotEmpty().GreaterThan(0);
-        RuleFor(x => x.UserConfigs.Height).NotEmpty().GreaterThan(0);
-        RuleFor(x => x.UserConfigs.Age).NotEmpty();
-        RuleFor(x => x.UserConfigs.Sex).NotEmpty();
-        RuleFor(x => x.UserConfigs.SportActivity).NotEmpty();
+        RuleFor(x => x.Request.UserConfig.Weight).NotEmpty().GreaterThan(0);
+        RuleFor(x => x.Request.UserConfig.Height).NotEmpty().GreaterThan(0);
+        RuleFor(x => x.Request.UserConfig.Age).NotEmpty();
+        RuleFor(x => x.Request.UserConfig.Sex).NotEmpty();
+        RuleFor(x => x.Request.UserConfig.SportActivity).NotEmpty();
     }
 }

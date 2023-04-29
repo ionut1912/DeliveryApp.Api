@@ -25,14 +25,14 @@ public class RestaurantDeleteCommandHandler : ICommandHandler<RestaurantDeleteCo
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.Restaurant.CanNotDeleteRestaurant(request.Id)
+                Message = DomainMessagesEn.Restaurant.CanNotDeleteRestaurant(request.Id)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
 
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Restaurant.RestaurantDeletedSuccessfully(request.Id)
+            Message = DomainMessagesEn.Restaurant.RestaurantDeletedSuccessfully(request.Id)
         };
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);

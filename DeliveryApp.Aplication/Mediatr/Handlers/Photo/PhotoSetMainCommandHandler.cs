@@ -24,7 +24,7 @@ public class PhotoSetMainCommandHandler : ICommandHandler<PhotoSetMainCommand, R
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.Photo.CanNotSetMainPhoto(request.Id)
+                Message = DomainMessagesEn.Photo.CanNotSetMainPhoto(request.Id)
             };
 
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
@@ -33,7 +33,7 @@ public class PhotoSetMainCommandHandler : ICommandHandler<PhotoSetMainCommand, R
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Photo.PhotoSetAsMain(request.Id)
+            Message = DomainMessagesEn.Photo.PhotoSetAsMain(request.Id)
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

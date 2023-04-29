@@ -27,7 +27,7 @@ public class
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponse = new JsonResponse
         {
-            Message = DomainMessages.PhotoForRestaurant.PhotoAddedSuccessfully
+            Message = DomainMessagesEn.PhotoForRestaurant.PhotoAddedSuccessfully
         };
         return ResultT<JsonResponse>.Success(jsonResponse);
     }

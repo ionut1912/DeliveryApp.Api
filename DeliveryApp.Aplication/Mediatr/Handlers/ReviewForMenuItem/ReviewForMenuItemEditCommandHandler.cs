@@ -23,14 +23,17 @@ public class ReviewForMenuItemEditCommandHandler : ICommandHandler<ReviewForMenu
         CancellationToken cancellationToken)
     {
         var result =
-            await _reviewForMenuItemRepository.EditReviewForMenuItem(request.Id, request.ReviewForMenuItemDto,
+            await _reviewForMenuItemRepository.EditReviewForMenuItem(request.Id, request.Request.ReviewForMenuItemDto,
                 cancellationToken);
         if (result is false)
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.ReviewForMenuItem.CanNotEditReview(request.Id,
-                    request.ReviewForMenuItemDto.MenuItemId)
+                Message = request.Request.Language == "EN"
+                    ? DomainMessagesEn.ReviewForMenuItem.CanNotEditReview(request.Id,
+                        request.Request.ReviewForMenuItemDto.MenuItemId)
+                    : DomainMessagesRo.ReviewForMenuItem.CanNotEditReview(request.Id,
+                        request.Request.ReviewForMenuItemDto.MenuItemId)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -38,7 +41,9 @@ public class ReviewForMenuItemEditCommandHandler : ICommandHandler<ReviewForMenu
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.ReviewForMenuItem.ReviewEdited(request.Id)
+            Message = request.Request.Language == "EN"
+                ? DomainMessagesEn.ReviewForMenuItem.ReviewEdited(request.Id)
+                : DomainMessagesRo.ReviewForMenuItem.ReviewEdited(request.Id)
         };
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }

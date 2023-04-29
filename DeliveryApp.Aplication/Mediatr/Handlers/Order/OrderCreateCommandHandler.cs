@@ -19,11 +19,13 @@ public class OrderCreateCommandHandler : ICommandHandler<OrderCreateCommand, Res
 
     public async Task<ResultT<JsonResponse>> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
     {
-        await _orderRepository.AddOrder(request.Order, cancellationToken);
+        await _orderRepository.AddOrder(request.Request.Order, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.Order.OrderAddedSuccessfully
+            Message = request.Request.Language == "EN"
+                ? DomainMessagesEn.Order.OrderAddedSuccessfully
+                : DomainMessagesRo.Order.OrderAddedSuccessfully
         };
 
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);

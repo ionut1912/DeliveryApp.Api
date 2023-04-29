@@ -22,7 +22,8 @@ public class OrdersQueryItemHandler : IQueryHandler<
         CancellationToken cancellationToken)
     {
         var result = await _orderRepository.GetOrder(request.Id, cancellationToken);
-        if (result is null) return ResultT<Domain.Models.Order>.Failure(DomainMessages.Order.OrderNotFound(request.Id));
+        if (result is null)
+            return ResultT<Domain.Models.Order>.Failure(DomainMessagesEn.Order.OrderNotFound(request.Id));
         return ResultT<Domain.Models.Order>.Success(result);
     }
 }

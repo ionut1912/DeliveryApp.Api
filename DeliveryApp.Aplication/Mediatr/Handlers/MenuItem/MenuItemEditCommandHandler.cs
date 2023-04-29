@@ -24,7 +24,7 @@ public class MenuItemEditCommandHandler : ICommandHandler<MenuItemEditCommand, R
         {
             var jsonResponseFailure = new JsonResponse
             {
-                Message = DomainMessages.MenuItem.CanNotEditMenuItem(request.Id)
+                Message = DomainMessagesEn.MenuItem.CanNotEditMenuItem(request.Id)
             };
             return ResultT<JsonResponse>.Failure(jsonResponseFailure.Message);
         }
@@ -32,7 +32,7 @@ public class MenuItemEditCommandHandler : ICommandHandler<MenuItemEditCommand, R
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.MenuItem.MenuItemEditedSuccessfully(request.Id)
+            Message = DomainMessagesEn.MenuItem.MenuItemEditedSuccessfully(request.Id)
         };
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }

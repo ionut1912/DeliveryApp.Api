@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using DeliveryApp.Application.Mediatr.Commands.ReviewForRestaurant;
-using DeliveryApp.Application.Mediatr.CommandValidators.ReviewForRestaurant;
+using DeliveryApp.Application.Mediatr.Query.ReviewForMenuItem;
 using DeliveryApp.Application.Mediatr.Query.ReviewForRestaurant;
 using DeliveryApp.Commons.Controllers;
+using DeliveryApp.Domain.Contracts;
 using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using MediatR;
@@ -23,11 +24,11 @@ public class ReviewForRestaurantsController : BaseApiController
     [HttpPost]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Add review for restaurant")]
-    public async Task<IActionResult> AddReviewForRestaurant(ReviewForRestaurantDto reviewForRestaurantDto)
+    public async Task<IActionResult> AddReviewForRestaurant(AddReviewForRestaurantRequest request)
     {
         var command = new ReviewForRestaurantCreateCommand
         {
-            ReviewForRestaurantDto = reviewForRestaurantDto
+            Request = request
         };
         return HandleResult(await Mediator.Send(command));
     }
@@ -60,23 +61,34 @@ public class ReviewForRestaurantsController : BaseApiController
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Edit review for restaurant")]
-    public async Task<IActionResult> EditReviewForRestaurant(Guid id, ReviewForRestaurantDto reviewForRestaurantDto)
+    public async Task<IActionResult> EditReviewForRestaurant(Guid id,EditReviewForRestaurantRequest request)
     {
         var command = new ReviewForRestaurantEditCommand
         {
+        Request = request,
             Id = id,
-            ReviewForRestaurant = reviewForRestaurantDto
+            
         };
         return HandleResult(await Mediator.Send(command));
     }
-
+    [Authorize]
+    [HttpGet]
+    [ProducesResponseType(typeof(UnauthorizedObjectResult), (int)HttpStatusCode.Unauthorized)]
+    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
+    [SwaggerOperation(Summary = "Get reviews for current user")]
+    public async Task<ActionResult<List<CurrentUserReviewForRestaurant>>> GetReviewForCurrentUser()
+    {
+        var query = new ReviewForRestaurantGetCurrentUserQuery();
+        return HandleResult(await Mediator.Send(query));
+    }
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
     [SwaggerOperation(Summary = "Delete review for restaurant")]
-    public async Task<IActionResult> DeleteReviewForMenuItem(Guid id)
+    public async Task<IActionResult> DeleteReviewForMenuItem(Guid id, DeleteReviewForRestaurantRequest request)
     {
         var command = new ReviewForRestaurantDeleteCommand
         {
+            Request = request,
             Id = id
         };
         return HandleResult(await Mediator.Send(command));

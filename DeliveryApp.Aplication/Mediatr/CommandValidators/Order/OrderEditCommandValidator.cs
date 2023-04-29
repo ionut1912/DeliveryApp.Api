@@ -7,6 +7,6 @@ public class OrderEditCommandValidator : AbstractValidator<OrderEditCommand>
 {
     public OrderEditCommandValidator()
     {
-        RuleFor(x => x.OrderForUpdate.Status).NotEmpty();
+        RuleFor(x => x.Request.OrderForUpdate.Status).NotEmpty();
     }
 }

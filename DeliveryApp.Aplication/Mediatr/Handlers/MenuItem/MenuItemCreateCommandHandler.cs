@@ -24,7 +24,7 @@ public class MenuItemCreateCommandHandler : ICommandHandler<MenuItemCreateComman
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var jsonResponseSuccess = new JsonResponse
         {
-            Message = DomainMessages.MenuItem.MenuItemAddedSuccessfully
+            Message = DomainMessagesEn.MenuItem.MenuItemAddedSuccessfully
         };
         return ResultT<JsonResponse>.Success(jsonResponseSuccess);
     }

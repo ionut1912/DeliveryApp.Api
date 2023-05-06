@@ -39,6 +39,9 @@ public static class DomainMessagesRo
         public static string AccountCreatedSuccessfully => "Contul a fost creat cu success";
         public static string CanNotModifyAddress => "Adresa utilizatorului nu poate fi modificata";
         public static string AddressModified => "Adresa utilizatorului a fost modificata cu success";
+        public static string CodeSentSuccessfully => "Codul a fost trimis.Verifica adresa de email";
+        public static string IssuesResetingPassword => "Sunt probleme in resetarea parolei";
+        public static string PasswordResetedSuccessfully => "Parola a fost resetata cu succes";
     }
 
     public static class ReviewForMenuItem

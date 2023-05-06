@@ -219,6 +219,9 @@ public static class DomainMessagesEn
         public static string AccountCreatedSuccessfully => "Account was created successfully";
         public static string CanNotModifyAddress => "User address can not be modified";
         public static string AddressModified => "User address successfully modified";
+        public static string CodeSentSuccessfully => "Code was sent via email.Please check your inbox";
+        public static string IssuesResetingPassword => "There are issues reseting your password";
+        public static string PasswordResetedSuccessfully => "Password was successfully reseted";
     }
 
     public static class ReviewForMenuItem

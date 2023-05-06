@@ -8,6 +8,7 @@ using DeliveryApp.Repository.Profiles;
 using DeliveryApp.Repository.Services;
 using DeliveryApp.Repository.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -39,7 +40,8 @@ public static class AddRepositoryServices
 
         services.AddIdentityCore<Users>(opt => { opt.User.RequireUniqueEmail = true; })
             .AddRoles<Roles>()
-            .AddEntityFrameworkStores<DeliveryContext>();
+            .AddEntityFrameworkStores<DeliveryContext>()
+            .AddTokenProvider<DataProtectorTokenProvider<Users>>(TokenOptions.DefaultProvider);
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
             {

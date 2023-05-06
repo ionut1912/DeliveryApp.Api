@@ -78,6 +78,29 @@ public class AccountsController : BaseApiController
         return HandleResult(await Mediator.Send(command));
     }
 
+    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
+    [HttpPost("code")]
+    public async Task<ActionResult> GenerateCode(ForgotPasswordResetCodeRequest request)
+    {
+        var command = new ForgotPasswordGenerateCodeCommand
+        {
+            Request = request
+        };
+
+        return HandleResult(await Mediator.Send(command));
+    }
+
+    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
+    [HttpPost("resetPassword")]
+    public async Task<ActionResult> ResetPassword(ResetPasswordRequest request)
+    {
+        var command = new ResetPasswordCommand
+        {
+            Request = request
+        };
+        return HandleResult(await Mediator.Send(command));
+    }
+
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(ActionResult<User>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]

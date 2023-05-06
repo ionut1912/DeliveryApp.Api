@@ -16,4 +16,6 @@ public interface IAccountRepository
 
     public Task<bool> EditCurrentUserAddress(UserAddressesForCreation userAddressesForCreation,
         CancellationToken cancellationToken);
+
+    public Task<bool> ModifyUserPassword(string email, string password, CancellationToken cancellationToken);
 }

@@ -148,6 +148,20 @@ public class AccountRepository : IAccountRepository
         return true;
     }
 
+    public async Task<bool> ModifyUserPassword(string email, string password, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+
+        if (user == null) return false;
+
+        var result = await _userManager.RemovePasswordAsync(user);
+        if (!result.Succeeded) return false;
+
+        result = await _userManager.AddPasswordAsync(user, password);
+
+        return result.Succeeded;
+    }
+
 
     private async Task<string> GetUserRole(Users user, CancellationToken cancellationToken)
     {

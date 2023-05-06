@@ -23,49 +23,48 @@ public class MailService : IMailService
         email.Subject = mailRequest.Subject;
         var builder = new BodyBuilder();
         if (mailRequest.Attachments != null)
-        {
-            byte[] fileBytes;
-            foreach (var file in mailRequest.Attachments)
-                if (file.Length > 0)
+            foreach (var file in mailRequest.Attachments.Where(file => file.Length > 0))
+            {
+                byte[] fileBytes;
+                using (var ms = new MemoryStream())
                 {
-                    using (var ms = new MemoryStream())
-                    {
-                        file.CopyTo(ms);
-                        fileBytes = ms.ToArray();
-                    }
-
-                    builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
+                    await file.CopyToAsync(ms);
+                    fileBytes = ms.ToArray();
                 }
-        }
+
+                builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
+            }
 
         builder.HtmlBody = mailRequest.Body;
         email.Body = builder.ToMessageBody();
         using var smtp = new SmtpClient();
-        smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
-        smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+        await smtp.ConnectAsync(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+        await smtp.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
         await smtp.SendAsync(email);
-        smtp.Disconnect(true);
+        await smtp.DisconnectAsync(true);
     }
 
     public async Task SendWelcomeEmailAsync(WelcomeRequest request)
     {
-        var FilePath =
+        const string filePath =
             "C:\\Users\\nites\\Desktop\\Projects\\Delivery\\DeliveryApp.Api\\DeliveryApp.ExternalServices\\MailSending\\Templates\\WelcomeTemplate.html";
-        var str = new StreamReader(FilePath);
-        var MailText = str.ReadToEnd();
+        var str = new StreamReader(filePath);
+        var mailText = await str.ReadToEndAsync();
         str.Close();
-        MailText = MailText.Replace("[username]", request.UserName).Replace("[email]", request.ToEmail);
+        mailText = mailText.Replace("[username]", request.UserName).Replace("[email]", request.ToEmail);
         var email = new MimeMessage();
         email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
         email.To.Add(MailboxAddress.Parse(request.ToEmail));
         email.Subject = $"Welcome {request.UserName}";
-        var builder = new BodyBuilder();
-        builder.HtmlBody = MailText;
+        var builder = new BodyBuilder
+        {
+            HtmlBody = mailText
+        };
         email.Body = builder.ToMessageBody();
         using var smtp = new SmtpClient();
-        smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
-        smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+        await smtp.ConnectAsync(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+        await smtp.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
         await smtp.SendAsync(email);
-        smtp.Disconnect(true);
+        await smtp.DisconnectAsync(true);
     }
 }

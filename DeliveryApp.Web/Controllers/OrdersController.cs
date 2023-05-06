@@ -4,7 +4,6 @@ using DeliveryApp.Application.Mediatr.Query.Orders;
 using DeliveryApp.Commons.Controllers;
 using DeliveryApp.Commons.Query;
 using DeliveryApp.Domain.Contracts;
-using DeliveryApp.Domain.DTO;
 using DeliveryApp.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -76,7 +75,7 @@ public class OrdersController : BaseApiController
         var command = new OrderEditCommand
         {
             Id = id,
-           Request = request
+            Request = request
         };
         return HandleResult(await Mediator.Send(
             command));

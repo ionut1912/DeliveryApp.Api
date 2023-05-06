@@ -12,4 +12,5 @@ public class Users : IdentityUser<int>
     public List<Orders> Orders { get; set; } = new();
     public UserAddresses UserAddress { get; set; }
     public UserConfigs UserConfigs { get; set; }
+    public string ResetPasswordCode { get; set; }
 }

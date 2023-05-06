@@ -101,6 +101,17 @@ public class AccountsController : BaseApiController
         return HandleResult(await Mediator.Send(command));
     }
 
+    [ProducesResponseType(typeof(ActionResult), (int)HttpStatusCode.OK)]
+    [HttpGet("code/{email}")]
+    public async Task<ActionResult> GetResetPasswordCode(string email)
+    {
+        var query = new GetResetPasswordCodeQuery
+        {
+            Email = email
+        };
+        return HandleResult(await Mediator.Send(query));
+    }
+
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(ActionResult<User>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(UnauthorizedResult), (int)HttpStatusCode.Unauthorized)]

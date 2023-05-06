@@ -148,6 +148,24 @@ public class AccountRepository : IAccountRepository
         return true;
     }
 
+    public async Task<string> GenerateResetPasswordCode(string email, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+
+        if (user == null) return string.Empty;
+
+        user.ResetPasswordCode = GenerateCode();
+        _deliveryContext.Users.Update(user);
+        return user.ResetPasswordCode;
+    }
+
+    public async Task<string> GetResetPasswordCode(string email, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.Users.AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+        return user.ResetPasswordCode;
+    }
+
     public async Task<bool> ModifyUserPassword(string email, string password, CancellationToken cancellationToken)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
@@ -160,6 +178,14 @@ public class AccountRepository : IAccountRepository
         result = await _userManager.AddPasswordAsync(user, password);
 
         return result.Succeeded;
+    }
+
+    private static string GenerateCode()
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var random = new Random();
+        return new string(Enumerable.Repeat(chars, 6)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
 

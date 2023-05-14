@@ -7,6 +7,7 @@ using DeliveryApp.ExternalServices.Cloudinary.Photo;
 using DeliveryApp.Repository.Context;
 using DeliveryApp.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Channels;
 
 namespace DeliveryApp.Repository.Services;
 
@@ -100,6 +101,7 @@ public class ReviewForMenuItemService : IReviewForMenuItemRepository
         var result = new List<CurrentUserReviewForMenuItem>();
         for (var i = 0; i < reviews.Count(); i++)
         {
+           
             var resultItem = new CurrentUserReviewForMenuItem
             {
                 Id = reviews[i].Id,
@@ -107,10 +109,10 @@ public class ReviewForMenuItemService : IReviewForMenuItemRepository
                 ReviewDescription = reviews[i].ReviewDescription,
                 NumberOfStars = reviews[i].NumberOfStars,
                 Username = reviews[i].User.UserName,
-                MenuItemId = _deliveryContext.Restaurants
+                MenuItemId = _deliveryContext.MenuItems
                     .FirstOrDefaultAsync(x => x.Id == reviews[i].MenuItemsId, cancellationToken).Result.Id,
-                ItemName = _deliveryContext.Restaurants
-                    .FirstOrDefaultAsync(x => x.Id == reviews[i].MenuItemsId, cancellationToken).Result.Name
+                ItemName = _deliveryContext.MenuItems
+                    .FirstOrDefaultAsync(x => x.Id == reviews[i].MenuItemsId, cancellationToken).Result.ItemName
             };
             result.Add(resultItem);
         }
